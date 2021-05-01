@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@config/*": ["__config.release/*"],
+      "@app/shared/*": ["../../libs/shared/src/*"]
+    },
+    "jsx": "react-jsx"
+  }
+}

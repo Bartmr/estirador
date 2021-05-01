@@ -1,0 +1,13 @@
+@import 'node_modules/bootstrap/scss/navbar';
+
+.navbar-nav {
+  .nav-link {
+    .icon {
+      margin-right: map-get($map: $spacers, $key: 1);
+    }
+
+    &.active {
+      background-color: $selected-bg;
+    }
+  }
+}

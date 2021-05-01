@@ -1,0 +1,16 @@
+a:not(.btn).disabled,
+.text-link.disabled {
+  pointer-events: none;
+  color: set-contrasting-color-alpha('body', $text-muted-opacity);
+}
+
+.text-link {
+  color: $link-color;
+  text-decoration: $link-decoration;
+  cursor: pointer;
+
+  @include hover-focus() {
+    color: $link-hover-color;
+    text-decoration: $link-hover-decoration;
+  }
+}

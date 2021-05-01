@@ -1,0 +1,76 @@
+/*
+  Clone Bootstrap small spinner styles
+  into new spinner-sm modifier class
+*/
+.spinner-border {
+  &.spinner-sm {
+    @extend .spinner-border-sm;
+  }
+}
+
+.spinner-grow {
+  &.spinner-sm {
+    @extend .spinner-grow-sm;
+  }
+}
+/* --- */
+
+.spinner-border,
+.spinner-grow {
+  &.spinner-sm {
+    width: $spinner-width-sm;
+    height: $spinner-height-sm;
+  }
+  &.spinner-lg {
+    width: $spinner-width-lg;
+    height: $spinner-height-lg;
+  }
+
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+      $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+      &.spinner#{$infix}-sm {
+        width: $spinner-width-sm;
+        height: $spinner-height-sm;
+      }
+      &.spinner#{$infix}-default {
+        width: $spinner-width;
+        height: $spinner-height;
+      }
+      &.spinner#{$infix}-lg {
+        width: $spinner-width-lg;
+        height: $spinner-height-lg;
+      }
+    }
+  }
+}
+
+/*
+  Set spinner-border border width depending on its size
+*/
+.spinner-border {
+  &.spinner-sm {
+    border-width: $spinner-border-width-sm;
+  }
+  &.spinner-lg {
+    border-width: $spinner-border-width-lg;
+  }
+
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+      $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+      &.spinner#{$infix}-sm {
+        border-width: $spinner-border-width-sm;
+      }
+      &.spinner#{$infix}-default {
+        border-width: $spinner-border-width;
+      }
+      &.spinner#{$infix}-lg {
+        border-width: $spinner-border-width-lg;
+      }
+    }
+  }
+}
+/* --- */

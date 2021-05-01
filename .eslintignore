@@ -1,0 +1,15 @@
+node_modules
+
+.git
+
+/dist
+
+/coverage
+
+/client-side
+
+*.json
+*.js
+
+# Temporary files
+/_tmp

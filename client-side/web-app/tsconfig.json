@@ -1,0 +1,26 @@
+{
+  "include": ["type-declarations/**/*", "src/**/*", "../../libs/shared/**/*"],
+  "compilerOptions": {
+    "paths": {
+      "@config/*": ["__config.debug/*"],
+      "@app/shared/*": ["../../libs/shared/src/*"]
+    },
+    "noEmit": true,
+    "target": "es2020",
+    "module": "commonjs",
+    "lib": ["dom", "es2020"],
+    "jsx": "react-jsxdev",
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "incremental": true,
+    "outDir": "./dist"
+  }
+}

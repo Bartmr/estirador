@@ -1,0 +1,17 @@
+.icon {
+  font-size: inherit;
+
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+      $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+      &.icon#{$infix}-inherit {
+        font-size: inherit;
+      }
+
+      &.icon#{$infix}-thumbnail {
+        font-size: 3rem;
+      }
+    }
+  }
+}

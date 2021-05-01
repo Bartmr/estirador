@@ -1,0 +1,33 @@
+.stripe-top {
+  border-top: $stripe-width-lg solid $primary !important;
+}
+
+.stripe-right {
+  border-right: $stripe-width-lg solid $primary !important;
+}
+
+.stripe-bottom {
+  border-bottom: $stripe-width-lg solid $primary !important;
+}
+
+.stripe-left {
+  border-left: $stripe-width-lg solid $primary !important;
+}
+
+@each $color, $value in $theme-colors {
+  .stripe-top.stripe-top-#{$color} {
+    border-top-color: $value !important;
+  }
+
+  .stripe-right.stripe-right-#{$color} {
+    border-right-color: $value !important;
+  }
+
+  .stripe-bottom.stripe-bottom-#{$color} {
+    border-bottom-color: $value !important;
+  }
+
+  .stripe-left.stripe-left-#{$color} {
+    border-left-color: $value !important;
+  }
+}

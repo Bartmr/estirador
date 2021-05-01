@@ -1,0 +1,16 @@
+node_modules
+
+.git
+
+/build
+/dist
+/public
+/.cache
+
+_graphql-generated_
+*._graphql-generated_.ts
+
+/__config*
+
+*.json
+*.js

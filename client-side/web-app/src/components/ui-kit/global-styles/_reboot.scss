@@ -1,0 +1,21 @@
+@import 'node_modules/bootstrap/scss/reboot';
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @include on-inverted-color-scheme {
+    background-color: $body-bg-inverted;
+    @include with-contrasting-colors($body-bg-inverted);
+  }
+}
+
+html,
+body {
+  font-size: 13px;
+
+  @include media-breakpoint-up(md) {
+    font-size: 16px;
+  }
+}

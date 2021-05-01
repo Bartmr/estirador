@@ -1,0 +1,15 @@
+@import 'node_modules/bootstrap/scss/grid';
+
+.row:not(.no-gutters) {
+  margin-bottom: -$grid-gutter-width;
+
+  > col,
+  > [class*='col-'] {
+    padding-bottom: $grid-gutter-width;
+  }
+}
+
+.container {
+  padding-left: map-get($spacers, 3);
+  padding-right: map-get($spacers, 3);
+}

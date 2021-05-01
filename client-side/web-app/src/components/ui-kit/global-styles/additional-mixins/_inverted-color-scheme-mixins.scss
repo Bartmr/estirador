@@ -1,0 +1,11 @@
+@mixin on-inverted-color-scheme {
+  @if ($dark-background-is-dominant) {
+    @media (prefers-color-scheme: light) {
+      @content;
+    }
+  } @else {
+    @media (prefers-color-scheme: dark) {
+      @content;
+    }
+  }
+}

@@ -1,0 +1,5 @@
+/*
+  Variables should be loaded outside this file.
+  This is in order for them to only be loaded once, and be overridable.
+*/
+@import 'node_modules/bootstrap/scss/mixins/breakpoints';

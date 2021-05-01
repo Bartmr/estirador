@@ -1,0 +1,31 @@
+overwrite: true
+schema: './_graphql-generated_/schema.json'
+documents:
+  - ./src/**/*.{ts,tsx}
+generates:
+  _graphql-generated_/typescript/types.ts:
+    plugins:
+      - typescript
+    config:
+      typesPrefix: GQL
+      enumsAsTypes: true
+      skipTypename: true
+      scalars:
+        Date: string
+        JSON: unknown
+  _graphql-generated_/typescript/:
+    preset: near-operation-file
+    presetConfig:
+      baseTypesPath: types.ts
+      extension: ._graphql-generated_.ts
+    plugins:
+      - typescript-operations
+    config:
+      typesPrefix: GQL
+      enumsAsTypes: true
+      skipTypename: true
+      scalars:
+        Date: string
+        JSON: unknown
+pluckConfig:
+  globalIdentifier: 'graphql'

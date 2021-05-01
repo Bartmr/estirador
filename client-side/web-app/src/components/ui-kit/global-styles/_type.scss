@@ -1,0 +1,9 @@
+@import 'node_modules/bootstrap/scss/type';
+
+.display-1,
+.display-2,
+.display-3,
+.display-4 {
+  color: get-contrasting-color('primary');
+  text-shadow: $text-shadow-dimensions get-contrasting-color('primary');
+}

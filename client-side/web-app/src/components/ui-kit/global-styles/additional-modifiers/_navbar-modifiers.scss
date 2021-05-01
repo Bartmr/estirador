@@ -1,0 +1,40 @@
+.navbar {
+  .navbar-nav {
+    .navbar-nav-divider {
+      width: 100%;
+      height: $hr-border-width;
+      align-self: center;
+    }
+  }
+}
+
+.navbar.navbar-light {
+  .navbar-nav {
+    .navbar-nav-divider {
+      background-color: $hr-border-color;
+    }
+  }
+}
+.navbar.navbar-dark {
+  .navbar-nav {
+    .navbar-nav-divider {
+      background-color: rgba($lightest, 0.4);
+    }
+  }
+}
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  .navbar.navbar-expand#{$infix} {
+    .navbar-nav {
+      @include media-breakpoint-up($breakpoint) {
+        .navbar-nav-divider {
+          height: 31px;
+          width: $hr-border-width;
+          margin: -5px 13px;
+        }
+      }
+    }
+  }
+}

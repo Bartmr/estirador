@@ -1,0 +1,37 @@
+/*
+  The default shadows should remain the same regardless of the surrounding color.
+
+  They are absolute in a color scheme,
+  but they may change between color schemes (default, inverted, etc)
+*/
+.text-shadow-sm {
+  text-shadow: #{$text-shadow-sm-dimensions} rgba(0, 0, 0, 0.5) !important;
+}
+.text-shadow {
+  text-shadow: #{$text-shadow-dimensions} rgba(0, 0, 0, 0.5) !important;
+}
+.text-shadow-lg {
+  text-shadow: #{$text-shadow-lg-dimensions} rgba(0, 0, 0, 0.5) !important;
+}
+/* ----- */
+
+/*
+  Colored shadows should change in order to contrast with the surrounding color
+*/
+@each $color, $value in $theme-colors {
+  .text-shadow-#{$color} {
+    &.text-shadow-sm {
+      text-shadow: #{$text-shadow-sm-dimensions}
+        set-contrasting-color-alpha($color, 0.5) !important;
+    }
+    &.text-shadow {
+      text-shadow: #{$text-shadow-dimensions}
+        set-contrasting-color-alpha($color, 0.5) !important;
+    }
+    &.text-shadow-lg {
+      text-shadow: #{$text-shadow-sm-dimensions}
+        set-contrasting-color-alpha($color, 0.5) !important;
+    }
+  }
+}
+/* ----- */

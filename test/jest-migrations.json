@@ -1,0 +1,30 @@
+{
+  "globalSetup": "<rootDir>/test-environment/migrations-tests-global-setup.js",
+  "setupFiles": [
+    "<rootDir>/src/internals/environment/load-environment-variables.ts",
+    "<rootDir>/test-environment-impl/base/set-test-process-context.ts"
+  ],
+  "testSequencer": "<rootDir>/test-environment/migrations-tests-sequencer.js",
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "roots": ["<rootDir>/src/", "<rootDir>/libs/"],
+  "testMatch": ["**/*.migrations-spec.ts"],
+  "collectCoverageFrom": [
+    "src/**/migrations/**/*.(t|j)s",
+    "libs/**/migrations/**/*.(t|j)s"
+  ],
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "globals": {
+    "ts-jest": {
+      "isolatedModules": true,
+      "tsconfig": "tsconfig.test.json"
+    }
+  },
+  "moduleDirectories": ["node_modules", "<rootDir>"],
+  "moduleNameMapper": {
+    "@app/shared/(.*)": "<rootDir>/libs/shared/src/$1"
+  }
+}

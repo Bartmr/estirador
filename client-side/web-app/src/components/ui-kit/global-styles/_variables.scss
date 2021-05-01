@@ -1,0 +1,241 @@
+@import 'node_modules/bootstrap/scss/functions';
+@import 'src/components/ui-kit/global-styles/additional-functions/color-info-functions';
+
+$primary: #8133ff;
+$secondary: #ff6b00;
+$success: #28a745;
+$info: #007bff;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: darken(#ffffff, 3);
+$lightest: #ffffff;
+$dark: #4d4d4d;
+$darkest: #262626;
+
+$body-bg: $light;
+
+$body-bg-inverted: $dark;
+
+$dark-background-is-dominant: is-color-dark($body-bg);
+
+$theme-colors: (
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'success': $success,
+    'info': $info,
+    'warning': $warning,
+    'danger': $danger,
+    'light': $light,
+    'lightest': $lightest,
+    'dark': $dark,
+    'darkest': $darkest,
+    'body': $body-bg,
+  )
+);
+
+$inverted-theme-colors: (
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'success': $success,
+    'info': $info,
+    'warning': $warning,
+    'danger': $danger,
+    'lightest': $lightest,
+    'light': $light,
+    'dark': $dark,
+    'darkest': $darkest,
+    'body': $body-bg-inverted,
+  )
+);
+
+@function get-theme-color($color-name) {
+  $value: map-get($theme-colors, $color-name);
+
+  @if ($value == null) {
+    @error "-> #{$color-name} does not exist in $theme-colors";
+  }
+
+  @return $value;
+}
+
+@function get-inverted-theme-color($color-name) {
+  $value: map-get($inverted-theme-colors, $color-name);
+
+  @if ($value == null) {
+    @error "-> #{$color-name} does not exist in $inverted-theme-colors";
+  }
+
+  @return $value;
+}
+
+/*
+---
+--- CSS Custom Properties initial values and functions
+---
+*/
+
+$contrasting-colors-names: ();
+
+@each $color-name in map-keys($theme-colors) {
+  $contrasting-colors-names: join(
+    $contrasting-colors-names,
+    ($color-name, #{$color-name}-hover),
+    $separator: comma
+  );
+}
+
+$contrasting-color-css-custom-properties: ();
+
+@each $color in $contrasting-colors-names {
+  $contrasting-color-css-custom-properties: map-merge(
+    $contrasting-color-css-custom-properties,
+    (--#{$color}-contrasting-color: --#{$color}-contrasting-color)
+  );
+
+  $subpixels: (h, s, l);
+
+  @each $subpixel in $subpixels {
+    $contrasting-color-css-custom-properties: map-merge(
+      $contrasting-color-css-custom-properties,
+      (
+        --#{$color}-contrasting-color-#{$subpixel}:
+          --#{$color}-contrasting-color-#{$subpixel}
+      )
+    );
+  }
+}
+
+/* --- Initial Values --- */
+
+/* Dark text colors to use in light background colors */
+
+$dark-contrasting-colors: (
+  primary: $primary,
+  secondary: $secondary,
+  success: $success,
+  info: $info,
+  warning: $warning,
+  danger: $danger,
+  light: $light,
+  lightest: $lightest,
+  dark: $dark,
+  darkest: $darkest,
+  body: $darkest,
+);
+
+@each $color, $value in $dark-contrasting-colors {
+  $dark-contrasting-colors: map-merge(
+    $dark-contrasting-colors,
+    (#{$color}-hover: lighten($value, 20%))
+  );
+}
+
+/* Light text colors to use in dark background colors */
+
+$light-contrasting-colors: (
+  primary: change-color($primary, $lightness: 70%),
+  secondary: change-color($secondary, $lightness: 70%),
+  success: change-color($success, $lightness: 70%),
+  info: change-color($info, $lightness: 70%),
+  warning: change-color($warning, $lightness: 70%),
+  danger: change-color($danger, $lightness: 70%),
+  light: $light,
+  lightest: $lightest,
+  dark: $dark,
+  darkest: $darkest,
+  body: $lightest,
+);
+
+@each $color, $value in $light-contrasting-colors {
+  $light-contrasting-colors: map-merge(
+    $light-contrasting-colors,
+    (#{$color}-hover: lighten($value, 20%))
+  );
+}
+
+/* --- Functions --- */
+
+@import 'src/components/ui-kit/global-styles/additional-functions/contrasting-colors-functions';
+
+/*
+---
+--- End of CSS Custom Properties initial values and functions
+---
+*/
+
+$body-color: get-contrasting-color('body');
+
+$selected-bg: set-contrasting-color-alpha('body', 0.1);
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  3: $spacer,
+  4: $spacer * 2,
+  5: $spacer * 3,
+  6: $spacer * 4,
+  7: $spacer * 6,
+  8: $spacer * 8,
+  9: $spacer * 10,
+);
+
+$grid-gutter-width: $spacer;
+
+$font-1: 'Open Sans', sans-serif;
+
+$font-family-sans-serif: $font-1;
+$font-family-base: $font-family-sans-serif;
+
+$font-size-base: 1rem;
+
+$headings-margin-bottom: $spacer;
+$headings-font-weight: 700;
+
+$h1-font-size: $font-size-base * 2.5;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.75;
+$h4-font-size: $font-size-base * 1.5;
+
+$display1-size: $h1-font-size * 1.2;
+$display2-size: $h2-font-size * 1.2;
+$display3-size: $h3-font-size * 1.2;
+$display4-size: $h4-font-size * 1.2;
+
+$link-color: get-contrasting-color('primary');
+$link-hover-color: get-contrasting-color('primary-hover');
+
+$text-muted-opacity: 0.5;
+$text-muted: set-contrasting-color-alpha('body', $text-muted-opacity);
+
+$text-subtle-opacity: 0.15;
+
+$border-radius: 0.7rem;
+$border-radius-lg: 1.5rem;
+$border-radius-sm: 0.4rem;
+
+$stripe-width-lg: 0.5rem;
+
+$hr-border-width: 1px;
+$hr-border-color: set-contrasting-color-alpha('body', 0.3);
+
+$spinner-width-lg: 3rem;
+$spinner-height-lg: 3rem;
+$spinner-border-width-lg: 0.3em;
+
+$box-shadow-sm-dimensions: 0 0.125rem 0.25rem;
+$box-shadow-dimensions: 0 0.5rem 1rem;
+$box-shadow-lg-dimensions: 0 1rem 3rem;
+
+$box-shadow-sm: #{$box-shadow-sm-dimensions} rgba(0, 0, 0, 0.2);
+$box-shadow: #{$box-shadow-dimensions} rgba(0, 0, 0, 0.2);
+$box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(0, 0, 0, 0.3);
+
+$text-shadow-sm-dimensions: 0 0rem 0.5rem;
+$text-shadow-dimensions: 0 0.3rem 0.8rem;
+$text-shadow-lg-dimensions: 0 0.3rem 2rem;
+
+@import 'node_modules/bootstrap/scss/variables';

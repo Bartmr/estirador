@@ -1,0 +1,46 @@
+@mixin _attach-bg-gradient($value) {
+  @if (is-color-dark($value)) {
+    $background-start-color: lighten(desaturate($value, 25%), 5%);
+    $background-end-color: $value;
+
+    background-image: linear-gradient(
+      90deg,
+      $background-start-color 0%,
+      $background-end-color 100%
+    ) !important;
+  } @else {
+    $background-start-color: $value;
+    $background-end-color: darken(adjust-hue($value, -7deg), 5%);
+
+    background-image: linear-gradient(
+      90deg,
+      $background-start-color 0%,
+      $background-end-color 100%
+    ) !important;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  $inverted-value: get-inverted-theme-color($color);
+
+  .bg-#{$color} {
+    @include with-contrasting-colors($value);
+
+    @include on-inverted-color-scheme {
+      background-color: $inverted-value !important;
+      @include with-contrasting-colors($inverted-value);
+    }
+  }
+
+  .bg-gradient-#{$color} {
+    @include _attach-bg-gradient($value);
+
+    @include with-contrasting-colors($value);
+
+    @include on-inverted-color-scheme {
+      @include _attach-bg-gradient($inverted-value);
+
+      @include with-contrasting-colors($inverted-value);
+    }
+  }
+}

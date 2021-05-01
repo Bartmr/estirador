@@ -1,0 +1,13 @@
+@import 'node_modules/bootstrap/scss/button-group';
+
+.btn-group {
+  > .btn:not(:last-child) {
+    margin-right: 0;
+  }
+}
+
+.btn-toolbar {
+  > * {
+    margin-right: map-get($spacers, 2);
+  }
+}

@@ -1,0 +1,1 @@
+export const HEADER_CSS_CLASS = 'UNIQUE-APP-HEADER';

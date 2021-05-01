@@ -1,0 +1,156 @@
+{
+  "name": "@app/api",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "14"
+  },
+  "scripts": {
+    "install:all": "npm install & npm run install:web-app",
+    "install:all:ci": "npm ci && npm run install:web-app:ci",
+    "install:web-app": "cd client-side/web-app && npm install",
+    "install:web-app:ci": "cd client-side/web-app && npm ci",
+    "seed": "npm run ts-node ./scripts-dev/seed.ts",
+    "tear-down-databases": "npm run ts-node ./scripts-dev/tear-down-databases.ts",
+    "start:dev": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr.config.js --path tsconfig.build.json",
+    "start:dev:no-typecheck": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-no-type-checks.config.js --path tsconfig.build.json",
+    "start:dev:tsc": "NODE_ENV=development nest start --path tsconfig.build.json --watch",
+    "start:debug": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-debug.config.js --path tsconfig.build.json",
+    "start:debug:no-typecheck": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-debug-no-type-checks.config.js --path tsconfig.build.json",
+    "start:debug:tsc": "NODE_ENV=development nest start --path tsconfig.build.json --watch --debug",
+    "start:prod": "typeorm migration:run && node dist/src/main.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:cov:changed": "npm run test:cov -- --onlyChanged",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:debug:watch": "npm run test:debug -- --watch",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:cov": "npm run test:e2e -- --coverage",
+    "test:e2e:cov:changed": "npm run test:e2e:cov -- --onlyChanged",
+    "test:e2e:watch": "jest --config ./test/jest-e2e.json --watch",
+    "test:e2e:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --config ./test/jest-e2e.json",
+    "test:e2e:debug:watch": "npm run test:e2e:debug -- --watch",
+    "test:migrations": "jest --config ./test/jest-migrations.json --runInBand",
+    "test:migrations:cov": "npm run test:migrations -- --coverage",
+    "test:migrations:cov:changed": "npm run test:migrations:cov -- --onlyChanged",
+    "test:migrations:watch": "jest --config ./test/jest-migrations.json --runInBand --watch",
+    "test:migrations:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --config ./test/jest-migrations.json",
+    "test:migrations:debug:watch": "npm run test:migrations:debug -- --watch",
+    "test:all:cov": "jest --config ./test/jest-all.js --coverage",
+    "test:all:cov:changed": "npm run test:all:cov -- --onlyChanged",
+    "clean:api": "rimraf dist",
+    "build:api": "npm run clean:api && nest build",
+    "typecheck": "tsc --noEmit",
+    "typecheck:slow": "npm run clean:api && npm run typecheck",
+    "format": "prettier --write .",
+    "eslint": "eslint . --ext .ts --max-warnings 0",
+    "lint": "npm run eslint -- --fix",
+    "lint:no-fix": "npm run eslint",
+    "integrity-check:api": "npm run typecheck:slow && npm run lint:no-fix",
+    "integrity-check:web-app": "cd client-side/web-app && npm run build:reset && npm run lint:no-fix",
+    "integrity-check:all": "concurrently \"npm run integrity-check:api\" \"npm run integrity-check:web-app\" -n \"api,web-app\" --no-color --kill-others-on-fail",
+    "precommit": "lint-staged && npm run integrity-check:all",
+    "npm-check-updates": "npm-check-updates",
+    "nest": "nest",
+    "typeorm": "npm run ts-node ./node_modules/.bin/typeorm",
+    "ts-node": "ts-node --project tsconfig.build.json --transpile-only -r tsconfig-paths/register"
+  },
+  "dependencies": {
+    "@nestjs/common": "^7.6.15",
+    "@nestjs/core": "^7.6.15",
+    "@nestjs/jwt": "^7.2.0",
+    "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/swagger": "^4.8.0",
+    "@nestjs/typeorm": "^7.1.5",
+    "@opplane/not-me": "^1.4.4",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
+    "glob": "^7.1.6",
+    "pg": "^8.6.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^6.6.7",
+    "source-map-support": "^0.5.19",
+    "swagger-ui-express": "^4.1.6",
+    "typeorm": "^0.2.32",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^7.6.0",
+    "@nestjs/schematics": "^7.3.1",
+    "@nestjs/testing": "^7.6.15",
+    "@types/bcrypt": "^3.0.1",
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.22",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/multer": "^1.4.5",
+    "@types/node": "^14.14.39",
+    "@types/pg": "^7.14.11",
+    "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.0",
+    "@types/webpack-env": "^1.16.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "concurrently": "^6.0.2",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "npm-check-updates": "^11.4.1",
+    "prettier": "^2.2.1",
+    "run-script-webpack-plugin": "^0.0.11",
+    "supertest": "^6.1.3",
+    "ts-jest": "^26.5.4",
+    "ts-loader": "^8.1.0",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.2.4",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/src/internals/environment/load-environment-variables.ts",
+      "<rootDir>/test-environment-impl/base/set-test-process-context.ts"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "testMatch": [
+      "**/*.spec.ts"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true,
+        "tsconfig": "tsconfig.test.json"
+      }
+    },
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/libs/"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>"
+    ],
+    "moduleNameMapper": {
+      "@app/shared/(.*)": "<rootDir>/libs/shared/src/$1"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,json,ts,tsx,scss,sass,css,md}": "prettier --write"
+  }
+}

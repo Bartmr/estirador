@@ -1,0 +1,34 @@
+@function get-contrasting-color-css-custom-property($name, $subpixel: null) {
+  $map-key: null;
+
+  @if ($subpixel == null) {
+    $map-key: --#{$name}-contrasting-color;
+  } @else {
+    $map-key: --#{$name}-contrasting-color-#{$subpixel};
+  }
+
+  /*
+    Although this looks like duplicated logic to return the color css custom property,
+    this logic below double checks if such color exists
+    from the list of generated CSS custom properties
+  */
+  $custom-property: map-get($contrasting-color-css-custom-properties, $map-key);
+
+  @if ($custom-property == null) {
+    @error "-> #{$name} (#{$map-key}) does not exist in contrasting-color-css-custom-properties map";
+  }
+
+  @return $custom-property;
+}
+
+@function set-contrasting-color-alpha($name, $opacity) {
+  $h: get-contrasting-color-css-custom-property('#{$name}', h);
+  $s: get-contrasting-color-css-custom-property('#{$name}', s);
+  $l: get-contrasting-color-css-custom-property('#{$name}', l);
+
+  @return hsla(var($h), var($s), var($l), $opacity);
+}
+
+@function get-contrasting-color($name) {
+  @return var(#{get-contrasting-color-css-custom-property($name)});
+}
