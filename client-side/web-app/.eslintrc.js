@@ -122,5 +122,7 @@ module.exports = {
         fieldset: ['radiogroup', 'presentation'],
       },
     ],
+    'jsx-a11y/label-has-for': 'off',
+    'jsx-a11y/label-has-associated-control': 'error',
   },
 };
