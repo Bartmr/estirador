@@ -34,12 +34,12 @@ export function useAppNavigation() {
   return {
     pathPrefix,
     navigate,
-    navigateVoid: (href: string) => {
+    navigateWithoutAwaiting: (href: string) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       navigate(href);
     },
     goBack,
-    goBackVoid: () => {
+    goBackWithoutAwaiting: () => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       goBack();
     },
