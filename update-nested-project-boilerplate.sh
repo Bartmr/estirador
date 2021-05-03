@@ -6,6 +6,10 @@ then
 else
   echo "Paste the URL of the git repository where the boilerplate is"
   read git_url
+
+  echo "What is the name of the git branch where the updates are?"
+  read git_branch
+
   echo "Updating..."
 
   git init
@@ -13,7 +17,7 @@ else
   git commit -m "Before update"
 
   git remote add boilerplate $git_url
-  git pull boilerplate master --allow-unrelated-histories
+  git pull boilerplate $git_branch --allow-unrelated-histories
 
   rm -rf ./.git/
 

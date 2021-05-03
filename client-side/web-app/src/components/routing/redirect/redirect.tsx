@@ -13,7 +13,7 @@ export function Redirect(props: Props) {
     if (props.href.includes('://')) {
       window.location.href = props.href;
     } else {
-      appNavigation.navigateVoid(props.href);
+      appNavigation.navigateWithoutAwaiting(props.href);
     }
   }, []);
 

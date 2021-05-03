@@ -1,6 +1,7 @@
 #!/bin/bash
 
 force=''
+update_mode='NORMAL'
 
 while getopts 'f' flag; do
   case "${flag}" in
@@ -9,10 +10,16 @@ while getopts 'f' flag; do
   esac
 done
 
+if [ "$force" = "true" ]; then
+  update_mode='FORCED'
+fi
+
 if [ ! -d "./.git/" ]
 then
   echo -e "This command is only to be used when the project is IN the root directory of the repository"
 else
+  echo "Update will run in $update_mode mode."
+
   echo "-----
 WARNING!!! This will erase any uncommited changes that you have right now.
 To cancel the update press Ctrl+C. Commit and push your changes first and then run this update command again.
@@ -20,16 +27,16 @@ To continue with the update write yes and press Enter.
 -----"
   read user_has_continued
 
+  if [ "$user_has_continued" != "yes" ]; then
+    echo "Update canceled"
+    exit 0
+  fi
+
   echo "Paste the URL of the git repository where the boilerplate is"
   read git_url
 
   echo "What is the name of the git branch where the updates are?"
   read git_branch
-
-  if [ "$user_has_continued" != "yes" ]; then
-    echo "Update canceled"
-    exit 0
-  fi
 
   echo "Updating..."
 
