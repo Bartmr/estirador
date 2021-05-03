@@ -1,4 +1,4 @@
-import { boolean } from '@opplane/not-me/lib/schemas/boolean/boolean-schema';
+import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import cluster from 'cluster';
 import os from 'os';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';

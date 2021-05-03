@@ -3,7 +3,7 @@ import { SerializableJSONValue } from '../transports/json-types';
 import { useParams } from '@reach/router';
 import { useAppNavigation } from './use-app-navigation';
 import { Logger } from '../logging/logger';
-import { InferType, Schema } from '@opplane/not-me/lib/schemas/schema';
+import { InferType, Schema } from 'not-me/lib/schemas/schema';
 
 type SupportedRouteParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;

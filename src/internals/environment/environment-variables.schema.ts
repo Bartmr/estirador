@@ -1,11 +1,11 @@
 import { NODE_ENV } from './node-env.constants';
 import { NodeEnv } from './node-env.types';
 import inspector from 'inspector';
-import { object } from '@opplane/not-me/lib/schemas/object/object-schema';
-import { number } from '@opplane/not-me/lib/schemas/number/number-schema';
-import { string } from '@opplane/not-me/lib/schemas/string/string-schema';
-import { boolean } from '@opplane/not-me/lib/schemas/boolean/boolean-schema';
-import { equals } from '@opplane/not-me/lib/schemas/equals/equals-schema';
+import { object } from 'not-me/lib/schemas/object/object-schema';
+import { number } from 'not-me/lib/schemas/number/number-schema';
+import { string } from 'not-me/lib/schemas/string/string-schema';
+import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
+import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 
 export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS: (() => {
