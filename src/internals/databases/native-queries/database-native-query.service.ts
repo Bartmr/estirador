@@ -1,4 +1,4 @@
-import { InferType, Schema } from '@opplane/not-me/lib/schemas/schema';
+import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import { Client } from 'pg';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { QueryRunner } from 'typeorm';

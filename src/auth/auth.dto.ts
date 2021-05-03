@@ -1,7 +1,7 @@
-import { ValidationSchema } from '@opplane/not-me/lib/resolvers/nest/validation-schema.decorator';
-import { object } from '@opplane/not-me/lib/schemas/object/object-schema';
-import { Schema } from '@opplane/not-me/lib/schemas/schema';
-import { string } from '@opplane/not-me/lib/schemas/string/string-schema';
+import { ValidationSchema } from 'not-me/lib/resolvers/nest/validation-schema.decorator';
+import { object } from 'not-me/lib/schemas/object/object-schema';
+import { Schema } from 'not-me/lib/schemas/schema';
+import { string } from 'not-me/lib/schemas/string/string-schema';
 import { SignupResult } from 'src/users/users.dto';
 
 const refreshRequestBodySchema: Schema<RefreshAccessTokenRequestBodyDTO> = object(

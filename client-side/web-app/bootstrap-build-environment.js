@@ -1,6 +1,4 @@
-const {
-  boolean,
-} = require('@opplane/not-me/lib/schemas/boolean/boolean-schema');
+const { boolean } = require('not-me/lib/schemas/boolean/boolean-schema');
 
 exports.ALL_BUILD_VARIANTS = {
   DEBUG: 'debug',

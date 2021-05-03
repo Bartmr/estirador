@@ -1,9 +1,7 @@
 const { promisify } = require('util');
 const childProcess = require('child_process');
 
-const {
-  boolean,
-} = require('@opplane/not-me/lib/schemas/boolean/boolean-schema');
+const { boolean } = require('not-me/lib/schemas/boolean/boolean-schema');
 
 const exec = promisify(childProcess.exec);
 
