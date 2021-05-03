@@ -122,7 +122,11 @@ module.exports = {
         fieldset: ['radiogroup', 'presentation'],
       },
     ],
+    /*
+      Rule is deprecated.
+      plugin:jsx-a11y/strict has label-has-associated-control enabled instead.
+    */
     'jsx-a11y/label-has-for': 'off',
-    'jsx-a11y/label-has-associated-control': 'error',
+    //
   },
 };
