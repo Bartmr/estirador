@@ -1,7 +1,9 @@
 ## Setting up a new project
 
 - Clone this repository
-- Run `git remote set-url origin <project repository url>` inside the cloned repository to detach the new project from the boilerplate repository and start pushing changes to your new project's repository
+- Point the terminal to the project root directory
+- Run `git remote remove origin` to remove any unnecessary branches that came with the boilerplate repository and detach the new project from said repository
+- Run `git remote add origin <project repository url>` to start pushing changes to your new project's repository
 - Run `npm run install:all`
 - (Optional) hook the `precommit` script in `package.json` to your Git pre-commit hook
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
