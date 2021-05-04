@@ -105,7 +105,7 @@ tunnels:
 
 ### When developing
 
-- Read about **validations** here: <https://github.com/Opplane/not-me>
+- Read about **validations** here: <https://github.com/Bartmr/not-me>
 - **Avoid configurations that are tied to the build type** (example: values and configurations that use `NODE_ENV`).
 - **Do not access environment variables directly** (the linter will problably stop you from doing that). Use the `EnvironmentVariablesService` to access these variables. This service is responsible for parsing and validating all environment variables that are used.
 - **Always use custom repositories** In order to **enforce the use of the custom logic implemented in each repository** _(like auditing rows changes when extending `AuditedEntityRepository`)_ and to make sure that **entities have all their required fields filled**, always use custom repositories, by calling `(connection or manager).getCustomRepository(CustomRepositoryClass)`, or using _NestJS_'s `@InjectRepository(CustomRepositoryClass)`.
@@ -141,4 +141,4 @@ tunnels:
 
 ## Related projects
 
-- Not-Me: <https://github.com/Opplane/not-me>
+- Not-Me: <https://github.com/Bartmr/not-me>
