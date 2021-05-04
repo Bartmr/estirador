@@ -1,7 +1,7 @@
 @import 'node_modules/bootstrap/scss/card';
 
 .card {
-  border-color: set-contrasting-color-alpha(body, 0.3);
+  border-color: set-contrasting-color-alpha(body, 0.2);
 
   @include with-contrasting-colors($card-bg);
 
