@@ -1,4 +1,30 @@
+@import 'node_modules/bootstrap/scss/functions';
+
 @import 'src/components/ui-kit/global-styles/variables';
+
+$headings-margin-bottom: $spacer;
+$headings-font-weight: 700;
+
+$h1-font-size: $font-size-base * 2.5;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.75;
+$h4-font-size: $font-size-base * 1.5;
+
+$display1-size: $h1-font-size * 1.2;
+$display2-size: $h2-font-size * 1.2;
+$display3-size: $h3-font-size * 1.2;
+$display4-size: $h4-font-size * 1.2;
+
+$stripe-width-lg: 0.5rem;
+
+$hr-border-width: 1px;
+$hr-border-color: set-contrasting-color-alpha('body', 0.3);
+
+$spinner-width-lg: 3rem;
+$spinner-height-lg: 3rem;
+$spinner-border-width-lg: 0.3em;
+
+@import 'node_modules/bootstrap/scss/variables';
 
 @import 'node_modules/bootstrap/scss/mixins';
 @import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
