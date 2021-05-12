@@ -1,5 +1,5 @@
 {
-  "include": ["type-declarations/**/*", "src/**/*", "../../libs/shared/**/*"],
+  "include": ["type-declarations/**/*", "src/**/*"],
   "compilerOptions": {
     "paths": {
       "@config/*": ["__config.debug/*"],
