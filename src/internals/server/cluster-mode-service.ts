@@ -27,7 +27,7 @@ const IS_WORKER_THAT_CALLS_JOBS = EnvironmentVariablesService.variables
 const totalCPUs = os.cpus().length;
 
 type SlaveWorkerEntry = {
-  connected?: boolean;
+  listening?: boolean;
   isWorkerThatCallsJobs: boolean;
   worker: cluster.Worker;
 };
@@ -54,7 +54,8 @@ class ClusterModeServiceImpl {
   private whenWorkerFailsBeforeStartHandler!: WhenWorkerFailsBeforeStartHandler;
 
   constructor() {
-    this.isMasterWorker = cluster.isMaster;
+    this.isMasterWorker =
+      cluster.isMaster || !EnvironmentVariablesService.variables.FORK_WORKERS;
     this.workerId = cluster.isMaster ? 'master' : `${cluster.worker.id}`;
     this.isWorkerThatCallsScheduledJobs = IS_WORKER_THAT_CALLS_JOBS;
     this.shutdownStarted = false;
@@ -87,7 +88,7 @@ class ClusterModeServiceImpl {
       if (message === WORKER_IS_LISTENING_KEY) {
         const workerEntry = slaveWorkersMap.get(worker.id) || throwError();
 
-        slaveWorkersMap.set(worker.id, { ...workerEntry, connected: true });
+        slaveWorkersMap.set(worker.id, { ...workerEntry, listening: true });
 
         loggingService.logInfo(
           'cluster-mode-service:worker-is-listening',
@@ -107,7 +108,7 @@ class ClusterModeServiceImpl {
           This condition here avoids an endless loop of restarts
           in case the worker crashed while starting itself
         */
-        if (workerEntry.connected) {
+        if (workerEntry.listening) {
           slaveWorkersMap.delete(worker.id);
 
           const newWorker = cluster.fork({
@@ -159,7 +160,7 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
     }
   }
 
-  markAsListening() {
+  markChildWorkerAsListening() {
     if (this.isMasterWorker) {
       throw new Error('Only child workers should mark themselves as connected');
     }
@@ -210,6 +211,16 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
 
   whenWorkerFailsBeforeStart(handler: WhenWorkerFailsBeforeStartHandler) {
     this.whenWorkerFailsBeforeStart = handler;
+  }
+
+  disconnectChildWorker() {
+    if (this.isMasterWorker) {
+      throw new Error();
+    }
+
+    if (cluster.isWorker) {
+      cluster.worker.disconnect();
+    }
   }
 }
 

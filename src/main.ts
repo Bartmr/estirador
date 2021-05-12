@@ -36,10 +36,7 @@ async function bootstrap() {
   let hotReloadedDatabasesResult:
     | UnwrapPromise<ReturnType<typeof hotReloadDatabases>>
     | undefined = undefined;
-  if (
-    NODE_ENV === NodeEnv.Development &&
-    (ClusterModeService.isMasterWorker || module.hot)
-  ) {
+  if (NODE_ENV === NodeEnv.Development && ClusterModeService.isMasterWorker) {
     const { hotReloadDatabases } = await import(
       './internals/databases/hot-reload-databases'
     );
@@ -59,7 +56,7 @@ async function bootstrap() {
     so they appear on the logs even if the master / child worker exits unexpectedly
   */
 
-  if (ClusterModeService.isMasterWorker && FORK_WORKERS) {
+  if (ClusterModeService.isMasterWorker) {
     const masterShutdownSignalHandler = () => {
       process.removeListener('SIGTERM', masterShutdownSignalHandler);
       process.removeListener('SIGINT', masterShutdownSignalHandler);
@@ -126,6 +123,8 @@ async function bootstrap() {
           if (hotReloadedDatabasesResult) {
             await Promise.all(hotReloadedDatabasesResult.map((c) => c.close()));
           }
+
+          ClusterModeService.disconnectChildWorker();
         }
       })();
     };
@@ -158,7 +157,7 @@ async function bootstrap() {
     await app.listen(3000);
 
     if (FORK_WORKERS) {
-      ClusterModeService.markAsListening();
+      ClusterModeService.markChildWorkerAsListening();
     }
   }
 }
