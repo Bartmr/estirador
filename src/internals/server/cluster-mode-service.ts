@@ -2,46 +2,41 @@ import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import cluster from 'cluster';
 import os from 'os';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
-import { LoggingServiceSingleton } from '../logging/logging.service.singleton';
 import { throwError } from '../utils/throw-error';
-
-const isWorkerThatCallsJobsResult = boolean().validate(
-  // eslint-disable-next-line node/no-process-env
-  process.env['IS_WORKER_THAT_CALLS_JOBS'],
-);
-
-if (isWorkerThatCallsJobsResult.errors) {
-  throw new Error(
-    `IS_WORKER_THAT_CALLS_JOBS environment variable is incorrectly set to ${
-      // eslint-disable-next-line node/no-process-env, @typescript-eslint/restrict-template-expressions
-      process.env['IS_WORKER_THAT_CALLS_JOBS']
-    }`,
-  );
-}
-
-const IS_WORKER_THAT_CALLS_JOBS = EnvironmentVariablesService.variables
-  .FORK_WORKERS
-  ? isWorkerThatCallsJobsResult.value
-  : true;
+import { LoggingService } from '../logging/logging.service';
+import { NODE_ENV } from '../environment/node-env.constants';
+import { NodeEnv } from '../environment/node-env.types';
 
 const totalCPUs = os.cpus().length;
 
-type SlaveWorkerEntry = {
-  connected?: boolean;
+type ForkedWorkerEntry = {
+  listening?: boolean;
   isWorkerThatCallsJobs: boolean;
   worker: cluster.Worker;
 };
 
-const slaveWorkersMap = new Map<number, SlaveWorkerEntry>();
+const forkedWorkersMap = new Map<number, ForkedWorkerEntry>();
 
 const WORKER_IS_LISTENING_KEY = 'cluster-worker-is-listening';
 
+const FINAL_SHUTDOWN_TIMEOUT = 30000 as number;
+const SHUTDOWN_TIMEOUT = FINAL_SHUTDOWN_TIMEOUT - 10000;
+
+if (SHUTDOWN_TIMEOUT <= 0) {
+  throw new Error(
+    `FINAL_SHUTDOWN_TIMEOUT: ${FINAL_SHUTDOWN_TIMEOUT}; SHUTDOWN_TIMEOUT: ${SHUTDOWN_TIMEOUT};`,
+  );
+}
+
 type WhenWorkerFailsBeforeStartHandler = () => void;
 
-class ClusterModeServiceImpl {
-  isMasterWorker: boolean;
+class ClusterModeService {
   workerId: string;
+
+  isWorkerThatForksMoreWorkers: boolean;
+  isWorkerThatCallsOtherRelatedSetups: boolean;
   isWorkerThatCallsScheduledJobs: boolean | undefined;
+  isForkedWorker: boolean;
 
   private shutdownStarted: boolean;
 
@@ -53,15 +48,46 @@ class ClusterModeServiceImpl {
     | ((worker: cluster.Worker, code: number, signal: string) => void);
   private whenWorkerFailsBeforeStartHandler!: WhenWorkerFailsBeforeStartHandler;
 
-  constructor() {
-    this.isMasterWorker = cluster.isMaster;
+  private loggingService: LoggingService;
+
+  constructor(loggingService: LoggingService) {
+    this.isWorkerThatForksMoreWorkers =
+      EnvironmentVariablesService.variables.FORK_WORKERS && cluster.isMaster;
+
+    this.isWorkerThatCallsOtherRelatedSetups =
+      cluster.isMaster || !EnvironmentVariablesService.variables.FORK_WORKERS;
+
     this.workerId = cluster.isMaster ? 'master' : `${cluster.worker.id}`;
-    this.isWorkerThatCallsScheduledJobs = IS_WORKER_THAT_CALLS_JOBS;
+
+    this.isForkedWorker =
+      EnvironmentVariablesService.variables.FORK_WORKERS && cluster.isWorker;
+
+    const isWorkerThatCallsJobsResult = boolean().validate(
+      // eslint-disable-next-line node/no-process-env
+      process.env['IS_WORKER_THAT_CALLS_JOBS'],
+    );
+
+    if (isWorkerThatCallsJobsResult.errors) {
+      throw new Error(
+        `IS_WORKER_THAT_CALLS_JOBS environment variable is incorrectly set to ${
+          // eslint-disable-next-line node/no-process-env, @typescript-eslint/restrict-template-expressions
+          process.env['IS_WORKER_THAT_CALLS_JOBS']
+        }`,
+      );
+    }
+
+    this.isWorkerThatCallsScheduledJobs = EnvironmentVariablesService.variables
+      .FORK_WORKERS
+      ? isWorkerThatCallsJobsResult.value
+      : true;
+
+    this.loggingService = loggingService;
+
     this.shutdownStarted = false;
   }
 
   fork() {
-    if (!this.isMasterWorker) {
+    if (!this.isWorkerThatForksMoreWorkers) {
       throw new Error();
     }
 
@@ -81,15 +107,13 @@ class ClusterModeServiceImpl {
       throw new Error('Cannot fork twice');
     }
 
-    const loggingService = LoggingServiceSingleton.getInstance();
-
     this.onMessageListener = (worker, message) => {
       if (message === WORKER_IS_LISTENING_KEY) {
-        const workerEntry = slaveWorkersMap.get(worker.id) || throwError();
+        const workerEntry = forkedWorkersMap.get(worker.id) || throwError();
 
-        slaveWorkersMap.set(worker.id, { ...workerEntry, connected: true });
+        forkedWorkersMap.set(worker.id, { ...workerEntry, listening: true });
 
-        loggingService.logInfo(
+        this.loggingService.logInfo(
           'cluster-mode-service:worker-is-listening',
           `Worker ${worker.id} is now listening to requests`,
         );
@@ -97,7 +121,7 @@ class ClusterModeServiceImpl {
     };
 
     this.onExitListener = (worker: cluster.Worker) => {
-      const workerEntry = slaveWorkersMap.get(worker.id) || throwError();
+      const workerEntry = forkedWorkersMap.get(worker.id) || throwError();
       const isWorkerThatCallsJobs = workerEntry.isWorkerThatCallsJobs;
 
       if (!this.shutdownStarted) {
@@ -107,19 +131,19 @@ class ClusterModeServiceImpl {
           This condition here avoids an endless loop of restarts
           in case the worker crashed while starting itself
         */
-        if (workerEntry.connected) {
-          slaveWorkersMap.delete(worker.id);
+        if (workerEntry.listening) {
+          forkedWorkersMap.delete(worker.id);
 
           const newWorker = cluster.fork({
             IS_WORKER_THAT_CALLS_JOBS: isWorkerThatCallsJobs,
           });
 
-          slaveWorkersMap.set(newWorker.id, {
+          forkedWorkersMap.set(newWorker.id, {
             worker: newWorker,
             isWorkerThatCallsJobs,
           });
 
-          loggingService.logError(
+          this.loggingService.logError(
             'cluster-mode-service:crashed-worker-restart',
             new Error(),
             `Will attempt to restart crashed worker \
@@ -128,7 +152,7 @@ as worker ${newWorker.id}...`,
         } else {
           process.exitCode = 1;
 
-          loggingService.logError(
+          this.loggingService.logError(
             'cluster-mode-service:worker-crashed-on-start',
             new Error(),
             `The crashed worker didn't even start. \
@@ -155,62 +179,145 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
         IS_WORKER_THAT_CALLS_JOBS: isWorkerThatCallsJobs,
       });
 
-      slaveWorkersMap.set(worker.id, { worker, isWorkerThatCallsJobs });
+      forkedWorkersMap.set(worker.id, { worker, isWorkerThatCallsJobs });
     }
   }
 
-  markAsListening() {
-    if (this.isMasterWorker) {
-      throw new Error('Only child workers should mark themselves as connected');
+  markWorkerAsListening() {
+    if (this.isWorkerThatForksMoreWorkers) {
+      throw new Error();
     }
 
-    cluster.worker.send(WORKER_IS_LISTENING_KEY);
+    if (this.isForkedWorker) {
+      cluster.worker.send(WORKER_IS_LISTENING_KEY);
+    }
   }
 
-  flagAsShuttingDown() {
-    if (!this.isMasterWorker) {
-      throw new Error(
-        'Only the master process should call shutdown() on the Cluster Service and do further cleanup',
-      );
+  disconnectWorkerThatForkedMoreWorkers() {
+    if (!this.isWorkerThatForksMoreWorkers) {
+      throw new Error();
     }
-
-    const loggingService = LoggingServiceSingleton.getInstance();
 
     this.shutdownStarted = true;
 
-    const timeout = setTimeout(() => {
+    /*
+      Wait for event loop to be empty by setting timeouts
+    */
+    const hangingWorkersTimeout = setTimeout(() => {
       process.exitCode = 1;
 
-      for (const workerId in cluster.workers) {
-        loggingService.logError(
-          'cluster-mode-service:worker-did-not-shutdown',
+      const hangingWorkersIds = Object.keys(cluster.workers);
+
+      if (hangingWorkersIds.length > 0) {
+        this.loggingService._onlyLogErrorToConsole(
+          'cluster-mode-service:hanging-workers',
           new Error(),
-          { workerId },
+          { hangingWorkersIds },
         );
 
-        const worker = cluster.workers[workerId] || throwError();
+        for (const hangingWorkerId of hangingWorkersIds) {
+          const hangingWorker =
+            cluster.workers[hangingWorkerId] || throwError();
 
-        worker.process.kill('SIGKILL');
+          hangingWorker.process.kill('SIGKILL');
+        }
       }
+    }, SHUTDOWN_TIMEOUT);
 
-      const masterTimeout = setTimeout(() => {
-        loggingService._onlyLogErrorToConsole(
-          'cluster-mode-service:master-did-not-shutdown',
+    hangingWorkersTimeout.unref();
+
+    const finalTimeout = setTimeout(() => {
+      process.exitCode = 1;
+
+      this.loggingService._onlyLogErrorToConsole(
+        'cluster-mode-service:master-still-hangs',
+        new Error(),
+        { stillHangingWorkersIds: Object.keys(cluster.workers) },
+      );
+
+      process.exit();
+    }, FINAL_SHUTDOWN_TIMEOUT);
+
+    finalTimeout.unref();
+  }
+
+  whenWorkerFailsBeforeStart(handler: WhenWorkerFailsBeforeStartHandler) {
+    if (!this.isWorkerThatForksMoreWorkers) {
+      throw new Error();
+    }
+
+    this.whenWorkerFailsBeforeStart = handler;
+  }
+
+  disconnectWorker() {
+    if (this.isWorkerThatForksMoreWorkers) {
+      throw new Error();
+    }
+
+    if (module.hot) {
+      if (NODE_ENV === NodeEnv.Development) {
+        // eslint-disable-next-line no-console
+        console.info(`NOTE: Running Node as a child process (like Webpack with Hot Reload does) makes workers hang even if the event loop is empty.
+To test graceful shutdowns, use npm run start:dev:tsc or npm run start:debug:tsc instead.`);
+
+        process.exit();
+      } else {
+        throw new Error();
+      }
+    }
+
+    if (this.isForkedWorker) {
+      process.disconnect();
+    } else {
+      /*
+        Log if only worker does not empty event loop and exits during the designated timeout
+      */
+      const timeout = setTimeout(() => {
+        process.exitCode = 1;
+
+        this.loggingService._onlyLogErrorToConsole(
+          'cluster-mode-service:only-worker-did-not-exit-gracefully',
           new Error(),
         );
 
         process.exit();
-      }, 10000);
+      }, SHUTDOWN_TIMEOUT);
 
-      masterTimeout.unref();
-    }, 30000);
-
-    timeout.unref();
-  }
-
-  whenWorkerFailsBeforeStart(handler: WhenWorkerFailsBeforeStartHandler) {
-    this.whenWorkerFailsBeforeStart = handler;
+      timeout.unref();
+    }
   }
 }
 
-export const ClusterModeService = new ClusterModeServiceImpl();
+let instance: ClusterModeService | undefined;
+
+export const ClusterModeServiceSingleton = {
+  getInstance: () => instance || throwError(),
+  makeInstance: (loggingService: LoggingService) => {
+    if (instance) {
+      throw new Error('Only one instance per worker');
+    }
+
+    if (
+      (cluster.isMaster ||
+        !EnvironmentVariablesService.variables.FORK_WORKERS) &&
+      /*
+        Running Node as a child process (like Webpack with Hot Reload does)
+        makes workers hang even if the event loop is empty
+      */
+      !module.hot
+    ) {
+      process.on('beforeExit', () => {
+        if (!process.exitCode) {
+          loggingService.logInfo(
+            'all-workers-shut-down-correctly',
+            'All workers shut down correctly',
+          );
+        }
+      });
+    }
+
+    instance = new ClusterModeService(loggingService);
+
+    return instance;
+  },
+};

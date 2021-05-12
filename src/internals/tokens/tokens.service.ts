@@ -1,11 +1,11 @@
+import { OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common';
 import { LoggingService } from 'src/internals/logging/logging.service';
-import { ClusterModeService } from '../server/cluster-mode-service';
+import { ClusterModeServiceSingleton } from '../server/cluster-mode-service';
 import { Token } from './token.entity';
 import { TokensRepository } from './tokens.repository';
 
-export abstract class TokensService<
-  Repository extends TokensRepository<Token>
-> {
+export abstract class TokensService<Repository extends TokensRepository<Token>>
+  implements OnApplicationBootstrap, OnApplicationShutdown {
   private tokenCleanupInterval?: NodeJS.Timeout;
 
   constructor(
@@ -14,7 +14,9 @@ export abstract class TokensService<
   ) {}
 
   onApplicationBootstrap() {
-    if (ClusterModeService.isWorkerThatCallsScheduledJobs) {
+    const clusterModeService = ClusterModeServiceSingleton.getInstance();
+
+    if (clusterModeService.isWorkerThatCallsScheduledJobs) {
       this.tokenCleanupInterval = setInterval(() => {
         this.cleanupExpiredRefreshTokens().catch((error) => {
           this.loggingService.logError(

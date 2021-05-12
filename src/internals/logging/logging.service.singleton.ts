@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { inspect } from 'util';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
-import { ClusterModeService } from '../server/cluster-mode-service';
+import { ClusterModeServiceSingleton } from '../server/cluster-mode-service';
 import { LoggingService } from './logging.service';
 
 function nestedValuesToString(value: unknown) {
@@ -18,9 +18,11 @@ function nestedValuesToString(value: unknown) {
 
 class LoggingServiceImpl extends LoggingService {
   logDebug(key: string, extraData?: unknown) {
+    const clusterModeService = ClusterModeServiceSingleton.getInstance();
+
     if (EnvironmentVariablesService.variables.LOG_DEBUG) {
       console.log(
-        `----- DEBUG [Worker ${ClusterModeService.workerId}]:`,
+        `----- DEBUG [Worker ${clusterModeService.workerId}]:`,
         key,
         '\nExtra data:',
         nestedValuesToString(extraData),
@@ -30,8 +32,10 @@ class LoggingServiceImpl extends LoggingService {
   }
 
   logInfo(key: string, message: string, extraData?: unknown) {
+    const clusterModeService = ClusterModeServiceSingleton.getInstance();
+
     console.info(
-      `[Worker ${ClusterModeService.workerId}] ` + 'Info:',
+      `[Worker ${clusterModeService.workerId}] ` + 'Info:',
       key,
       '\nMessage:',
       message,
@@ -42,8 +46,10 @@ class LoggingServiceImpl extends LoggingService {
   }
 
   logWarning(key: string, message: string, extraData?: unknown) {
+    const clusterModeService = ClusterModeServiceSingleton.getInstance();
+
     console.warn(
-      `[Worker ${ClusterModeService.workerId}] `,
+      `[Worker ${clusterModeService.workerId}] `,
       'Warning:',
       key,
       '\nMessage:',
@@ -80,8 +86,10 @@ class LoggingServiceImpl extends LoggingService {
       ? (caughtValue as Error)
       : new Error();
 
+    const clusterModeService = ClusterModeServiceSingleton.getInstance();
+
     console.error(
-      `[Worker ${ClusterModeService.workerId}] ` + 'Error:' + key,
+      `[Worker ${clusterModeService.workerId}] ` + 'Error:' + key,
       '\nError:',
       nestedValuesToString(error),
       !caughtValueIsInstanceOfError

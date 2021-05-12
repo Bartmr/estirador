@@ -1,11 +1,10 @@
 import 'source-map-support/register';
 import 'src/internals/environment/load-environment-variables';
 
-import { ClusterModeService } from './internals/server/cluster-mode-service';
+import { ClusterModeServiceSingleton } from './internals/server/cluster-mode-service';
 import { LoggingServiceSingleton } from './internals/logging/logging.service.singleton';
 import { NODE_ENV } from './internals/environment/node-env.constants';
 import { NodeEnv } from './internals/environment/node-env.types';
-import { EnvironmentVariablesService } from './internals/environment/environment-variables.service';
 import type { hotReloadDatabases } from './internals/databases/hot-reload-databases';
 import { UnwrapPromise } from '@app/shared/internals/utils/types/promise-types';
 import { ProcessType } from './internals/process/process-context';
@@ -22,8 +21,6 @@ ProcessContextManager.setContext({
   workerId: generateRandomUUID(),
 });
 
-const FORK_WORKERS = EnvironmentVariablesService.variables.FORK_WORKERS;
-
 async function bootstrap() {
   const closingPromise = (module.hot?.data as ModuleHotData | undefined)
     ?.closingPromise;
@@ -32,13 +29,16 @@ async function bootstrap() {
   }
 
   const loggingService = LoggingServiceSingleton.makeInstance();
+  const clusterModeService = ClusterModeServiceSingleton.makeInstance(
+    loggingService,
+  );
 
   let hotReloadedDatabasesResult:
     | UnwrapPromise<ReturnType<typeof hotReloadDatabases>>
     | undefined = undefined;
   if (
     NODE_ENV === NodeEnv.Development &&
-    (ClusterModeService.isMasterWorker || module.hot)
+    clusterModeService.isWorkerThatCallsOtherRelatedSetups
   ) {
     const { hotReloadDatabases } = await import(
       './internals/databases/hot-reload-databases'
@@ -59,7 +59,7 @@ async function bootstrap() {
     so they appear on the logs even if the master / child worker exits unexpectedly
   */
 
-  if (ClusterModeService.isMasterWorker && FORK_WORKERS) {
+  if (clusterModeService.isWorkerThatForksMoreWorkers) {
     const masterShutdownSignalHandler = () => {
       process.removeListener('SIGTERM', masterShutdownSignalHandler);
       process.removeListener('SIGINT', masterShutdownSignalHandler);
@@ -67,14 +67,21 @@ async function bootstrap() {
         process.removeListener('SIGUSR2', masterShutdownSignalHandler);
       }
 
-      ClusterModeService.flagAsShuttingDown();
+      loggingService.logInfo(
+        'forker-of-workers-started-shutting-down',
+        'Worker that forks more workers started shutting down',
+      );
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      (async () => {
+      const shutdown = async () => {
         if (hotReloadedDatabasesResult) {
           await Promise.all(hotReloadedDatabasesResult.map((c) => c.close()));
         }
-      })();
+
+        clusterModeService.disconnectWorkerThatForkedMoreWorkers();
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      shutdown();
     };
 
     process.on('SIGTERM', masterShutdownSignalHandler);
@@ -82,26 +89,9 @@ async function bootstrap() {
     if (listenToSIGUSR2) {
       process.on('SIGUSR2', masterShutdownSignalHandler);
     }
-    ClusterModeService.whenWorkerFailsBeforeStart(masterShutdownSignalHandler);
+    clusterModeService.whenWorkerFailsBeforeStart(masterShutdownSignalHandler);
 
-    process.on('beforeExit', () => {
-      if (process.exitCode) {
-        loggingService.logError(
-          'master-or-workers-did-not-shutdown-correctly',
-          new Error(),
-          {
-            exitCode: process.exitCode,
-          },
-        );
-      } else {
-        loggingService.logInfo(
-          'master-shut-down-correctly',
-          'The master process shut down correctly: by finishing everything in its event loop',
-        );
-      }
-    });
-
-    ClusterModeService.fork();
+    clusterModeService.fork();
   } else {
     const { createApp } = await import('./create-app');
 
@@ -116,8 +106,12 @@ async function bootstrap() {
         process.removeListener('SIGUSR2', workerShutdownSignalHandler);
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      (async () => {
+      loggingService.logInfo(
+        'worker-started-shutting-down',
+        'Worker started shutting down',
+      );
+
+      const shutdown = async () => {
         if (args.isHotReload) {
           args.data.closingPromise = app.close();
         } else {
@@ -126,8 +120,13 @@ async function bootstrap() {
           if (hotReloadedDatabasesResult) {
             await Promise.all(hotReloadedDatabasesResult.map((c) => c.close()));
           }
+
+          clusterModeService.disconnectWorker();
         }
-      })();
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      shutdown();
     };
 
     const workerShutdownSignalHandler = () => {
@@ -148,18 +147,9 @@ async function bootstrap() {
       });
     }
 
-    process.on('beforeExit', () => {
-      loggingService.logInfo(
-        'worker-shut-down-correctly',
-        'Worker shut down correctly: by finishing everything in its event loop',
-      );
-    });
-
     await app.listen(3000);
 
-    if (FORK_WORKERS) {
-      ClusterModeService.markAsListening();
-    }
+    clusterModeService.markWorkerAsListening();
   }
 }
 

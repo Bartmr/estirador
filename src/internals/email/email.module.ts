@@ -12,12 +12,10 @@ export const USE_DEV_EMAIL =
 
 @Module({
   providers: [
-    USE_DEV_EMAIL
-      ? {
-          provide: EmailService,
-          useClass: DevEmailService,
-        }
-      : throwError('Not Implemented'),
+    {
+      provide: EmailService,
+      useClass: USE_DEV_EMAIL ? DevEmailService : throwError('Not Implemented'),
+    },
   ],
   exports: [EmailService],
 })

@@ -4,6 +4,9 @@
 # dependencies from all projects
 node_modules
 
+# Used by boilerplate update scripts
+.git-bkp
+
 # ESLint cache
 .eslintcache
 
