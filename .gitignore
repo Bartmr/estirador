@@ -5,7 +5,8 @@
 node_modules
 
 # Used by boilerplate update scripts
-.git-bkp
+/.git-bkp
+/.git-file-bkp
 
 # ESLint cache
 .eslintcache

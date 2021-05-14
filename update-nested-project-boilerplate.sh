@@ -12,6 +12,10 @@ else
 
   echo "Updating..."
 
+  if [ -f "./.git" ]; then
+    mv .git .git-file-bkp
+  fi
+
   git init
   git add .
   git commit -m "Before update"
@@ -20,6 +24,10 @@ else
   git pull boilerplate $git_branch --allow-unrelated-histories
 
   rm -rf ./.git/
+
+  if [ -f "./.git" ]; then
+    mv .git-file-bkp .git
+  fi
 
   git clean -Xdf
 
