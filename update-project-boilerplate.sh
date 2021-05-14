@@ -14,9 +14,13 @@ if [ "$force" = "true" ]; then
   update_mode='FORCED'
 fi
 
-if [ ! -d "./.git/" ]
+if [ -f "./.git" ] && [ "$force" = "true" ]
 then
-  echo -e "This command is only to be used when the project is IN the root directory of the repository"
+  echo -e "This project is a Git Submodule!
+If you want to run a forced update on a Git Submodule, use the update-nested-project-boilerplate.sh script."
+elif [ ! -d "./.git/" ] && [ ! -f "./.git" ]
+then
+  echo -e "This command is only to be used when the project is in the root directory of a Git repository"
 else
   echo "Update will run in $update_mode mode."
 
@@ -52,7 +56,10 @@ To continue with the update write yes and press Enter.
   fi
 
   git remote add boilerplate $git_url
-  git pull boilerplate $git_branch --allow-unrelated-histories
+
+  git fetch boilerplate $git_branch
+
+  git merge "boilerplate/${git_branch}" --allow-unrelated-histories
 
   if [ "$force" = "true" ]; then
     rm -rf ./.git/

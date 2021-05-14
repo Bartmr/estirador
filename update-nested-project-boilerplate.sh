@@ -2,7 +2,7 @@
 
 if [ -d "./.git/" ]
 then
-  echo -e "This command is only to be used when the project is NOT on the root directory of the repository"
+  echo -e "This command is only to be used when the project is NOT in the root directory of a Git repository"
 else
   echo "Paste the URL of the git repository where the boilerplate is"
   read git_url
