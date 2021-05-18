@@ -16,6 +16,7 @@ import { EntityManager } from 'typeorm';
 import { AuthSessionDTO } from '../auth.dto';
 import { HttpAdapterHost } from '@nestjs/core';
 import { AppServerHttpAdapter } from 'src/internals/server/types/app-server-http-adapter-types';
+import { JobsConfigService } from 'src/internals/jobs/config/jobs-config.service';
 
 const JWT_ALGORITHM: Algorithm = 'HS256';
 
@@ -27,8 +28,9 @@ export class AuthTokensService extends TokensService<RefreshTokensRepository> {
     loggingService: LoggingService,
     private jwtService: JwtService,
     private httpAdapterHost: HttpAdapterHost<AppServerHttpAdapter>,
+    jobsConfigService: JobsConfigService,
   ) {
-    super(tokensRepository, loggingService);
+    super(tokensRepository, loggingService, jobsConfigService);
   }
 
   async createSession(

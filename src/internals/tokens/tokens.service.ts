@@ -1,6 +1,6 @@
 import { OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common';
 import { LoggingService } from 'src/internals/logging/logging.service';
-import { ClusterModeServiceSingleton } from '../server/cluster-mode-service';
+import { JobsConfigService } from '../jobs/config/jobs-config.service';
 import { Token } from './token.entity';
 import { TokensRepository } from './tokens.repository';
 
@@ -11,12 +11,11 @@ export abstract class TokensService<Repository extends TokensRepository<Token>>
   constructor(
     protected tokensRepository: Repository,
     protected loggingService: LoggingService,
+    protected jobsConfigService: JobsConfigService,
   ) {}
 
   onApplicationBootstrap() {
-    const clusterModeService = ClusterModeServiceSingleton.getInstance();
-
-    if (clusterModeService.isWorkerThatCallsScheduledJobs) {
+    if (this.jobsConfigService.shouldCallScheduledJobs) {
       this.tokenCleanupInterval = setInterval(() => {
         this.cleanupExpiredRefreshTokens().catch((error) => {
           this.loggingService.logError(

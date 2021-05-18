@@ -7,6 +7,10 @@ import { LoggingService } from '../logging/logging.service';
 import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';
 
+if (NODE_ENV === NodeEnv.Test) {
+  throw new Error();
+}
+
 const totalCPUs = os.cpus().length;
 
 type ForkedWorkerEntry = {
@@ -35,7 +39,7 @@ class ClusterModeService {
 
   isWorkerThatForksMoreWorkers: boolean;
   isWorkerThatCallsOtherRelatedSetups: boolean;
-  isWorkerThatCallsScheduledJobs: boolean | undefined;
+  isWorkerThatCallsScheduledJobs: boolean;
   isForkedWorker: boolean;
 
   private shutdownStarted: boolean;
@@ -78,7 +82,7 @@ class ClusterModeService {
 
     this.isWorkerThatCallsScheduledJobs = EnvironmentVariablesService.variables
       .FORK_WORKERS
-      ? isWorkerThatCallsJobsResult.value
+      ? isWorkerThatCallsJobsResult.value ?? false
       : true;
 
     this.loggingService = loggingService;

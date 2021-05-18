@@ -8,6 +8,7 @@ import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { RefreshTokensRepository } from './tokens/refresh-token.repository';
 import { AuthTokensService } from './tokens/auth-tokens.service';
+import { JobsConfigModule } from 'src/internals/jobs/config/jobs-config.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthTokensService } from './tokens/auth-tokens.service';
       },
     }),
     TypeOrmModule.forFeature([RefreshTokensRepository]),
+    JobsConfigModule,
     UsersModule,
   ],
   providers: [
