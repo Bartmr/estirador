@@ -1,7 +1,10 @@
 import 'source-map-support/register';
 import 'src/internals/environment/load-environment-variables';
 
-import { ClusterModeServiceSingleton } from './internals/server/cluster-mode-service';
+import {
+  ClusterModeServiceSingleton,
+  ClusterModeServiceType,
+} from './internals/server/cluster-mode-service';
 import { LoggingServiceSingleton } from './internals/logging/logging.service.singleton';
 import { NODE_ENV } from './internals/environment/node-env.constants';
 import { NodeEnv } from './internals/environment/node-env.types';
@@ -13,6 +16,7 @@ import { generateRandomUUID } from './internals/utils/generate-random-uuid';
 
 type ModuleHotData = {
   closingPromise?: Promise<unknown>;
+  clusterModeService?: ClusterModeServiceType;
 };
 
 ProcessContextManager.setContext({
@@ -29,9 +33,9 @@ async function bootstrap() {
   }
 
   const loggingService = LoggingServiceSingleton.makeInstance();
-  const clusterModeService = ClusterModeServiceSingleton.makeInstance(
-    loggingService,
-  );
+  const clusterModeService =
+    (module.hot?.data as ModuleHotData | undefined)?.clusterModeService ||
+    ClusterModeServiceSingleton.makeInstance(loggingService);
 
   let hotReloadedDatabasesResult:
     | UnwrapPromise<ReturnType<typeof hotReloadDatabases>>
@@ -114,6 +118,7 @@ async function bootstrap() {
       const shutdown = async () => {
         if (args.isHotReload) {
           args.data.closingPromise = app.close();
+          args.data.clusterModeService = clusterModeService;
         } else {
           await app.close();
 

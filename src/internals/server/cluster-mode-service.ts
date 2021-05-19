@@ -292,6 +292,8 @@ To test graceful shutdowns, use npm run start:dev:tsc or npm run start:debug:tsc
   }
 }
 
+export type ClusterModeServiceType = ClusterModeService;
+
 let instance: ClusterModeService | undefined;
 
 export const ClusterModeServiceSingleton = {
