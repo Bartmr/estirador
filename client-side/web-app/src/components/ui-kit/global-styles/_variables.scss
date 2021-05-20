@@ -184,6 +184,14 @@ $spacers: (
 
 $grid-gutter-width: $spacer;
 
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
 $font-1: 'Open Sans', sans-serif;
 
 $font-family-sans-serif: $font-1;
