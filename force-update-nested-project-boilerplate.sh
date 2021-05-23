@@ -21,7 +21,10 @@ else
   git commit -m "Before update"
 
   git remote add boilerplate $git_url
-  git pull boilerplate $git_branch --allow-unrelated-histories
+
+  git fetch boilerplate $git_branch
+
+  git merge "boilerplate/${git_branch}" --allow-unrelated-histories
 
   rm -rf ./.git/
 
@@ -38,9 +41,11 @@ else
 - CHECK IF THE UPDATE DIDN'T FAILED HALFWAY:
   - Make sure the current git repository is again pointing to your project's repository and NOT to the boilerplate repository.
     - You can do this by running 'git remote' and checking that there is no remote called 'boilerplate'
-    - If the update failed:
-      - Delete the '.git/' directory in the root directory of the repository where this project is stored.
+      - If the 'boilerplate' remote still exists:
+        - Delete the '.git/' directory in the root directory of the repository where this project is stored.
+        - If this project is a Git Submodule, check if 'git-file-bkp' file exists and rename it back to '.git'
 - Pick the updates you want to add to the project
 - Run 'npm run install:all' to update the 'package-lock.json' files with the dependencies changes
-- Commit everything as normal work"
+- IF YOU WANT TO ABORT the update, just discard the changes as you normally would with your work.
+- To finalize the update, commit everything as you would do with regular work"
 fi
