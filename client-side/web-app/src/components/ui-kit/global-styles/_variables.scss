@@ -134,12 +134,12 @@ $dark-contrasting-colors: (
 /* Light text colors to use in dark background colors */
 
 $light-contrasting-colors: (
-  primary: change-color($primary, $lightness: 70%),
-  secondary: change-color($secondary, $lightness: 70%),
-  success: change-color($success, $lightness: 70%),
-  info: change-color($info, $lightness: 70%),
-  warning: change-color($warning, $lightness: 70%),
-  danger: change-color($danger, $lightness: 70%),
+  primary: change-color($primary, $lightness: 80%),
+  secondary: change-color($secondary, $lightness: 80%),
+  success: change-color($success, $lightness: 80%),
+  info: change-color($info, $lightness: 80%),
+  warning: change-color($warning, $lightness: 80%),
+  danger: change-color($danger, $lightness: 80%),
   light: $light,
   lightest: $lightest,
   dark: $dark,
