@@ -44,7 +44,8 @@ export async function hotReloadDatabases(): Promise<Connection[]> {
         await migrationExecutor.undoLastMigration();
       }
 
-      const pendingMigrations = await migrationExecutor.executePendingMigrations();
+      const pendingMigrations =
+        await migrationExecutor.executePendingMigrations();
 
       // eslint-disable-next-line no-console
       console.info(

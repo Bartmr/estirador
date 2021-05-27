@@ -4,11 +4,10 @@ import { Schema } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { SignupResult } from 'src/users/users.dto';
 
-const refreshRequestBodySchema: Schema<RefreshAccessTokenRequestBodyDTO> = object(
-  {
+const refreshRequestBodySchema: Schema<RefreshAccessTokenRequestBodyDTO> =
+  object({
     refreshToken: string().defined(),
-  },
-).defined();
+  }).defined();
 
 @ValidationSchema(refreshRequestBodySchema)
 export class RefreshAccessTokenRequestBodyDTO {

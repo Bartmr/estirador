@@ -5,7 +5,7 @@ import { useStoreReducers } from './use-store-reducers';
 
 export function useStoreSelector<
   ReducersMapToLoad extends Partial<FullyLoadedStoreReducersMap>,
-  TSelected
+  TSelected,
 >(
   reducersMapToLoad: ReducersMapToLoad,
   selector: (state: StateFromReducersMapObject<ReducersMapToLoad>) => TSelected,

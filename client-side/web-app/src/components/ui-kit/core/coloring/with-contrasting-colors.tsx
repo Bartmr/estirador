@@ -6,6 +6,7 @@ type Props<AsHTMLElement extends keyof JSX.IntrinsicElements> = {
   asHTMLElement: keyof AsHTMLElement;
   dominantBackgroundColor: string;
   children?: ReactNode;
+  className?: string;
 } & JSX.IntrinsicElements[AsHTMLElement];
 
 function isColorDark(color: string): boolean {
@@ -24,18 +25,17 @@ function isColorDark(color: string): boolean {
 }
 
 export function WithContrastingColors<
-  AsHTMLElement extends keyof JSX.IntrinsicElements
+  AsHTMLElement extends keyof JSX.IntrinsicElements,
 >(props: Props<AsHTMLElement>) {
   const {
     asHTMLElement,
     dominantBackgroundColor,
     children,
+    className,
     ...htmlElementProps
   } = props;
 
-  const className = (htmlElementProps.className as string | undefined) || '';
-
-  const As = (asHTMLElement as unknown) as ComponentClass;
+  const As = asHTMLElement as unknown as ComponentClass;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
   const _htmlElementProps = htmlElementProps as any;
@@ -43,7 +43,7 @@ export function WithContrastingColors<
   return (
     <As
       {..._htmlElementProps}
-      className={`${className} ${
+      className={`${className || ''} ${
         isColorDark(dominantBackgroundColor)
           ? 'attach-light-contrasting-colors'
           : 'attach-dark-contrasting-colors'

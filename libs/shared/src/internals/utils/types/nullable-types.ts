@@ -5,10 +5,8 @@ export type NonNullableExcept<T, Exceptions extends keyof T> = {
 } &
   Pick<T, Exceptions>;
 
-export type NonNullableFields<
-  T,
-  NonNullableFieldKeys extends keyof T
-> = OmitWithTypesafeKeys<T, NonNullableFieldKeys> &
-  {
-    [NNK in NonNullableFieldKeys]-?: NonNullable<T[NNK]>;
-  };
+export type NonNullableFields<T, NonNullableFieldKeys extends keyof T> =
+  OmitWithTypesafeKeys<T, NonNullableFieldKeys> &
+    {
+      [NNK in NonNullableFieldKeys]-?: NonNullable<T[NNK]>;
+    };

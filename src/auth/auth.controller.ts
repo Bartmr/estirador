@@ -42,10 +42,11 @@ export class AuthController {
       throw new BadRequestException('no-hostname');
     }
 
-    const accessToken = await this.tokensService.createAccessTokenFromRefreshToken(
-      body.refreshToken,
-      hostname,
-    );
+    const accessToken =
+      await this.tokensService.createAccessTokenFromRefreshToken(
+        body.refreshToken,
+        hostname,
+      );
 
     return {
       accessToken,

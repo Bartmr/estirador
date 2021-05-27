@@ -51,9 +51,8 @@ describe('Abstract Entity', () => {
 
       entity.propA = newDate;
 
-      const customRepository = connection.manager.getCustomRepository(
-        TestsRepository,
-      );
+      const customRepository =
+        connection.manager.getCustomRepository(TestsRepository);
 
       const auditContext: AuditContext = {
         operationId: generateRandomUUID(),

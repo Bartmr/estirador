@@ -5,7 +5,8 @@ import { Token } from './token.entity';
 import { TokensRepository } from './tokens.repository';
 
 export abstract class TokensService<Repository extends TokensRepository<Token>>
-  implements OnApplicationBootstrap, OnApplicationShutdown {
+  implements OnApplicationBootstrap, OnApplicationShutdown
+{
   private tokenCleanupInterval?: NodeJS.Timeout;
 
   constructor(

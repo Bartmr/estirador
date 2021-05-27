@@ -10,7 +10,7 @@ type SupportedRouteParametersSchema = Schema<{
 }>;
 
 export function useRouteParameters<
-  RouteParametersSchema extends SupportedRouteParametersSchema
+  RouteParametersSchema extends SupportedRouteParametersSchema,
 >(schema: RouteParametersSchema) {
   const unparsedParameters = useParams() as unknown;
   const appNavigation = useAppNavigation();

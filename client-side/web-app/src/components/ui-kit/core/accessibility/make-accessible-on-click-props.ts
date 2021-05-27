@@ -2,7 +2,7 @@ import React from 'react';
 import { SyntheticEvent } from 'react';
 
 export type AccessibleOnClickPropsHandler<
-  Element extends HTMLElement = HTMLElement
+  Element extends HTMLElement = HTMLElement,
 > = (event: SyntheticEvent<Element>) => void;
 
 export type AcceptedRoles = 'button' | 'switch';
@@ -15,7 +15,7 @@ export const ROLES_ACCEPTED_KEYBOARD_CODES: {
 };
 
 export function makeAccessibleOnClickProps<
-  Element extends HTMLElement = HTMLElement
+  Element extends HTMLElement = HTMLElement,
 >(
   handler: AccessibleOnClickPropsHandler<Element>,
   role: AcceptedRoles,

@@ -8,7 +8,7 @@ import { useStoreReducers } from './use-store-reducers';
  * in the middle of an async function
  */
 export function useStoreGetState<
-  ReducersMapToLoad extends Partial<FullyLoadedStoreReducersMap>
+  ReducersMapToLoad extends Partial<FullyLoadedStoreReducersMap>,
 >(
   reducersMapToLoad: ReducersMapToLoad,
 ): () => StateFromReducersMapObject<ReducersMapToLoad> {

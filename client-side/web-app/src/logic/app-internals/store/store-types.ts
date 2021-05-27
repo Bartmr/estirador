@@ -8,7 +8,8 @@ import { StoreReducersMap } from './store-reducers-map';
 export type FullyLoadedStoreReducersMap = Required<StoreReducersMap>;
 export type FullyLoadedStoreState = Required<StoreState>;
 
-export type StoreAction = ActionFromReducersMapObject<FullyLoadedStoreReducersMap>;
+export type StoreAction =
+  ActionFromReducersMapObject<FullyLoadedStoreReducersMap>;
 
 export type StoreState = {
   [K in keyof StoreReducersMap]: ReturnType<NonNullable<StoreReducersMap[K]>>;
@@ -17,7 +18,7 @@ export type StoreState = {
 export type Store = ReduxStore<StoreState, StoreAction>;
 
 export type StoreDispatch<
-  ReducerKey extends keyof FullyLoadedStoreReducersMap
+  ReducerKey extends keyof FullyLoadedStoreReducersMap,
 > = Dispatch<
   ActionFromReducersMapObject<
     {
@@ -26,8 +27,7 @@ export type StoreDispatch<
   >
 >;
 
-export type StoreGetState<
-  StateKey extends keyof FullyLoadedStoreState
-> = () => {
-  [K in StateKey]: FullyLoadedStoreState[K];
-};
+export type StoreGetState<StateKey extends keyof FullyLoadedStoreState> =
+  () => {
+    [K in StateKey]: FullyLoadedStoreState[K];
+  };

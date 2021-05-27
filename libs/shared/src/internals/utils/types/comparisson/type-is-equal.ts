@@ -5,7 +5,5 @@
  * To check what properties are not being compatible,
  * just reverse the generic parameters order
  */
-export type TypeIsEqualTo<
-  Comparator,
-  T extends Comparator
-> = Comparator extends T ? T : unknown;
+export type TypeIsEqualTo<Comparator, T extends Comparator> =
+  Comparator extends T ? T : unknown;

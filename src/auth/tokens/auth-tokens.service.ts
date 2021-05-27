@@ -93,9 +93,8 @@ export class AuthTokensService extends TokensService<RefreshTokensRepository> {
       }
     }
 
-    const payloadValidationResult = accessTokenPayloadSchema.validate(
-      unparsedPayload,
-    );
+    const payloadValidationResult =
+      accessTokenPayloadSchema.validate(unparsedPayload);
 
     if (payloadValidationResult.errors) {
       throw new UnauthorizedException();
@@ -134,9 +133,8 @@ export class AuthTokensService extends TokensService<RefreshTokensRepository> {
       }
     }
 
-    const payloadValidationResult = accessTokenPayloadSchema.validate(
-      unparsedPayload,
-    );
+    const payloadValidationResult =
+      accessTokenPayloadSchema.validate(unparsedPayload);
 
     if (payloadValidationResult.errors) {
       throw new UnauthorizedException();

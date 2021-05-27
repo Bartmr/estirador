@@ -15,7 +15,8 @@ import { JobsConfigService } from './jobs-config.service';
             '../../server/cluster-mode-service'
           );
 
-          const clusterModeService = clusterModeSingletonModule.ClusterModeServiceSingleton.getInstance();
+          const clusterModeService =
+            clusterModeSingletonModule.ClusterModeServiceSingleton.getInstance();
 
           return new JobsConfigService({
             shouldCallScheduledJobs:

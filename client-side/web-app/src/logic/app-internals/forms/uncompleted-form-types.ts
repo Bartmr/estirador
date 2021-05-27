@@ -26,6 +26,6 @@ type _UncompletedForm<T, IsRootOfForm extends boolean = false> =
 
 export type UncompletedForm<
   T extends Array<unknown> | { [key: string]: unknown },
-  IsRootOfForm extends boolean = false
+  IsRootOfForm extends boolean = false,
 > = _UncompletedForm<T, IsRootOfForm>;
 export type UncompletedFormField<T> = FormField<T> | undefined;

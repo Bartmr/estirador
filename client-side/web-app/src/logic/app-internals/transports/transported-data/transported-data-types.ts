@@ -34,15 +34,14 @@ export type TransportedData<Data> = Readonly<
     }
 >;
 
-export type UnwrapTransportedData<
-  T extends TransportedData<unknown>
-> = T extends {
-  status: TransportedDataStatus.Done;
-  data: infer U;
-}
-  ? U
-  : /*
+export type UnwrapTransportedData<T extends TransportedData<unknown>> =
+  T extends {
+    status: TransportedDataStatus.Done;
+    data: infer U;
+  }
+    ? U
+    : /*
     Discard all other TransportedData states
     that may not have any data
   */
-    never;
+      never;

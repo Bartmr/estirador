@@ -9,7 +9,7 @@ type SupportedQueryParametersSchema = Schema<{
 }>;
 
 export function useQueryParameters<
-  QueryParametersSchema extends SupportedQueryParametersSchema
+  QueryParametersSchema extends SupportedQueryParametersSchema,
 >(schema: QueryParametersSchema) {
   type QueryParameters = InferType<QueryParametersSchema>;
 

@@ -41,7 +41,7 @@ export interface FindOptions<Entity extends AuditedEntity>
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,
-  FieldsOmittedBeforePersistence extends keyof Entity = never
+  FieldsOmittedBeforePersistence extends keyof Entity = never,
 > extends AbstractRepository<Entity> {
   _AuditedEntityCreationAttributes!: OmitWithUndefined<
     Entity,

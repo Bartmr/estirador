@@ -79,9 +79,9 @@ type ModuleHotData = {
 
 const GiveContextToContents = (props: { children: ReactNode }) => {
   const [storeManager] = useState(() => {
-    const storeManagerFromPreviousRuntime = (module.hot?.data as
-      | ModuleHotData
-      | undefined)?.storeManager;
+    const storeManagerFromPreviousRuntime = (
+      module.hot?.data as ModuleHotData | undefined
+    )?.storeManager;
 
     const storeManager =
       storeManagerFromPreviousRuntime || createStoreManager();

@@ -114,7 +114,7 @@ export abstract class JSONApiBase {
 
   get<
     Response extends JsonHttpResponseBase = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never
+    QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -129,7 +129,7 @@ export abstract class JSONApiBase {
   post<
     Response extends JsonHttpResponseBase = never,
     RequestBody extends SupportedRequestBody = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never
+    QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -144,7 +144,7 @@ export abstract class JSONApiBase {
   put<
     Response extends JsonHttpResponseBase = never,
     RequestBody extends SupportedRequestBody = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never
+    QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -159,7 +159,7 @@ export abstract class JSONApiBase {
   patch<
     Response extends JsonHttpResponseBase = never,
     RequestBody extends SupportedRequestBody = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never
+    QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -173,7 +173,7 @@ export abstract class JSONApiBase {
   }
   delete<
     Response extends JsonHttpResponseBase = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never
+    QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -185,7 +185,7 @@ export abstract class JSONApiBase {
     });
   }
   head<
-    QueryParams extends SupportedRequestQueryParams | undefined = never
+    QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;

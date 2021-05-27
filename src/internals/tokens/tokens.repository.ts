@@ -3,7 +3,7 @@ import { AbstractRepository, LessThan, MoreThan } from 'typeorm';
 import { Token } from './token.entity';
 
 export abstract class TokensRepository<
-  Entity extends Token
+  Entity extends Token,
 > extends AbstractRepository<Entity> {
   deleteExpired() {
     return this.repository.delete({

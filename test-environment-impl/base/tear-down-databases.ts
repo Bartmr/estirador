@@ -29,7 +29,8 @@ export async function tearDownDatabases(connectionsArg?: Connection[]) {
     connections.map(async (connection) => {
       const queryRunner = connection.createQueryRunner();
       const migrationExecutor = new MigrationExecutor(connection, queryRunner);
-      const executedMigrations = await migrationExecutor.getExecutedMigrations();
+      const executedMigrations =
+        await migrationExecutor.getExecutedMigrations();
 
       if (!queryRunner.isReleased) {
         await queryRunner.release();
