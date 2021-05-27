@@ -54,7 +54,7 @@
     "integrity-check:web-app": "cd client-side/web-app && npm run build:reset && npm run lint:no-fix",
     "integrity-check:all": "concurrently \"npm run integrity-check:api\" \"npm run integrity-check:web-app\" -n \"api,web-app\" --no-color --kill-others-on-fail",
     "precommit": "lint-staged && npm run integrity-check:all",
-    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json && npm install",
+    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install",
     "nest": "nest",
     "typeorm": "npm run ts-node ./node_modules/.bin/typeorm",
     "ts-node": "ts-node --project tsconfig.build.json --transpile-only -r tsconfig-paths/register"

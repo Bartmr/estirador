@@ -88,6 +88,6 @@
     "lint": "npm run eslint -- --fix",
     "lint:no-fix": "npm run eslint",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
-    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json && npm install"
+    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install"
   }
 }
