@@ -1,8 +1,12 @@
 .navbar {
   .navbar-nav {
     .navbar-nav-divider {
+      border-style: solid;
+      border-top-width: $hr-border-width;
+
       width: 100%;
-      height: $hr-border-width;
+      height: 0;
+
       align-self: center;
     }
   }
@@ -11,14 +15,7 @@
 .navbar.navbar-light {
   .navbar-nav {
     .navbar-nav-divider {
-      background-color: $hr-border-color;
-    }
-  }
-}
-.navbar.navbar-dark {
-  .navbar-nav {
-    .navbar-nav-divider {
-      background-color: rgba($lightest, 0.4);
+      border-color: $hr-border-color;
     }
   }
 }
@@ -30,8 +27,12 @@
     .navbar-nav {
       @include media-breakpoint-up($breakpoint) {
         .navbar-nav-divider {
-          height: 31px;
-          width: $hr-border-width;
+          border-top-width: 0;
+          border-left-width: $hr-border-width;
+
+          height: 1.5rem;
+          width: 0;
+
           margin: -5px 13px;
         }
       }
