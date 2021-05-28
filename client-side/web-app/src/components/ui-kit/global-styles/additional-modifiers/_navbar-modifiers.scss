@@ -1,21 +1,19 @@
 .navbar {
   .navbar-nav {
     .navbar-nav-divider {
+      border-color: $hr-border-color;
       border-style: solid;
+
+      border-right: none;
+      border-bottom: none;
+
+      border-left-width: 0;
       border-top-width: $hr-border-width;
 
       width: 100%;
       height: 0;
 
       align-self: center;
-    }
-  }
-}
-
-.navbar.navbar-light {
-  .navbar-nav {
-    .navbar-nav-divider {
-      border-color: $hr-border-color;
     }
   }
 }

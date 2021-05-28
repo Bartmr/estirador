@@ -14,3 +14,14 @@ a:not(.btn).disabled,
     text-decoration: $link-hover-decoration;
   }
 }
+
+@each $color, $value in $theme-colors {
+  .text-link.text-#{$color} {
+    &:hover {
+      color: get-contrasting-color('#{$color}-hover') !important;
+    }
+    &:focus {
+      color: get-contrasting-color('#{$color}-hover') !important;
+    }
+  }
+}
