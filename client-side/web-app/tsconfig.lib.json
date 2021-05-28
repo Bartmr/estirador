@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["type-declarations/**/*.d.ts", "src/**/*.d.ts"],
+  "compilerOptions": {
+    "skipLibCheck": false,
+    "tsBuildInfoFile": "./dist/declaration-files.tsbuildinfo"
+  }
+}

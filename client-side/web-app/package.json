@@ -84,6 +84,7 @@
     "serve": "NODE_ENV=production gatsby serve --prefix-paths --host 0.0.0.0",
     "generate:config:release": "rimraf __config.release && node scripts/generate-config/generate-config.js",
     "typecheck": "tsc",
+    "typecheck:declaration-files": "tsc -p tsconfig.lib.json --noEmit",
     "eslint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "lint": "npm run eslint -- --fix",
     "lint:no-fix": "npm run eslint",

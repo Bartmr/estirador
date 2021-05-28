@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "src/**/*.d.ts",
+    "libs/**/*.d.ts",
+    "type-declarations/**/*.d.ts",
+    "test-environment-impl/**/*.d.ts",
+    "scripts/**/*.d.ts",
+    "scripts-dev/**/*.d.ts"
+  ],
+  "compilerOptions": {
+    "skipLibCheck": false,
+    "tsBuildInfoFile": "./dist/declaration-files.tsbuildinfo"
+  }
+}

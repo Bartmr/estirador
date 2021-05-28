@@ -140,7 +140,17 @@ exports.onPreBuild = async ({ store }) => {
       'tsc',
     )} --p tsconfig.${currentBuildVariant}.json`;
 
-    await exec(TYPESCRIPT_TYPE_CHECK_COMMAND);
+    const TYPESCRIPT_DECLARACTION_FILES_TYPE_CHECK_COMMAND = `${path.resolve(
+      __dirname,
+      'node_modules',
+      '.bin',
+      'tsc',
+    )} --p tsconfig.lib.json`;
+
+    await Promise.all([
+      exec(TYPESCRIPT_DECLARACTION_FILES_TYPE_CHECK_COMMAND),
+      exec(TYPESCRIPT_TYPE_CHECK_COMMAND),
+    ]);
   } catch (error) {
     console.error(error);
     process.exit(1);
