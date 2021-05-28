@@ -207,6 +207,9 @@ $text-muted: set-contrasting-color-alpha('body', $text-muted-opacity);
 
 $text-subtle-opacity: 0.15;
 
+$opacity-muted: 0.4;
+$opacity-subtle: 0.1;
+
 $border-color: set-contrasting-color-alpha('body', 0.1);
 
 $border-radius: 0.7rem;
