@@ -13,7 +13,7 @@ else
   echo "Updating..."
 
   if [ -f "./.git" ]; then
-    mv .git .git-file-bkp
+    mv ./.git ./.git-file-bkp
   fi
 
   git init
@@ -28,8 +28,8 @@ else
 
   rm -rf ./.git/
 
-  if [ -f "./.git" ]; then
-    mv .git-file-bkp .git
+  if [ -f "./.git-file-bkp" ]; then
+    mv ./.git-file-bkp ./.git
   fi
 
   git clean -Xdf
@@ -43,7 +43,7 @@ else
     - You can do this by running 'git remote' and checking that there is no remote called 'boilerplate'
       - If the 'boilerplate' remote still exists:
         - Delete the '.git/' directory in the root directory of the repository where this project is stored.
-        - If this project is a Git Submodule, check if 'git-file-bkp' file exists and rename it back to '.git'
+        - If this project is a Git Submodule, check if '.git-file-bkp' file exists and rename it back to '.git'
 - Pick the updates you want to add to the project
 - Run 'npm run install:all' to update the 'package-lock.json' files with the dependencies changes
 - IF YOU WANT TO ABORT the update, just discard the changes as you normally would with your work.
