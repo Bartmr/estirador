@@ -1,6 +1,6 @@
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 
 export abstract class AuditedEntityRepository<
@@ -22,9 +22,9 @@ export abstract class AuditedEntityRepository<
   }
 
   private async archiveChange(
-    repository: Repository<AuditedEntity>,
     auditContext: AuditContext,
     updatedEntity: Entity,
+    manager: EntityManager,
   ): Promise<void> {
     const entityDataClone = {
       ...updatedEntity,
@@ -33,7 +33,7 @@ export abstract class AuditedEntityRepository<
 
     this.assignArchiveAttributesToEntity(auditContext, entityDataClone);
 
-    await repository.save(repository.create(entityDataClone));
+    await super.create(auditContext, entityDataClone, manager);
   }
 
   async create(
@@ -41,19 +41,28 @@ export abstract class AuditedEntityRepository<
     entityLikeObject: this['_EntityCreationAttributes'],
   ): Promise<Entity> {
     const run = async (manager: EntityManager) => {
-      const repository = manager.getRepository<AuditedEntity>(
-        this.repository.target,
-      );
+      const _entityLikeObject = entityLikeObject as Partial<Entity>;
 
-      const _entityLikeObject = entityLikeObject as Entity;
+      delete _entityLikeObject.archivedAt;
+      delete _entityLikeObject.instanceId;
+      delete _entityLikeObject.operationId;
+      delete _entityLikeObject.requestPath;
+      delete _entityLikeObject.requestMethod;
+      delete _entityLikeObject.processId;
+      delete _entityLikeObject.archivedByUserId;
 
       const createdAt = new Date();
       _entityLikeObject.createdAt = createdAt;
       _entityLikeObject.updatedAt = createdAt;
 
-      const createdEntity = await repository.save(_entityLikeObject);
+      const createdEntity = await super.create(
+        auditContext,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        _entityLikeObject as any,
+        manager,
+      );
 
-      await this.archiveChange(repository, auditContext, createdEntity);
+      await this.archiveChange(auditContext, createdEntity, manager);
 
       return createdEntity;
     };
@@ -70,15 +79,11 @@ export abstract class AuditedEntityRepository<
 
   async update(auditContext: AuditContext, entity: Entity): Promise<Entity> {
     const run = async (manager: EntityManager) => {
-      const repository = manager.getRepository<AuditedEntity>(
-        this.repository.target,
-      );
-
       entity.updatedAt = new Date();
 
-      const updatedEntity = await repository.save(entity);
+      const updatedEntity = await super.update(auditContext, entity, manager);
 
-      await this.archiveChange(repository, auditContext, updatedEntity);
+      await this.archiveChange(auditContext, updatedEntity, manager);
 
       return updatedEntity;
     };
@@ -95,11 +100,9 @@ export abstract class AuditedEntityRepository<
 
   async delete(auditContext: AuditContext, entity: Entity): Promise<void> {
     const run = async (manager: EntityManager) => {
-      const repository = manager.getRepository(this.repository.target);
-
       this.assignArchiveAttributesToEntity(auditContext, entity);
 
-      await repository.save(entity);
+      await super.update(auditContext, entity, manager);
     };
 
     if (

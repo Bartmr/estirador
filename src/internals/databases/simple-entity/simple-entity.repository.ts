@@ -1,4 +1,5 @@
-import { OmitWithUndefined } from '@app/shared/internals/utils/types/omission-types';
+import { ClassType } from '@app/shared/internals/utils/types/classes-types';
+import { OmitWithTypesafeKeys } from '@app/shared/internals/utils/types/omission-types';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import {
   AbstractRepository,
@@ -43,7 +44,7 @@ export abstract class SimpleEntityRepository<
   Entity extends SimpleEntity,
   FieldsOmittedBeforePersistence extends keyof Entity = never,
 > extends AbstractRepository<Entity> {
-  _EntityCreationAttributes!: OmitWithUndefined<
+  _EntityCreationAttributes!: OmitWithTypesafeKeys<
     Entity,
     keyof SimpleEntity | FieldsOmittedBeforePersistence
   >;
@@ -90,29 +91,66 @@ export abstract class SimpleEntityRepository<
   async create(
     auditContext: AuditContext,
     entityLikeObject: this['_EntityCreationAttributes'],
+    manager?: EntityManager,
   ): Promise<Entity> {
-    const entity = this.repository.create(
-      entityLikeObject,
+    const repository = manager
+      ? manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    const _entityLikeObject = entityLikeObject as DeepPartial<Entity>;
+
+    delete _entityLikeObject.id;
+
+    const entity = repository.create(
+      _entityLikeObject,
     ) as unknown as DeepPartial<Entity>;
 
-    const createdEntity = await this.repository.save(entity);
+    const createdEntity = await repository.save(entity);
 
     return createdEntity;
   }
 
-  async update(auditContext: AuditContext, entity: Entity): Promise<Entity> {
-    const updatedEntity = await this.repository.save(
+  async update(
+    auditContext: AuditContext,
+    entity: Entity,
+    manager?: EntityManager,
+  ): Promise<Entity> {
+    const EntityClass = this.repository.target as ClassType;
+
+    if (!(entity instanceof EntityClass)) {
+      throw new Error();
+    }
+
+    const repository = manager
+      ? manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    const updatedEntity = await repository.save(
       entity as unknown as DeepPartial<Entity>,
     );
 
     return updatedEntity;
   }
 
-  async delete(auditContext: AuditContext, entity: Entity): Promise<void> {
+  async delete(
+    auditContext: AuditContext,
+    entity: Entity,
+    manager?: EntityManager,
+  ): Promise<void> {
+    const EntityClass = this.repository.target as ClassType;
+
+    if (!(entity instanceof EntityClass)) {
+      throw new Error();
+    }
+
+    const repository = manager
+      ? manager.getRepository<Entity>(EntityClass)
+      : this.repository;
+
     if (this.repository.metadata.deleteDateColumn) {
-      await this.manager.softRemove(entity);
+      await repository.softRemove(entity as unknown as DeepPartial<Entity>);
     } else {
-      await this.manager.remove(entity);
+      await repository.remove(entity);
     }
   }
 }
