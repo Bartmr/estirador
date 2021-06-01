@@ -1,82 +1,15 @@
-import { OmitWithUndefined } from '@app/shared/internals/utils/types/omission-types';
 import { AuditContext } from 'src/internals/auditing/audit-context';
-import {
-  AbstractRepository,
-  EntityManager,
-  FindOperator,
-  Repository,
-} from 'typeorm';
+import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
+import { EntityManager, Repository } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
-
-type SimpleEntity = {
-  id: number | string;
-};
-
-type WhereObject<Entity extends AuditedEntity> = {
-  [K in keyof Entity]?:
-    | (Entity[K] extends SimpleEntity ? Entity[K] | Entity[K]['id'] : never)
-    | Entity[K]
-    | FindOperator<Entity[K]>;
-};
-
-export type Where<Entity extends AuditedEntity> =
-  | WhereObject<Entity>
-  | Array<WhereObject<Entity>>;
-
-type FindOptionsBase<Entity extends AuditedEntity> = {
-  withArchived?: boolean;
-  select?: Array<keyof Entity>;
-};
-
-export interface FindOneOptions<Entity extends AuditedEntity>
-  extends FindOptionsBase<Entity> {
-  where: Where<Entity>;
-}
-
-export interface FindOptions<Entity extends AuditedEntity>
-  extends FindOptionsBase<Entity> {
-  where?: Where<Entity>;
-  skip: number;
-}
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,
   FieldsOmittedBeforePersistence extends keyof Entity = never,
-> extends AbstractRepository<Entity> {
-  _AuditedEntityCreationAttributes!: OmitWithUndefined<
-    Entity,
-    keyof AuditedEntity | FieldsOmittedBeforePersistence
-  >;
-
-  findOne({
-    where,
-    withArchived,
-    select,
-  }: FindOneOptions<Entity>): Promise<Entity | undefined> {
-    return this.repository.findOne({
-      where,
-      withDeleted: withArchived,
-      select,
-    });
-  }
-
-  async find({ where, withArchived, select, skip }: FindOptions<Entity>) {
-    const limit = 20;
-    const results = await this.repository.findAndCount({
-      where,
-      withDeleted: withArchived,
-      select,
-      take: limit,
-      skip,
-    });
-
-    return {
-      limit,
-      total: results[1],
-      rows: results[0],
-    };
-  }
-
+> extends SimpleEntityRepository<
+  Entity,
+  keyof AuditedEntity | FieldsOmittedBeforePersistence
+> {
   private assignArchiveAttributesToEntity(
     auditContext: AuditContext,
     entity: Entity,
@@ -105,10 +38,7 @@ export abstract class AuditedEntityRepository<
 
   async create(
     auditContext: AuditContext,
-    entityLikeObject: OmitWithUndefined<
-      Entity,
-      keyof AuditedEntity | FieldsOmittedBeforePersistence
-    >,
+    entityLikeObject: this['_EntityCreationAttributes'],
   ): Promise<Entity> {
     const run = async (manager: EntityManager) => {
       const repository = manager.getRepository<AuditedEntity>(
