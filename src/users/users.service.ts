@@ -84,7 +84,7 @@ export class UsersService {
 
         user.isVerified = true;
 
-        await usersRepository.update(auditContext, user);
+        await usersRepository.save(auditContext, user);
         await signupVerificationTokensRepository.deleteFromUser(user);
 
         return 'ok';

@@ -6,7 +6,7 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { stripNullValuesRecursively } from 'src/internals/utils/strip-null-values-recursively';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 
-const TEST_TABLE_NAME = 'abstract_entity_spec';
+const TEST_TABLE_NAME = 'audited_entity_spec';
 
 let connection: Connection;
 
@@ -36,7 +36,7 @@ afterAll(async () => {
   await connection.close();
 });
 
-describe('Abstract Entity', () => {
+describe('Audited Entity Repository', () => {
   describe('Update', () => {
     it('Should have created an archived version of the entity after an update', async () => {
       const newDate = new Date();
@@ -62,7 +62,7 @@ describe('Abstract Entity', () => {
         authContext: undefined,
       };
 
-      await customRepository.update(auditContext, entity);
+      await customRepository.save(auditContext, entity);
 
       const rows = await repository.find({
         withDeleted: true,

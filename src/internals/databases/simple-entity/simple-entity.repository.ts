@@ -91,30 +91,42 @@ export abstract class SimpleEntityRepository<
   async create(
     auditContext: AuditContext,
     entityLikeObject: this['_EntityCreationAttributes'],
+    options?: Partial<{ id: Entity['id'] }>,
     manager?: EntityManager,
   ): Promise<Entity> {
     const repository = manager
       ? manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const _entityLikeObject = entityLikeObject as DeepPartial<Entity>;
+    const _entityLikeObject = entityLikeObject as Partial<Entity>;
 
     delete _entityLikeObject.id;
 
     const entity = repository.create(
-      _entityLikeObject,
-    ) as unknown as DeepPartial<Entity>;
+      _entityLikeObject as unknown as DeepPartial<Entity>,
+    );
 
-    const createdEntity = await repository.save(entity);
+    if (options?.id !== undefined) {
+      const preexisting = await repository.findOne(options.id);
 
-    return createdEntity;
+      if (preexisting) {
+        throw new Error();
+      }
+
+      _entityLikeObject.id = options.id;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await repository.save(entity as any);
+
+    return entity;
   }
 
-  async update(
+  async save(
     auditContext: AuditContext,
     entity: Entity,
     manager?: EntityManager,
-  ): Promise<Entity> {
+  ): Promise<void> {
     const EntityClass = this.repository.target as ClassType;
 
     if (!(entity instanceof EntityClass)) {
@@ -125,14 +137,10 @@ export abstract class SimpleEntityRepository<
       ? manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const updatedEntity = await repository.save(
-      entity as unknown as DeepPartial<Entity>,
-    );
-
-    return updatedEntity;
+    await repository.save(entity as unknown as DeepPartial<Entity>);
   }
 
-  async delete(
+  async remove(
     auditContext: AuditContext,
     entity: Entity,
     manager?: EntityManager,
