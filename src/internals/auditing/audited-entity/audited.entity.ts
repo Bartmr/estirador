@@ -1,14 +1,12 @@
-import { Column, DeleteDateColumn, PrimaryColumn } from 'typeorm';
+import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { Column, DeleteDateColumn } from 'typeorm';
 
 /*
   Use Postgres uuid v1mc instead of v1 in order
   to prevent the database MAC address from being identified
 */
 
-export abstract class AuditedEntity {
-  @PrimaryColumn('uuid', { default: () => 'uuid_generate_v1mc()' })
-  id!: string;
-
+export abstract class AuditedEntity extends SimpleEntity {
   @DeleteDateColumn()
   archivedAt?: Date;
 
