@@ -78,12 +78,12 @@ describe('Audited Entity Repository', () => {
       expect(stripNullValuesRecursively(rows)).toEqual([
         {
           ...entityWithoutNulls,
-          archivedAt: undefined,
+          deletedAt: undefined,
           id: expect.any(String) as unknown,
         },
         {
           ...entityWithoutNulls,
-          archivedAt: expect.any(Date) as unknown,
+          deletedAt: expect.any(Date) as unknown,
           id: expect.any(String) as unknown,
           ...auditContext,
           processId: undefined,
@@ -113,7 +113,7 @@ describe('Audited Entity Repository', () => {
       });
 
       const results = await repository.find({
-        withArchived: true,
+        withDeleted: true,
         where: { instanceId: entity.instanceId },
         skip: 0,
       });
@@ -127,7 +127,7 @@ describe('Audited Entity Repository', () => {
       expect(stripNullValuesRecursively(results.rows)).toEqual([
         {
           ...entityWithoutNulls,
-          archivedAt: undefined,
+          deletedAt: undefined,
           id: expect.any(String) as unknown,
           processId: undefined,
           requestPath: undefined,
@@ -135,7 +135,7 @@ describe('Audited Entity Repository', () => {
         },
         {
           ...entityWithoutNulls,
-          archivedAt: expect.any(Date) as unknown,
+          deletedAt: expect.any(Date) as unknown,
           id: expect.any(String) as unknown,
           ...auditContext,
           processId: undefined,

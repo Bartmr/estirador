@@ -110,7 +110,7 @@ export class AuthTokensService extends TokensService<RefreshTokensRepository> {
 
     const user = refreshToken.user;
 
-    if (user.archivedAt) {
+    if (user.deletedAt) {
       throw new UnauthorizedException();
     }
 

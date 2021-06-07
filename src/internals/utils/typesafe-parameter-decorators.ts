@@ -1,8 +1,8 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { ClassType } from '@app/shared/internals/utils/types/classes-types';
+import { Class } from '@app/shared/internals/utils/types/classes-types';
 
 export function EnforceParameterDecoratorTypesafety(
-  parameterClass: ClassType,
+  parameterClass: Class,
 ): ParameterDecorator {
   const enchancer: ParameterDecorator = (
     target: Object,
@@ -13,7 +13,7 @@ export function EnforceParameterDecoratorTypesafety(
       'design:paramtypes',
       target,
       propertyKey,
-    ) as ClassType[];
+    ) as Class[];
 
     const targetDescription = `Parameter [${parameterIndex}] from method ${propertyKey.toString()} in ${
       target.constructor.name

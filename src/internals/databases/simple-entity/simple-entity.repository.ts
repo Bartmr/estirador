@@ -1,4 +1,7 @@
-import { ClassType } from '@app/shared/internals/utils/types/classes-types';
+import {
+  Class,
+  ConcreteClass,
+} from '@app/shared/internals/utils/types/classes-types';
 import { OmitWithTypesafeKeys } from '@app/shared/internals/utils/types/omission-types';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import {
@@ -25,7 +28,7 @@ export type Where<Entity extends SimpleEntity> =
   | Array<WhereObject<Entity>>;
 
 type FindOptionsBase<Entity extends SimpleEntity> = {
-  withArchived?: boolean;
+  withDeleted?: boolean;
   select?: Array<keyof Entity>;
 };
 
@@ -50,32 +53,32 @@ export abstract class SimpleEntityRepository<
   >;
 
   findOne(
-    { where, withArchived, select }: FindOneOptions<Entity>,
-    manager?: EntityManager,
+    { where, withDeleted, select }: FindOneOptions<Entity>,
+    options?: Partial<{ manager: EntityManager }>,
   ): Promise<Entity | undefined> {
-    const repository = manager
-      ? manager.getRepository<Entity>(this.repository.target)
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
     return repository.findOne({
       where,
-      withDeleted: withArchived,
+      withDeleted,
       select,
     });
   }
 
   async find(
-    { where, withArchived, select, skip }: FindOptions<Entity>,
-    manager?: EntityManager,
+    { where, withDeleted, select, skip }: FindOptions<Entity>,
+    options?: Partial<{ manager: EntityManager }>,
   ) {
-    const repository = manager
-      ? manager.getRepository<Entity>(this.repository.target)
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
     const limit = 20;
     const results = await repository.findAndCount({
       where,
-      withDeleted: withArchived,
+      withDeleted,
       select,
       take: limit,
       skip,
@@ -91,50 +94,49 @@ export abstract class SimpleEntityRepository<
   async create(
     auditContext: AuditContext,
     entityLikeObject: this['_EntityCreationAttributes'],
-    options?: Partial<{ id: Entity['id'] }>,
-    manager?: EntityManager,
+    options?: Partial<{ manager?: EntityManager }>,
   ): Promise<Entity> {
-    const repository = manager
-      ? manager.getRepository<Entity>(this.repository.target)
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const _entityLikeObject = entityLikeObject as Partial<Entity>;
+    const _entityLikeObject = Object.assign({}, entityLikeObject) as {
+      id?: unknown;
+      [key: string]: unknown;
+    };
 
     delete _entityLikeObject.id;
 
-    const entity = repository.create(
-      _entityLikeObject as unknown as DeepPartial<Entity>,
-    );
+    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
+    const EntityClass = this.repository.target as ConcreteClass<{
+      [key: string]: unknown;
+    }>;
 
-    if (options?.id !== undefined) {
-      const preexisting = await repository.findOne(options.id);
+    const entity = new EntityClass() as any;
 
-      if (preexisting) {
-        throw new Error();
-      }
-
-      _entityLikeObject.id = options.id;
+    for (const key of Object.keys(_entityLikeObject)) {
+      entity[key] = _entityLikeObject[key];
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await repository.save(entity as any);
+    await repository.save(entity);
 
     return entity;
+    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
   }
 
   async save(
     auditContext: AuditContext,
     entity: Entity,
-    manager?: EntityManager,
+    options?: Partial<{ manager?: EntityManager }>,
   ): Promise<void> {
-    const EntityClass = this.repository.target as ClassType;
+    const EntityClass = this.repository.target as Class;
 
     if (!(entity instanceof EntityClass)) {
       throw new Error();
     }
 
-    const repository = manager
-      ? manager.getRepository<Entity>(this.repository.target)
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
     await repository.save(entity as unknown as DeepPartial<Entity>);
@@ -145,7 +147,7 @@ export abstract class SimpleEntityRepository<
     entity: Entity,
     manager?: EntityManager,
   ): Promise<void> {
-    const EntityClass = this.repository.target as ClassType;
+    const EntityClass = this.repository.target as Class;
 
     if (!(entity instanceof EntityClass)) {
       throw new Error();
