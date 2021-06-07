@@ -16,16 +16,16 @@ export abstract class AuditedEntity extends SimpleEntity {
   @Column('uuid', { nullable: true })
   operationId?: string;
 
-  @Column({ nullable: true, select: false })
+  @Column({ nullable: true })
   requestPath?: string;
 
-  @Column({ nullable: true, select: false })
+  @Column({ nullable: true })
   requestMethod?: string;
 
-  @Column({ nullable: true, select: false })
+  @Column({ nullable: true })
   processId?: string;
 
-  @Column('uuid', { nullable: true, select: false })
+  @Column('uuid', { nullable: true })
   archivedByUserId?: string;
 
   // Set in AuditedEntityRepository. No need for @CreatedAtColumn()
@@ -35,4 +35,14 @@ export abstract class AuditedEntity extends SimpleEntity {
   // Set in AuditedEntityRepository. No need for @UpdatedAtColumn()
   @Column('timestamp')
   updatedAt!: Date;
+
+  toJSON() {
+    return {
+      ...this,
+      requestPath: undefined,
+      requestMethod: undefined,
+      processId: undefined,
+      archivedByUserId: undefined,
+    };
+  }
 }

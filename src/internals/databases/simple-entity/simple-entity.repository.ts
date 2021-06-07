@@ -2,7 +2,6 @@ import {
   Class,
   ConcreteClass,
 } from '@app/shared/internals/utils/types/classes-types';
-import { OmitWithTypesafeKeys } from '@app/shared/internals/utils/types/omission-types';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import {
   AbstractRepository,
@@ -27,18 +26,17 @@ export type Where<Entity extends SimpleEntity> =
   | WhereObject<Entity>
   | Array<WhereObject<Entity>>;
 
-type FindOptionsBase<Entity extends SimpleEntity> = {
+type FindOptionsBase = {
   withDeleted?: boolean;
-  select?: Array<keyof Entity>;
 };
 
 export interface FindOneOptions<Entity extends SimpleEntity>
-  extends FindOptionsBase<Entity> {
+  extends FindOptionsBase {
   where: Where<Entity>;
 }
 
 export interface FindOptions<Entity extends SimpleEntity>
-  extends FindOptionsBase<Entity> {
+  extends FindOptionsBase {
   where?: Where<Entity>;
   skip: number;
 }
@@ -47,13 +45,13 @@ export abstract class SimpleEntityRepository<
   Entity extends SimpleEntity,
   FieldsOmittedBeforePersistence extends keyof Entity = never,
 > extends AbstractRepository<Entity> {
-  _EntityCreationAttributes!: OmitWithTypesafeKeys<
+  _EntityCreationAttributes!: Omit<
     Entity,
-    keyof SimpleEntity | FieldsOmittedBeforePersistence
+    keyof SimpleEntity | FieldsOmittedBeforePersistence | 'toJSON'
   >;
 
   findOne(
-    { where, withDeleted, select }: FindOneOptions<Entity>,
+    { where, withDeleted }: FindOneOptions<Entity>,
     options?: Partial<{ manager: EntityManager }>,
   ): Promise<Entity | undefined> {
     const repository = options?.manager
@@ -63,12 +61,11 @@ export abstract class SimpleEntityRepository<
     return repository.findOne({
       where,
       withDeleted,
-      select,
     });
   }
 
   async find(
-    { where, withDeleted, select, skip }: FindOptions<Entity>,
+    { where, withDeleted, skip }: FindOptions<Entity>,
     options?: Partial<{ manager: EntityManager }>,
   ) {
     const repository = options?.manager
@@ -79,7 +76,6 @@ export abstract class SimpleEntityRepository<
     const results = await repository.findAndCount({
       where,
       withDeleted,
-      select,
       take: limit,
       skip,
     });

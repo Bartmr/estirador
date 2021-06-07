@@ -39,7 +39,6 @@ export class UsersService {
 
     const user = (await usersRepository.findOne({
       where: { email, isVerified: true },
-      select: ['passwordHash', 'passwordSalt'],
     })) as undefined | NonNullableFields<User, 'passwordHash' | 'passwordSalt'>;
 
     if (!user) {

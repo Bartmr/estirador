@@ -9,11 +9,11 @@ export class User extends AuditedEntity {
   @Column()
   email!: string;
 
-  @Column({ select: false })
-  passwordHash?: string;
+  @Column()
+  passwordHash!: string;
 
-  @Column({ select: false })
-  passwordSalt?: string;
+  @Column()
+  passwordSalt!: string;
 
   @Column({ nullable: true })
   isVerified?: boolean;
@@ -23,4 +23,12 @@ export class User extends AuditedEntity {
     enum: getEnumValues(Role),
   })
   role!: Role;
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      passwordHash: undefined,
+      passwordSalt: undefined,
+    };
+  }
 }
