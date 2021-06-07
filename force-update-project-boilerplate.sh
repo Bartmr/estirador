@@ -26,7 +26,7 @@ else
 
   git fetch boilerplate $git_branch
 
-  git merge "boilerplate/${git_branch}" --allow-unrelated-histories
+  git merge "boilerplate/${git_branch}" --allow-unrelated-histories -X theirs
 
   rm -rf ./.git/
   mv ./.git-bkp ./.git
