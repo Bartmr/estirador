@@ -11,8 +11,8 @@ export abstract class AuditedEntityRepository<
   keyof AuditedEntity | FieldsOmittedBeforePersistence
 > {
   private assignArchiveAttributesToEntity(
-    auditContext: AuditContext,
     entity: Entity,
+    auditContext: AuditContext,
   ) {
     Object.assign(entity, {
       ...auditContext,
@@ -22,8 +22,8 @@ export abstract class AuditedEntityRepository<
   }
 
   private async archiveChange(
-    auditContext: AuditContext,
     updatedEntity: Entity,
+    auditContext: AuditContext,
     manager: EntityManager,
   ): Promise<void> {
     const entityDataClone = {
@@ -31,14 +31,14 @@ export abstract class AuditedEntityRepository<
       id: undefined,
     };
 
-    this.assignArchiveAttributesToEntity(auditContext, entityDataClone);
+    this.assignArchiveAttributesToEntity(entityDataClone, auditContext);
 
-    await super.create(auditContext, entityDataClone, { manager });
+    await super.create(entityDataClone, auditContext, { manager });
   }
 
   async create(
-    auditContext: AuditContext,
     entityLikeObject: this['_EntityCreationAttributes'],
+    auditContext: AuditContext,
   ): Promise<Entity> {
     const run = async (manager: EntityManager) => {
       const _entityLikeObject = Object.assign(
@@ -59,13 +59,13 @@ export abstract class AuditedEntityRepository<
       _entityLikeObject.updatedAt = createdAt;
 
       const createdEntity = await super.create(
-        auditContext,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         _entityLikeObject as any,
+        auditContext,
         { manager },
       );
 
-      await this.archiveChange(auditContext, createdEntity, manager);
+      await this.archiveChange(createdEntity, auditContext, manager);
 
       return createdEntity;
     };
@@ -80,13 +80,13 @@ export abstract class AuditedEntityRepository<
     }
   }
 
-  async save(auditContext: AuditContext, entity: Entity): Promise<void> {
+  async save(entity: Entity, auditContext: AuditContext): Promise<void> {
     const run = async (manager: EntityManager) => {
       entity.updatedAt = new Date();
 
-      await super.save(auditContext, entity, { manager });
+      await super.save(entity, auditContext, { manager });
 
-      await this.archiveChange(auditContext, entity, manager);
+      await this.archiveChange(entity, auditContext, manager);
     };
 
     if (
@@ -99,11 +99,11 @@ export abstract class AuditedEntityRepository<
     }
   }
 
-  async remove(auditContext: AuditContext, entity: Entity): Promise<void> {
+  async remove(entity: Entity, auditContext: AuditContext): Promise<void> {
     const run = async (manager: EntityManager) => {
-      this.assignArchiveAttributesToEntity(auditContext, entity);
+      this.assignArchiveAttributesToEntity(entity, auditContext);
 
-      await super.save(auditContext, entity, { manager });
+      await super.save(entity, auditContext, { manager });
     };
 
     if (

@@ -62,7 +62,7 @@ describe('Audited Entity Repository', () => {
         authContext: undefined,
       };
 
-      await customRepository.save(auditContext, entity);
+      await customRepository.save(entity, auditContext);
 
       const rows = await repository.find({
         withDeleted: true,
@@ -107,10 +107,13 @@ describe('Audited Entity Repository', () => {
         authContext: undefined,
       };
 
-      const entity = await repository.create(auditContext, {
-        propA: newDate,
-        propB: newDate,
-      });
+      const entity = await repository.create(
+        {
+          propA: newDate,
+          propB: newDate,
+        },
+        auditContext,
+      );
 
       const results = await repository.find({
         withDeleted: true,

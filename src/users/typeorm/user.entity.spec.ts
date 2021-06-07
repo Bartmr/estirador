@@ -43,12 +43,15 @@ describe('User entity', () => {
 
     const passwordHash = await bcrypt.hash('password123', passwordSalt);
 
-    const testUser = await repository.create(auditContext.toPersist, {
-      email: `${generateRandomUUID()}@test-email.com`,
-      role: Role.EndUser,
-      passwordHash,
-      passwordSalt,
-    });
+    const testUser = await repository.create(
+      {
+        email: `${generateRandomUUID()}@test-email.com`,
+        role: Role.EndUser,
+        passwordHash,
+        passwordSalt,
+      },
+      auditContext.toPersist,
+    );
 
     const user = await repository.findOne({
       where: {

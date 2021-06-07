@@ -92,8 +92,8 @@ export abstract class SimpleEntityRepository<
   }
 
   async create(
-    auditContext: AuditContext,
     entityLikeObject: this['_EntityCreationAttributes'],
+    auditContext: AuditContext,
     options?: Partial<{ manager?: EntityManager }>,
   ): Promise<Entity> {
     const repository = options?.manager
@@ -125,8 +125,8 @@ export abstract class SimpleEntityRepository<
   }
 
   async save(
-    auditContext: AuditContext,
     entity: Entity,
+    auditContext: AuditContext,
     options?: Partial<{ manager?: EntityManager }>,
   ): Promise<void> {
     const EntityClass = this.repository.target as Class;
@@ -143,8 +143,8 @@ export abstract class SimpleEntityRepository<
   }
 
   async remove(
-    auditContext: AuditContext,
     entity: Entity,
+    auditContext: AuditContext,
     manager?: EntityManager,
   ): Promise<void> {
     const EntityClass = this.repository.target as Class;

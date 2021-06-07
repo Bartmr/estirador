@@ -84,7 +84,7 @@ export class UsersService {
 
         user.isVerified = true;
 
-        await usersRepository.save(auditContext, user);
+        await usersRepository.save(user, auditContext);
         await signupVerificationTokensRepository.deleteFromUser(user);
 
         return 'ok';
@@ -176,12 +176,15 @@ export class UsersService {
       };
       delete dataWithoutPassword.password;
 
-      const user = await usersRepository.create(auditContext, {
-        ...dataWithoutPassword,
-        passwordHash,
-        passwordSalt,
-        role: Role.EndUser,
-      });
+      const user = await usersRepository.create(
+        {
+          ...dataWithoutPassword,
+          passwordHash,
+          passwordSalt,
+          role: Role.EndUser,
+        },
+        auditContext,
+      );
 
       const newToken = await signupVerificationTokensRepository.createToken(
         user,
