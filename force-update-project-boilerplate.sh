@@ -31,8 +31,6 @@ else
   rm -rf ./.git/
   mv ./.git-bkp ./.git
 
-  git clean -Xdf
-
   git checkout -- package-lock.json **/package-lock.json
 
   echo "

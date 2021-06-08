@@ -32,8 +32,6 @@ else
     mv ./.git-file-bkp ./.git
   fi
 
-  git clean -Xdf
-
   git checkout -- package-lock.json **/package-lock.json
 
   echo -e "\n-----\n-----\n-----

@@ -35,8 +35,6 @@ To continue with the update write yes and press Enter.
 
   git remote remove boilerplate
 
-  git clean -Xdf
-
   echo "
 -----
 -----
