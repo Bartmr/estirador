@@ -7,7 +7,14 @@ COPY ./src/ /usr/src/app/src/
 COPY ./scripts/ /usr/src/app/scripts/
 COPY ./type-declarations/ /usr/src/app/type-declarations/
 
-COPY ./.nvmrc ./nest-cli.json ./ormconfig.js ./package-lock.json ./package.json ./tsconfig.base.json ./tsconfig.build.json /usr/src/app/
+COPY ./.nvmrc \
+./nest-cli.json \
+./ormconfig.js \
+./package-lock.json \
+./package.json \
+./tsconfig.base.json \
+./tsconfig.lib.json \
+./tsconfig.build.json /usr/src/app/
 
 WORKDIR /usr/src/app
 
