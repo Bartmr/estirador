@@ -45,7 +45,7 @@
     "clean:api": "rimraf dist",
     "build:api": "npm run clean:api && nest build",
     "typecheck": "tsc --noEmit",
-    "typecheck:declaration-files": "tsc -p tsconfig.lib.json --noEmit",
+    "typecheck:declaration-files": "tsc -p tsconfig.declaration-files.json --noEmit",
     "format": "prettier --write .",
     "eslint": "eslint . --ext .ts --max-warnings 0",
     "lint": "npm run eslint -- --fix",

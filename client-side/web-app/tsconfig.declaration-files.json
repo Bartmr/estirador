@@ -3,6 +3,7 @@
   "include": ["type-declarations/**/*.d.ts", "src/**/*.d.ts"],
   "compilerOptions": {
     "skipLibCheck": false,
-    "tsBuildInfoFile": "./dist/declaration-files.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/declaration-files.tsbuildinfo",
+    "typeRoots": ["./node_modules/@types"]
   }
 }

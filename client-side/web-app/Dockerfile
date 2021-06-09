@@ -17,7 +17,7 @@ COPY ./client-side/web-app/.babelrc \
 ./client-side/web-app/package.json \
 ./client-side/web-app/package-lock.json \
 ./client-side/web-app/tsconfig.json \
-./client-side/web-app/tsconfig.lib.json \
+./client-side/web-app/tsconfig.declaration-files.json \
 ./client-side/web-app/tsconfig.release.json /usr/src/app/client-side/web-app/
 
 WORKDIR /usr/src/app

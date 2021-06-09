@@ -13,7 +13,7 @@ COPY ./.nvmrc \
 ./package-lock.json \
 ./package.json \
 ./tsconfig.base.json \
-./tsconfig.lib.json \
+./tsconfig.declaration-files.json \
 ./tsconfig.build.json /usr/src/app/
 
 WORKDIR /usr/src/app
