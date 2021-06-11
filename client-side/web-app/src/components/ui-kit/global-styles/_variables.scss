@@ -217,16 +217,26 @@ $border-radius-lg: 1.5rem;
 $border-radius-sm: 0.4rem;
 
 $box-shadow-sm-dimensions: 0 0.125rem 0.25rem;
+$box-shadow-sm-opacity: 0.2;
+
 $box-shadow-dimensions: 0 0.5rem 1rem;
+$box-shadow-opacity: 0.2;
+
 $box-shadow-lg-dimensions: 0 1rem 3rem;
+$box-shadow-lg-opacity: 0.3;
 
-$box-shadow-sm: #{$box-shadow-sm-dimensions} rgba(0, 0, 0, 0.2);
-$box-shadow: #{$box-shadow-dimensions} rgba(0, 0, 0, 0.2);
-$box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(0, 0, 0, 0.3);
+$box-shadow-sm: #{$box-shadow-sm-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-sm-opacity);
+$box-shadow: #{$box-shadow-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-opacity);
+$box-shadow-lg: #{$box-shadow-lg-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-lg-opacity);
 
-$text-shadow-sm-dimensions: 0 0rem 0.5rem;
-$text-shadow-dimensions: 0 0.3rem 0.8rem;
-$text-shadow-lg-dimensions: 0 0.3rem 2rem;
+$text-shadow-sm-dimensions: 0 0.05rem 0.15rem;
+$text-shadow-sm-opacity: 0.5;
+
+$text-shadow-dimensions: 0 0.1rem 0.3rem;
+$text-shadow-opacity: 0.8;
+
+$text-shadow-lg-dimensions: 0 0.5rem 1.5rem;
+$text-shadow-lg-opacity: 1;
 
 // Copied from node_modules/bootstrap/scss/_variables.scss
 //

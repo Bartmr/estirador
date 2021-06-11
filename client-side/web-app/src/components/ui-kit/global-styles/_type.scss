@@ -5,5 +5,6 @@
 .display-3,
 .display-4 {
   color: get-contrasting-color('primary');
-  text-shadow: $text-shadow-dimensions get-contrasting-color('primary');
+  text-shadow: $text-shadow-dimensions
+    set-contrasting-color-alpha('primary', $text-shadow-opacity);
 }
