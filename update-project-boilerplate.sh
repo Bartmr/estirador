@@ -48,7 +48,7 @@ To continue with the update write yes and press Enter.
   - Confirm that new commits from the project boilerplate are in the project's git history by running 'git log'
     - If no new commits from the project boilerplate are present, you can try running the update script again.
 - If there are git conflicts present, resolve the conflicts by pick the updates you want to add to the project.
-- Run 'npm run install:all' to update the 'package-lock.json' files with the dependencies changes.
+- Run 'npm run install:all', in case any dependencies were changed or added.
 - Run 'git add .' to stage all the accepted updates.
 - IF YOU WANT TO ABORT the update, run 'git merge --abort'
 - To finalize the update, run 'git merge --continue'"
