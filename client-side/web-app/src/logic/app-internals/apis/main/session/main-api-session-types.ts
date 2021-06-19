@@ -1,7 +1,3 @@
 export type MainApiSessionData = {
-  token: string;
+  userId: string;
 };
-
-export enum LoginAttemptRejection {
-  WrongCredentials = 'wc',
-}

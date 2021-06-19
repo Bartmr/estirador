@@ -6,7 +6,7 @@ import {
 import { makeAccessibleOnClickProps } from '../../core/accessibility/make-accessible-on-click-props';
 import { LinkAnchor } from '../../protons/link-anchor/link-anchor';
 
-export enum ButtonColor {
+export enum ButtonPriority {
   Default = 'btn btn-light',
   Link = 'btn btn-link',
   Primary = 'btn btn-primary',
@@ -18,7 +18,7 @@ export enum ButtonType {
 }
 
 type Props = {
-  color?: ButtonColor;
+  priority?: ButtonPriority;
   className?: string;
   icon?: ReactNode;
   label: string;
@@ -32,7 +32,7 @@ type Props = {
 };
 
 export function Button(props: Props) {
-  const typeClass = props.color || ButtonColor.Default;
+  const buttonClass = props.priority || ButtonPriority.Default;
 
   const iconElement = props.icon ? (
     <span className="mr-2">{props.icon}</span>
@@ -44,7 +44,7 @@ export function Button(props: Props) {
     (props.disabled ? 'cursor-not-allowed' : undefined) ||
     (props.loading ? 'cursor-wait' : undefined);
 
-  const className = `${typeClass} ${props.className || ''} ${
+  const className = `${buttonClass} ${props.className || ''} ${
     disabled ? 'disabled' : ''
   } ${pointerClassName || ''}`;
 
