@@ -27,7 +27,7 @@ export const AuthenticatedRoute: FunctionComponent<Props> = (props) => {
     return <>{props.children()}</>;
   } else {
     return (
-      <TransportedDataGate dataWrapper={sessionWrapper}>
+      <TransportedDataGate className="w-100" dataWrapper={sessionWrapper}>
         {({ data: session }) => {
           const mainApiAuthRule = authenticationRules.mainApiSession;
 

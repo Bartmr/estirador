@@ -1,7 +1,5 @@
-export type MainApiSessionData = {
-  token: string;
-};
+import { AuthSessionDTO, LoginResponseDTO } from '@app/shared/auth/auth.dto';
+import { ToJSON } from '@app/shared/internals/transports/json-type-converters';
 
-export enum LoginAttemptRejection {
-  WrongCredentials = 'wc',
-}
+export type MainApiSessionData = ToJSON<AuthSessionDTO>;
+export type LoginResponse = ToJSON<LoginResponseDTO>;

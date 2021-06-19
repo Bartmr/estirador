@@ -7,9 +7,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { string } from 'not-me/lib/schemas/string/string-schema';
 import { attachAuditContext } from 'src/internals/auditing/attach-audit-context';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { AuthContext } from './auth-context';
+import { AUTH_TOKEN_HTTP_ONLY_KEY_COOOKIE } from './auth.constants';
 import { PUBLIC_ROUTE_METADATA_KEY } from './public-route.decorator';
 import { ROLES_LEVELS } from './roles/roles';
 import {
@@ -36,18 +38,26 @@ export class AuthGuard implements CanActivate {
       .switchToHttp()
       .getRequest<AppServerRequest>();
 
-    const accessToken = request.header('authorization');
+    const authTokenId = request.header('authorization');
 
-    if (accessToken) {
-      const hostname = request.hostname;
+    if (authTokenId) {
+      const authTokenKeyFromCookie = (
+        request.cookies as { [key: string]: unknown }
+      )[AUTH_TOKEN_HTTP_ONLY_KEY_COOOKIE];
 
-      if (!request.hostname) {
-        throw new BadRequestException('no-hostname');
+      const authTokenKeyValidation = string()
+        .filled()
+        .validate(authTokenKeyFromCookie);
+
+      if (authTokenKeyValidation.errors) {
+        throw new BadRequestException();
       }
 
-      const user = await this.tokensService.validateAccessToken(
-        accessToken,
-        hostname,
+      const authTokenKey = authTokenKeyValidation.value;
+
+      const user = await this.tokensService.validateAuthToken(
+        authTokenId,
+        authTokenKey,
       );
 
       request.authContext = new AuthContext({ user });

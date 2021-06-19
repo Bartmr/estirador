@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+} from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { Connection, EntityManager } from 'typeorm';
@@ -12,14 +16,49 @@ import { SignupVerificationTokensRepository } from './signup-verification-tokens
 import { USERS_SIGNUP_VERIFICATION_TTL } from './users.constants';
 import { EmailService } from 'src/internals/email/email.service';
 import { SignupResult, UserSignupRequestDTO } from './users.dto';
-import { NonNullableFields } from '@app/shared/internals/utils/types/nullable-types';
+import { LoggingService } from 'src/internals/logging/logging.service';
+import { JobsConfigService } from 'src/internals/jobs/config/jobs-config.service';
 
 @Injectable()
-export class UsersService {
+export class UsersService
+  implements OnApplicationBootstrap, OnApplicationShutdown
+{
+  private tokenCleanupInterval?: NodeJS.Timeout;
+  private tokensRepository: SignupVerificationTokensRepository;
+
   constructor(
     @InjectConnection() private connection: Connection,
     private emailService: EmailService,
-  ) {}
+    private loggingService: LoggingService,
+    private jobsConfigService: JobsConfigService,
+  ) {
+    this.tokensRepository = connection.getCustomRepository(
+      SignupVerificationTokensRepository,
+    );
+  }
+
+  onApplicationBootstrap() {
+    if (this.jobsConfigService.shouldCallScheduledJobs) {
+      this.tokenCleanupInterval = setInterval(() => {
+        this.cleanupExpiredAuthTokens().catch((error) => {
+          this.loggingService.logError(
+            'token-service:token-cleanup-interval',
+            error,
+          );
+        });
+      }, 1000 * 60 * 60);
+    }
+  }
+
+  onApplicationShutdown() {
+    if (this.tokenCleanupInterval) {
+      clearInterval(this.tokenCleanupInterval);
+    }
+  }
+
+  private cleanupExpiredAuthTokens() {
+    return this.tokensRepository.deleteExpired();
+  }
 
   /*
   -----------
@@ -37,9 +76,9 @@ export class UsersService {
   ): Promise<{ result: 'match'; user: User } | { result: 'dont-match' }> {
     const usersRepository = manager.getCustomRepository(UsersRepository);
 
-    const user = (await usersRepository.findOne({
+    const user = await usersRepository.findOne({
       where: { email, isVerified: true },
-    })) as undefined | NonNullableFields<User, 'passwordHash' | 'passwordSalt'>;
+    });
 
     if (!user) {
       return { result: 'dont-match' };
@@ -62,7 +101,7 @@ export class UsersService {
   -----------
   */
 
-  async verifyUser(
+  async verifySignupToken(
     auditContext: AuditContext,
     tokenId: SignupVerificationToken['id'],
   ): Promise<'ok' | 'not-found'> {

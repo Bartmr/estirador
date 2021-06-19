@@ -1,10 +1,14 @@
 import { User } from 'src/users/typeorm/user.entity';
-import { AbstractRepository, LessThan, MoreThan } from 'typeorm';
-import { Token } from './token.entity';
+import {
+  AbstractRepository,
+  EntityRepository,
+  LessThan,
+  MoreThan,
+} from 'typeorm';
+import { AuthToken } from './typeorm/auth-token.entity';
 
-export abstract class TokensRepository<
-  Entity extends Token,
-> extends AbstractRepository<Entity> {
+@EntityRepository(AuthToken)
+export class AuthTokensRepository extends AbstractRepository<AuthToken> {
   deleteExpired() {
     return this.repository.delete({
       expires: LessThan(Date.now()),
@@ -12,19 +16,17 @@ export abstract class TokensRepository<
     } as any);
   }
 
-  deleteFromUser(user: User) {
+  deleteToken(tokenString: string) {
     return this.repository.delete({
-      user: user,
+      id: tokenString,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
   }
 
-  public async createToken(user: User, ttl: number): Promise<Entity> {
+  public async createToken(user: User, ttl: number): Promise<AuthToken> {
     const ttlInMilliseconds = ttl * 1000;
 
-    const TokenEntity = this.repository.target as { new (): Entity };
-
-    const token = new TokenEntity();
+    const token = new AuthToken();
 
     token.user = user;
 
@@ -36,14 +38,14 @@ export abstract class TokensRepository<
     return this.repository.save(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       token as any,
-    ) as Promise<Entity>;
+    ) as Promise<AuthToken>;
   }
 
   public findTokenById(id: string) {
     return this.repository.findOne({
       where: {
         id,
-        expires: MoreThan(Date.now()),
+        expires: MoreThan(new Date()),
       },
     });
   }
@@ -52,7 +54,7 @@ export abstract class TokensRepository<
     return this.repository.findOne({
       where: {
         user,
-        expires: MoreThan(Date.now()),
+        expires: MoreThan(new Date()),
       },
     });
   }

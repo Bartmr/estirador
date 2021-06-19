@@ -27,18 +27,18 @@ export abstract class JSONApiBase {
   private jsonHttp: ReturnType<typeof useJSONHttp>;
   private apiUrl: string;
   private getHeaders: () => OutgoingHeaders;
-  private logout: () => void;
+  private onInvalidAuthToken: () => Promise<void>;
 
   constructor(params: {
     jsonHttp: JSONApiBase['jsonHttp'];
     apiUrl: JSONApiBase['apiUrl'];
     getHeaders: JSONApiBase['getHeaders'];
-    logout: JSONApiBase['logout'];
+    onInvalidAuthToken: JSONApiBase['onInvalidAuthToken'];
   }) {
     this.jsonHttp = params.jsonHttp;
     this.apiUrl = params.apiUrl;
     this.getHeaders = params.getHeaders;
-    this.logout = params.logout;
+    this.onInvalidAuthToken = params.onInvalidAuthToken;
   }
 
   private async doRequest<R extends JsonHttpResponseBase>(
@@ -72,6 +72,7 @@ export abstract class JSONApiBase {
       url: `${this.apiUrl}${params.path}${
         params.query ? toQueryString(params.query) : ''
       }`,
+      withCredentials: true,
     };
 
     const res = await (() => {
@@ -101,7 +102,7 @@ export abstract class JSONApiBase {
       } else if (res.response.status === 403) {
         return { failure: TransportFailure.Forbidden };
       } else if (res.response.status === 401) {
-        this.logout();
+        await this.onInvalidAuthToken();
 
         return { failure: TransportFailure.AbortedAndDealtWith };
       } else {
@@ -128,8 +129,8 @@ export abstract class JSONApiBase {
 
   post<
     Response extends JsonHttpResponseBase = never,
-    RequestBody extends SupportedRequestBody = never,
     QueryParams extends SupportedRequestQueryParams | undefined = never,
+    RequestBody extends SupportedRequestBody = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -143,8 +144,8 @@ export abstract class JSONApiBase {
   }
   put<
     Response extends JsonHttpResponseBase = never,
-    RequestBody extends SupportedRequestBody = never,
     QueryParams extends SupportedRequestQueryParams | undefined = never,
+    RequestBody extends SupportedRequestBody = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -158,8 +159,8 @@ export abstract class JSONApiBase {
   }
   patch<
     Response extends JsonHttpResponseBase = never,
-    RequestBody extends SupportedRequestBody = never,
     QueryParams extends SupportedRequestQueryParams | undefined = never,
+    RequestBody extends SupportedRequestBody = never,
   >(params: {
     path: string;
     query: QueryParams;

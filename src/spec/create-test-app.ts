@@ -9,6 +9,7 @@ import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { LoggingModule } from 'src/internals/logging/logging.module';
 import { createLoggingTestService } from './logging-test-service';
 import { TestApp } from './test-app-types';
+import cookieParser from 'cookie-parser';
 
 if (NODE_ENV !== NodeEnv.Test) {
   throw new Error();
@@ -54,6 +55,8 @@ export async function createAndInitializeTestApp(args: {
   }).compile();
 
   const app = moduleRef.createNestApplication();
+
+  app.use(cookieParser());
 
   app.useLogger(logger);
 

@@ -20,14 +20,10 @@ export const mainApiReducer: MainApiReducer = (
   action,
 ) => {
   switch (action.type) {
-    case 'STARTED_MAIN_API_SESSION':
-    case 'RESTORED_MAIN_API_SESSION':
+    case 'UPDATE_MAIN_API_SESSION':
       return {
         ...state,
-        session: {
-          status: TransportedDataStatus.Done,
-          data: action.payload,
-        },
+        session: action.payload,
       };
     default:
       return state;

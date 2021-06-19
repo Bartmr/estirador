@@ -1,47 +1,124 @@
 import { StoreDispatch } from 'src/logic/app-internals/store/store-types';
-import { MAIN_API_SESSION_LOGOUT } from './main-api-session-actions';
 import { useSessionStorage } from 'src/logic/app-internals/transports/use-session-storage';
 import { useLocalStorage } from 'src/logic/app-internals/transports/use-local-storage';
 import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
 import { mainApiReducer } from '../main-api-reducer';
-import { MainApiSessionData } from './main-api-session-types';
+import { LoginResponse, MainApiSessionData } from './main-api-session-types';
+import { useMainJSONApi } from '../use-main-json-api';
+import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { LoginRequestDTO } from '@app/shared/auth/auth.dto';
+import { ToJSON } from '@app/shared/internals/transports/json-type-converters';
+import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './main-api-session-constants';
+import { MainApiAuthTokenIdLocalStorageSchema } from './main-api-session-schemas';
+import { useMainApiSessionLogout } from './use-main-api-session-logout';
 
 class MainApiSession {
   constructor(
+    private mainApi: ReturnType<typeof useMainJSONApi>,
     private dispatch: StoreDispatch<'mainApi'>,
     private localStorage: ReturnType<typeof useLocalStorage>,
     private sessionStorage: ReturnType<typeof useSessionStorage>,
+    private mainSessionLogout: ReturnType<typeof useMainApiSessionLogout>,
   ) {}
 
-  startUserSession(session: MainApiSessionData) {
+  async login(args: { email: string; password: string }) {
+    const res = await this.mainApi.post<
+      { status: 201; body: LoginResponse } | { status: 404; body: undefined },
+      undefined,
+      ToJSON<LoginRequestDTO>
+    >({
+      path: '/auth',
+      query: undefined,
+      body: args,
+      acceptableStatusCodes: [201, 404],
+    });
+
+    if (res.failure) {
+      return res.failure;
+    } else {
+      if (res.response.status === 404) {
+        return 'wrong-credentials';
+      } else {
+        this.localStorage.setItem(
+          MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
+          res.response.body.authTokenId,
+        );
+        this.setSession(res.response.body.session);
+
+        return 'ok' as const;
+      }
+    }
+  }
+
+  setSession(session: MainApiSessionData | null) {
     this.dispatch({
-      type: 'STARTED_MAIN_API_SESSION',
-      payload: session,
+      type: 'UPDATE_MAIN_API_SESSION',
+      payload: {
+        status: TransportedDataStatus.Done,
+        data: session,
+      },
     });
   }
 
-  logout() {
+  async restoreSession() {
     this.dispatch({
-      type: MAIN_API_SESSION_LOGOUT,
+      type: 'UPDATE_MAIN_API_SESSION',
+      payload: {
+        status: TransportedDataStatus.Loading,
+      },
     });
 
-    this.localStorage.wipeAll();
-    this.sessionStorage.wipeAll();
-  }
-
-  restorePersistedSession() {
-    this.dispatch({
-      type: 'RESTORED_MAIN_API_SESSION',
-      payload: null,
+    const res = await this.mainApi.get<
+      | { status: 200; body: MainApiSessionData }
+      | { status: 401; body: undefined },
+      undefined
+    >({
+      path: '/auth',
+      query: undefined,
+      acceptableStatusCodes: [200, 401],
     });
+
+    if (res.failure) {
+      this.dispatch({
+        type: 'UPDATE_MAIN_API_SESSION',
+        payload: {
+          status: res.failure,
+        },
+      });
+    } else {
+      if (res.response.status === 401) {
+        const hasSession = this.localStorage.getItem(
+          MainApiAuthTokenIdLocalStorageSchema,
+          MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
+        );
+
+        if (hasSession) {
+          await this.mainSessionLogout.logout();
+        }
+
+        this.setSession(null);
+      } else {
+        this.setSession(res.response.body);
+      }
+    }
   }
 }
 
 export function useMainApiSession() {
+  const mainApi = useMainJSONApi();
+
   const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
 
   const localStorage = useLocalStorage();
   const sessionStorage = useSessionStorage();
 
-  return new MainApiSession(dispatch, localStorage, sessionStorage);
+  const mainSessionLogout = useMainApiSessionLogout();
+
+  return new MainApiSession(
+    mainApi,
+    dispatch,
+    localStorage,
+    sessionStorage,
+    mainSessionLogout,
+  );
 }

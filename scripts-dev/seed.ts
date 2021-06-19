@@ -8,6 +8,10 @@ import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';
 import { ProcessType } from 'src/internals/process/process-context';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { UsersRepository } from 'src/users/users.repository';
+import { createTestAuditContext } from 'src/internals/auditing/spec/create-test-audit-context';
+import bcrypt from 'bcrypt';
+import { Role } from 'src/auth/roles/roles';
 
 async function seed() {
   if (NODE_ENV === NodeEnv.Development) {
@@ -30,11 +34,24 @@ async function seed() {
 
     await defaultDBConnection.runMigrations();
 
-    await Promise.all([
-      /*
-      CALL SEEDING METHODS HERE
-    */
-    ]);
+    const repository = defaultDBConnection.getCustomRepository(UsersRepository);
+
+    const auditContext = createTestAuditContext();
+
+    const passwordSalt = await bcrypt.genSalt();
+
+    const passwordHash = await bcrypt.hash('password123', passwordSalt);
+
+    await repository.create(
+      {
+        email: `end-user@test-email.com`,
+        role: Role.EndUser,
+        passwordHash,
+        passwordSalt,
+        isVerified: true,
+      },
+      auditContext.toPersist,
+    );
 
     await Promise.all([defaultDBConnection.close()]);
   } else {

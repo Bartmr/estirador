@@ -7,6 +7,9 @@
 - Run `npm run install:all`
 - (Optional) hook the `precommit` script in `package.json` to your Git pre-commit hook
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
+- Start the project's infrastructure by running `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
+- Generate the first database migration by running `NODE_ENV=development npm run typeorm migration:generate -- -- -n FirstMigration --pretty`
+- Import and place the newly generated migration in the `ALL_MIGRATIONS` array at `src/internals/databases/all-migrations.ts`
 - **Done**
 
 ### Setting up a new project inside a repository with multiple projects:
@@ -18,6 +21,9 @@
 - Run `npm run install:all`
 - Decide if you want to hook the `precommit` script in `package.json` to your Git pre-commit hook. In a repository with multiple projects, it might be inconvenient for everyone to run this precommit hook even if they haven't changed any code in this project. You can always do a script to only run the `precommit` script if any of the files inside the project were changed
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
+- Start the project's infrastructure by running `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
+- Generate the first database migration by running `NODE_ENV=development npm run typeorm migration:generate -- -- -n FirstMigration --pretty`
+- Import and place the newly generated migration in the `ALL_MIGRATIONS` array at `src/internals/databases/all-migrations.ts`
 - **Done**
 
 ## CI pipelines:
@@ -38,9 +44,9 @@ If your project is not on the repository's root directory, you can always run th
 
 ### Start development environment
 
+- `npm run install:all`
 - Start your project's infrastructure (example: databases, Redis, etc.)
   - `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
-- `npm run install:all`
 - Seed the development database with sample data by running `NODE_ENV=development npm run seed`
 - Start the server with `npm run start:dev`, or `npm run start:debug` if you want to debug the API in the Chrome Developer Tools
 - To run the web app:

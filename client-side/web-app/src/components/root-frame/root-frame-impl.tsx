@@ -65,9 +65,11 @@ const ContentsFrame = (props: { children: ReactNode }) => {
   );
 
   useEffect(() => {
-    if (mainApiSessionStatus === TransportedDataStatus.NotInitialized) {
-      mainApiSession.restorePersistedSession();
-    }
+    (async () => {
+      if (mainApiSessionStatus === TransportedDataStatus.NotInitialized) {
+        await mainApiSession.restoreSession();
+      }
+    })();
   }, [mainApiSessionStatus]);
 
   return <>{props.children}</>;

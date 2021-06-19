@@ -26,6 +26,7 @@ function logError({
   status,
   requestBody,
   responseText,
+  withCredentials,
 }: {
   errorKey: string;
   error: unknown;
@@ -34,6 +35,7 @@ function logError({
   status: number;
   requestBody: JsonHttpOutgoingBody;
   responseText: string;
+  withCredentials: boolean | undefined;
 }) {
   const requestBodyForLogger =
     requestBody instanceof FormData
@@ -54,6 +56,7 @@ function logError({
     status,
     requestBody: requestBodyForLogger,
     responseText: responseText,
+    withCredentials,
   });
 }
 
@@ -63,16 +66,23 @@ function makeJsonHttpRequest({
   headers,
   body,
   acceptableStatusCodes,
+  withCredentials,
 }: {
   url: string;
   headers: OutgoingHeaders;
   acceptableStatusCodes: readonly number[];
+  withCredentials: boolean | undefined;
 } & (
   | { method: 'HEAD' | 'GET' | 'DELETE'; body?: undefined }
   | { method: 'POST' | 'PATCH' | 'PUT'; body: JsonHttpOutgoingBody }
 )) {
   return new Promise<JsonHttpResponse<JsonHttpResponseBase>>((resolve) => {
     const request = new XMLHttpRequest();
+
+    if (withCredentials) {
+      request.withCredentials = withCredentials;
+    }
+
     const headersToAdd = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -107,6 +117,7 @@ function makeJsonHttpRequest({
           status: request.status,
           requestBody: body,
           responseText: request.responseText,
+          withCredentials,
         });
 
         return resolve({
@@ -129,6 +140,7 @@ function makeJsonHttpRequest({
             status: request.status,
             requestBody: body,
             responseText: request.responseText,
+            withCredentials,
           });
 
           return {
@@ -170,16 +182,19 @@ class JSONHttp {
     url,
     headers,
     acceptableStatusCodes,
+    withCredentials,
   }: {
     url: string;
     headers: OutgoingHeaders;
     acceptableStatusCodes: readonly R['status'][];
+    withCredentials: boolean | undefined;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
       method: 'GET',
       headers,
       acceptableStatusCodes,
+      withCredentials,
     })) as JsonHttpResponse<R>;
 
     return res;
@@ -190,11 +205,13 @@ class JSONHttp {
     headers,
     body,
     acceptableStatusCodes,
+    withCredentials,
   }: {
     url: string;
     headers: OutgoingHeaders;
     body: JsonHttpOutgoingBody;
     acceptableStatusCodes: readonly R['status'][];
+    withCredentials: boolean | undefined;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -202,6 +219,7 @@ class JSONHttp {
       headers,
       body,
       acceptableStatusCodes,
+      withCredentials,
     })) as JsonHttpResponse<R>;
 
     return res;
@@ -212,11 +230,13 @@ class JSONHttp {
     headers,
     body,
     acceptableStatusCodes,
+    withCredentials,
   }: {
     url: string;
     headers: OutgoingHeaders;
     body: JsonHttpOutgoingBody;
     acceptableStatusCodes: readonly R['status'][];
+    withCredentials: boolean | undefined;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -224,6 +244,7 @@ class JSONHttp {
       headers,
       body,
       acceptableStatusCodes,
+      withCredentials,
     })) as JsonHttpResponse<R>;
 
     return res;
@@ -234,11 +255,13 @@ class JSONHttp {
     headers,
     body,
     acceptableStatusCodes,
+    withCredentials,
   }: {
     url: string;
     headers: OutgoingHeaders;
     body: JsonHttpOutgoingBody;
     acceptableStatusCodes: readonly R['status'][];
+    withCredentials: boolean | undefined;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -246,6 +269,7 @@ class JSONHttp {
       headers,
       body,
       acceptableStatusCodes,
+      withCredentials,
     })) as JsonHttpResponse<R>;
 
     return res;
@@ -255,16 +279,19 @@ class JSONHttp {
     url,
     headers,
     acceptableStatusCodes,
+    withCredentials,
   }: {
     url: string;
     headers: OutgoingHeaders;
     acceptableStatusCodes: readonly R['status'][];
+    withCredentials: boolean | undefined;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
       method: 'DELETE',
       headers,
       acceptableStatusCodes,
+      withCredentials,
     })) as JsonHttpResponse<R>;
 
     return res;
@@ -274,16 +301,19 @@ class JSONHttp {
     url,
     headers,
     acceptableStatusCodes,
+    withCredentials,
   }: {
     url: string;
     headers: OutgoingHeaders;
     acceptableStatusCodes: number[];
+    withCredentials: boolean | undefined;
   }): Promise<JsonHttpHEADResponse> {
     const res = (await makeJsonHttpRequest({
       url,
       method: 'HEAD',
       headers,
       acceptableStatusCodes,
+      withCredentials,
     })) as JsonHttpHEADResponse;
 
     return res;

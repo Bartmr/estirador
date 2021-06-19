@@ -5,7 +5,6 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
-import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 
 export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS: (() => {
@@ -50,26 +49,11 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   DATABASE_USER: string().filled(),
   DATABASE_PASSWORD: string().filled(),
 
-  JWT_ISSUER: (() => {
-    if (NODE_ENV === NodeEnv.Test) {
-      return equals([undefined]);
-    } else {
-      return string().filled();
-    }
-  })(),
-  JWT_ACCESS_TOKEN_TTL: number().transform((value) => {
-    if (value === undefined) {
-      return 60 * 10;
-    } else {
-      return value;
-    }
-  }),
-  JWT_REFRESH_TOKEN_TTL: number().transform((value) => {
+  AUTH_TOKEN_TTL: number().transform((value) => {
     if (value === undefined) {
       return 60 * 60 * 24 * 30;
     } else {
       return value;
     }
   }),
-  JWT_SECRET: string().defined(),
 }).defined();

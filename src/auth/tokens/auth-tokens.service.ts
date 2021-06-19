@@ -1,114 +1,77 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Algorithm, JsonWebTokenError, SignOptions } from 'jsonwebtoken';
+import {
+  Injectable,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectConnection } from '@nestjs/typeorm';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
-import { NODE_ENV } from 'src/internals/environment/node-env.constants';
-import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { LoggingService } from 'src/internals/logging/logging.service';
-import { throwError } from 'src/internals/utils/throw-error';
 import { User } from 'src/users/typeorm/user.entity';
-import { RefreshTokensRepository } from './refresh-token.repository';
-import { accessTokenPayloadSchema } from './auth-tokens.types';
-import { RefreshToken } from './typeorm/refresh-token.entity';
-import { TokensService } from 'src/internals/tokens/tokens.service';
-import { EntityManager } from 'typeorm';
-import { AuthSessionDTO } from '../auth.dto';
-import { HttpAdapterHost } from '@nestjs/core';
-import { AppServerHttpAdapter } from 'src/internals/server/types/app-server-http-adapter-types';
+import { AuthTokensRepository } from './auth-token.repository';
+import { Connection, EntityManager } from 'typeorm';
 import { JobsConfigService } from 'src/internals/jobs/config/jobs-config.service';
 
-const JWT_ALGORITHM: Algorithm = 'HS256';
-
 @Injectable()
-export class AuthTokensService extends TokensService<RefreshTokensRepository> {
+export class AuthTokensService
+  implements OnApplicationBootstrap, OnApplicationShutdown
+{
+  private tokenCleanupInterval?: NodeJS.Timeout;
+  private tokensRepository: AuthTokensRepository;
+
   constructor(
-    @InjectRepository(RefreshTokensRepository)
-    tokensRepository: RefreshTokensRepository,
-    loggingService: LoggingService,
-    private jwtService: JwtService,
-    private httpAdapterHost: HttpAdapterHost<AppServerHttpAdapter>,
-    jobsConfigService: JobsConfigService,
+    @InjectConnection() connection: Connection,
+    private loggingService: LoggingService,
+    private jobsConfigService: JobsConfigService,
   ) {
-    super(tokensRepository, loggingService, jobsConfigService);
+    this.tokensRepository =
+      connection.getCustomRepository(AuthTokensRepository);
   }
 
-  async createSession(
-    manager: EntityManager,
-    user: User,
-    hostname: string,
-  ): Promise<AuthSessionDTO> {
-    const refreshTokenRes = await this.generateRefreshToken(
-      manager,
-      user,
-      hostname,
-    );
-    const accessToken = await this.generateAccessToken(
-      refreshTokenRes.entity,
-      hostname,
-    );
-
-    return {
-      accessToken,
-      refreshToken: refreshTokenRes.token,
-    };
+  onApplicationBootstrap() {
+    if (this.jobsConfigService.shouldCallScheduledJobs) {
+      this.tokenCleanupInterval = setInterval(() => {
+        this.cleanupExpiredAuthTokens().catch((error) => {
+          this.loggingService.logError(
+            'token-service:token-cleanup-interval',
+            error,
+          );
+        });
+      }, 1000 * 60 * 60);
+    }
   }
 
-  public async validateAccessToken(
-    accessToken: string,
-    hostname: string,
+  onApplicationShutdown() {
+    if (this.tokenCleanupInterval) {
+      clearInterval(this.tokenCleanupInterval);
+    }
+  }
+
+  private cleanupExpiredAuthTokens() {
+    return this.tokensRepository.deleteExpired();
+  }
+
+  async createAuthToken(manager: EntityManager, user: User) {
+    const tokensRepository = manager.getCustomRepository(AuthTokensRepository);
+
+    const ttl = EnvironmentVariablesService.variables.AUTH_TOKEN_TTL;
+
+    const token = await tokensRepository.createToken(user, ttl);
+
+    return token;
+  }
+
+  public async validateAuthToken(
+    authTokenId: string,
+    httpOnlyAuthTokenKey: string,
   ): Promise<User> {
-    const verifyOpts: JwtVerifyOptions = {
-      algorithms: [JWT_ALGORITHM],
-    };
+    const authToken = await this.findToken(authTokenId);
 
-    if (NODE_ENV === NodeEnv.Test) {
-      const address = this.httpAdapterHost.httpAdapter
-        .getHttpServer()
-        .address();
-
-      verifyOpts.issuer =
-        address === null || typeof address === 'string'
-          ? throwError()
-          : `http://localhost:${address.port}`;
-    } else {
-      verifyOpts.issuer =
-        EnvironmentVariablesService.variables.JWT_ISSUER || throwError();
-    }
-
-    verifyOpts.audience = hostname;
-
-    let unparsedPayload: object;
-
-    try {
-      unparsedPayload = await this.jwtService.verifyAsync<object>(
-        accessToken,
-        verifyOpts,
-      );
-    } catch (err: unknown) {
-      if (err instanceof JsonWebTokenError) {
-        throw new UnauthorizedException();
-      } else {
-        throw err;
-      }
-    }
-
-    const payloadValidationResult =
-      accessTokenPayloadSchema.validate(unparsedPayload);
-
-    if (payloadValidationResult.errors) {
+    if (!authToken || authToken.httpsOnlyKey !== httpOnlyAuthTokenKey) {
       throw new UnauthorizedException();
     }
 
-    const refreshToken = await this.tokensRepository.findTokenById(
-      payloadValidationResult.value.sub,
-    );
-
-    if (!refreshToken) {
-      throw new UnauthorizedException();
-    }
-
-    const user = refreshToken.user;
+    const user = authToken.user;
 
     if (user.deletedAt) {
       throw new UnauthorizedException();
@@ -117,120 +80,11 @@ export class AuthTokensService extends TokensService<RefreshTokensRepository> {
     return user;
   }
 
-  public async createAccessTokenFromRefreshToken(
-    refreshToken: string,
-    hostname: string,
-  ): Promise<string> {
-    let unparsedPayload: object;
-
-    try {
-      unparsedPayload = await this.jwtService.verifyAsync<object>(refreshToken);
-    } catch (err: unknown) {
-      if (err instanceof JsonWebTokenError) {
-        throw new UnauthorizedException();
-      } else {
-        throw err;
-      }
-    }
-
-    const payloadValidationResult =
-      accessTokenPayloadSchema.validate(unparsedPayload);
-
-    if (payloadValidationResult.errors) {
-      throw new UnauthorizedException();
-    }
-
-    const payload = payloadValidationResult.value;
-
-    const refreshTokenInDB = await this.tokensRepository.findTokenById(
-      payload.jti,
-    );
-
-    if (!refreshTokenInDB) {
-      throw new UnauthorizedException();
-    }
-
-    if (refreshTokenInDB.expires.getTime() < Date.now()) {
-      throw new UnauthorizedException();
-    }
-
-    const accessToken = await this.generateAccessToken(
-      refreshTokenInDB,
-      hostname,
-    );
-
-    return accessToken;
+  deleteToken(tokenString: string) {
+    return this.tokensRepository.deleteToken(tokenString);
   }
 
-  private async generateAccessToken(
-    refreshToken: RefreshToken,
-    hostname: string,
-  ): Promise<string> {
-    const opts: SignOptions = {
-      algorithm: JWT_ALGORITHM,
-      subject: refreshToken.id,
-    };
-
-    if (NODE_ENV === NodeEnv.Test) {
-      const address = this.httpAdapterHost.httpAdapter
-        .getHttpServer()
-        .address();
-
-      opts.issuer =
-        address === null || typeof address === 'string'
-          ? throwError()
-          : `http://localhost:${address.port}`;
-    } else {
-      opts.issuer =
-        EnvironmentVariablesService.variables.JWT_ISSUER || throwError();
-    }
-
-    opts.audience = hostname;
-
-    return this.jwtService.signAsync({}, opts);
-  }
-
-  private async generateRefreshToken(
-    manager: EntityManager,
-    user: User,
-    hostname: string,
-  ) {
-    const tokensRepository = manager.getCustomRepository(
-      RefreshTokensRepository,
-    );
-
-    const ttl = EnvironmentVariablesService.variables.JWT_REFRESH_TOKEN_TTL;
-
-    const token = await tokensRepository.createToken(user, ttl);
-
-    const opts: SignOptions = {
-      algorithm: JWT_ALGORITHM,
-      expiresIn: ttl,
-      subject: token.id,
-      jwtid: token.id,
-    };
-
-    if (NODE_ENV === NodeEnv.Test) {
-      const address = this.httpAdapterHost.httpAdapter
-        .getHttpServer()
-        .address();
-
-      opts.issuer =
-        address === null || typeof address === 'string'
-          ? throwError()
-          : `http://localhost:${address.port}`;
-    } else {
-      opts.issuer =
-        EnvironmentVariablesService.variables.JWT_ISSUER || throwError();
-    }
-
-    opts.audience = hostname;
-
-    const signedToken = await this.jwtService.signAsync({}, opts);
-
-    return {
-      entity: token,
-      token: signedToken,
-    };
+  findToken(tokenString: string) {
+    return this.tokensRepository.findTokenById(tokenString);
   }
 }

@@ -2,9 +2,12 @@ import { User } from 'src/users/typeorm/user.entity';
 import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class SignupVerificationToken {
+export class AuthToken {
   @PrimaryColumn('uuid', { default: () => 'uuid_generate_v4()' })
   id!: string;
+
+  @Column('uuid', { default: () => 'uuid_generate_v4()' })
+  httpsOnlyKey!: string;
 
   @ManyToOne(() => User, { eager: true })
   user!: User;

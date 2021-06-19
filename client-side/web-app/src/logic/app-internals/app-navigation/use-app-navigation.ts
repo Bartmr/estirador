@@ -33,6 +33,7 @@ export function useAppNavigation() {
 
   return {
     pathPrefix,
+    currentHref,
     navigate,
     navigateWithoutAwaiting: (href: string) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -43,6 +44,5 @@ export function useAppNavigation() {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       goBack();
     },
-    currentHref,
   };
 }
