@@ -5,13 +5,14 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
+import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 
 export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS: (() => {
     if (NODE_ENV === NodeEnv.Development || NODE_ENV === NodeEnv.Test) {
       return number().defined();
     } else {
-      return number().transform(() => 0);
+      return equals([undefined]).transform(() => 0);
     }
   })(),
 

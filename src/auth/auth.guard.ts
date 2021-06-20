@@ -11,7 +11,7 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { attachAuditContext } from 'src/internals/auditing/attach-audit-context';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { AuthContext } from './auth-context';
-import { AUTH_TOKEN_HTTP_ONLY_KEY_COOOKIE } from './auth.constants';
+import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { PUBLIC_ROUTE_METADATA_KEY } from './public-route.decorator';
 import { ROLES_LEVELS } from './roles/roles';
 import {
@@ -43,7 +43,7 @@ export class AuthGuard implements CanActivate {
     if (authTokenId) {
       const authTokenKeyFromCookie = (
         request.cookies as { [key: string]: unknown }
-      )[AUTH_TOKEN_HTTP_ONLY_KEY_COOOKIE];
+      )[AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE];
 
       const authTokenKeyValidation = string()
         .filled()
@@ -56,7 +56,7 @@ export class AuthGuard implements CanActivate {
       const authTokenKey = authTokenKeyValidation.value;
 
       const user = await this.tokensService.validateAuthToken(
-        authTokenId,
+        authTokenId.replace('Bearer ', ''),
         authTokenKey,
       );
 

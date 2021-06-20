@@ -56,16 +56,21 @@ export async function createApp() {
     const options = new DocumentBuilder()
       .setTitle(PROJECT_NAME + ' API')
       .setVersion('1.0')
-      .addBearerAuth({
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      })
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+        },
+        'Auth Token Id',
+      )
+      .addSecurityRequirements('Auth Token Id')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
 
-    SwaggerModule.setup('api-docs', app, document);
+    SwaggerModule.setup('api-docs', app, document, {
+      swaggerOptions: { persistAuthorization: true },
+    });
   }
 
   return app;

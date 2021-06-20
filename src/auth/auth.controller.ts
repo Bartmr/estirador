@@ -26,7 +26,7 @@ import {
   WithAuthContext,
   WithOptionalAuthContext,
 } from './auth-context.decorator';
-import { AUTH_TOKEN_HTTP_ONLY_KEY_COOOKIE } from './auth.constants';
+import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { PublicRoute } from './public-route.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 
@@ -71,7 +71,7 @@ export class AuthController {
         matchResult.user,
       );
 
-      response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOOKIE, token.httpsOnlyKey, {
+      response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpsOnlyKey, {
         expires: token.expires,
         httpOnly: true,
         secure: NODE_ENV === NodeEnv.Production,

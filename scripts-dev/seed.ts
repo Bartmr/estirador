@@ -44,7 +44,7 @@ async function seed() {
 
     await repository.create(
       {
-        email: `end-user@test-email.com`,
+        email: `end-user@email.com`,
         role: Role.EndUser,
         passwordHash,
         passwordSalt,
