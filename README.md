@@ -4,6 +4,7 @@
 - Point the terminal to the project root directory
 - Run `git remote remove origin` to remove any unnecessary branches that came with the boilerplate repository and detach the new project from said repository
 - Run `git remote add origin <project repository url>` to start pushing changes to your new project's repository
+- Remove the `CONTRIBUTING.md` and `LICENSE` files, and also change the `license` field in `package.json`
 - Run `npm run install:all`
 - (Optional) hook the `precommit` script in `package.json` to your Git pre-commit hook
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
@@ -17,6 +18,7 @@
 - Clone this repository
 - Delete the `.git` directory inside the recently cloned project directory
 - Rename the project directory to your project's name
+- Remove the `CONTRIBUTING.md` and `LICENSE` files, and also change the `license` field in `package.json`
 - Commit all the boilerplate files
 - Run `npm run install:all`
 - Decide if you want to hook the `precommit` script in `package.json` to your Git pre-commit hook. In a repository with multiple projects, it might be inconvenient for everyone to run this precommit hook even if they haven't changed any code in this project. You can always do a script to only run the `precommit` script if any of the files inside the project were changed
