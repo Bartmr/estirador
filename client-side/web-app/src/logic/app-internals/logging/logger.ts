@@ -5,10 +5,11 @@ import {
   isRunningOnServer,
 } from '../runtime/is-running-on-server';
 
-const LOG_LIMIT_PER_ERROR_TYPE = 3;
+const LOG_ENTRIES_LIMIT = 3;
 
 class LoggerImpl {
   private loggedErrors: { [key: string]: undefined | number } = {};
+  private loggedWarnings: { [key: string]: undefined | number } = {};
 
   logDebug(key: string, extraData?: unknown) {
     if (COMMON_CONFIG.logDebug) {
@@ -17,14 +18,14 @@ class LoggerImpl {
   }
 
   logWarning(key: string, message: string, extraData?: unknown) {
-    this.logWarningToConsole(key, message, extraData);
-  }
+    const numberOfTimesLogged = this.loggedWarnings[key] || 0;
 
-  private logWarningToConsole(
-    key: string,
-    message: string,
-    extraData?: unknown,
-  ) {
+    if (numberOfTimesLogged < LOG_ENTRIES_LIMIT) {
+      this.loggedWarnings[key] = numberOfTimesLogged + 1;
+
+      // TODO: Implement remote logging here
+    }
+
     console.warn('Logged warning with key: ' + key + '. ' + message);
     console.warn('Extra data:', extraData);
   }
@@ -45,8 +46,10 @@ class LoggerImpl {
 
     const numberOfTimesLogged = this.loggedErrors[errorKey] || 0;
 
-    if (numberOfTimesLogged < LOG_LIMIT_PER_ERROR_TYPE) {
+    if (numberOfTimesLogged < LOG_ENTRIES_LIMIT) {
       this.loggedErrors[errorKey] = numberOfTimesLogged + 1;
+
+      // TODO: Implement remote logging here
     }
 
     console.error('Logged error with key: ' + errorKey);
