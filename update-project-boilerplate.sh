@@ -31,7 +31,7 @@ To continue with the update write yes and press Enter.
 
   git fetch boilerplate $git_branch
 
-  git merge "boilerplate/${git_branch}" --allow-unrelated-histories
+  git merge "boilerplate/${git_branch}"
 
   git remote remove boilerplate
 
