@@ -8,6 +8,7 @@ import { INDEX_ROUTE } from 'src/components/templates/index/index-routes';
 import { Nav } from 'react-bootstrap';
 import { PROJECT_NAME } from '@app/shared/project-details';
 import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
+import { HamburguerMenuIcon } from '../../../ui-kit/components/icons/hamburguer-menu-icon';
 
 type Props = {
   menuHtmlId: string;
@@ -41,13 +42,7 @@ export function Header(props: Props) {
   return (
     <>
       <header className={`sticky-top border-bottom ${HEADER_CSS_CLASS}`}>
-        <Navbar
-          collapseOnSelect
-          expand="lg"
-          expanded={expanded}
-          variant="light"
-          className="bg-light"
-        >
+        <Navbar collapseOnSelect expand="lg" expanded={expanded}>
           <Navbar.Toggle
             onClick={() => {
               if (expanded) {
@@ -57,7 +52,9 @@ export function Header(props: Props) {
               }
             }}
             aria-controls={props.menuHtmlId}
-          />
+          >
+            <HamburguerMenuIcon />
+          </Navbar.Toggle>
           <LinkAnchor className="navbar-brand" href={INDEX_ROUTE.getHref()}>
             <span className="badge badge-primary">
               <span className="h5">{PROJECT_NAME}</span>

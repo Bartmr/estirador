@@ -77,9 +77,13 @@ export function Page(props: Props) {
         titleTemplate={siteTitle}
       />
       <span className="d-none">{`Build date: ${siteBuildDate}`}</span>
-      <div className="d-flex flex-column min-vh-100">
+      <div
+        className="d-flex flex-column"
+        style={{ minHeight: '100vh', maxHeight: '100vh' }}
+      >
         <Header menuHtmlId="page-header-menu" />
         <div
+          style={{ overflow: 'scroll', maxHeight: '100%' }}
           className={`flex-fill d-flex flex-row ${
             props.noContainment ? '' : 'container'
           } ${props.noTopPadding ? '' : 'pt-3'} ${

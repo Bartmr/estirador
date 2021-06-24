@@ -17,3 +17,21 @@
     }
   }
 }
+
+.navbar,
+.navbar.navbar-light,
+.navbar.navbar-dark {
+  background-color: $light;
+
+  @include with-contrasting-colors($light);
+
+  @include on-inverted-color-scheme {
+    background-color: $dark;
+
+    @include with-contrasting-colors($dark);
+  }
+
+  .navbar-toggler {
+    padding: map-get($map: $spacers, $key: 2) map-get($map: $spacers, $key: 3);
+  }
+}
