@@ -28,8 +28,8 @@ $navbar-dark-toggler-icon: none;
 $navbar-dark-toggler-icon-bg: $navbar-dark-toggler-icon;
 $navbar-light-toggler-icon-bg: $navbar-dark-toggler-icon;
 
-$navbar-dark-toggler-border-color: get-contrasting-color('body');
-$navbar-light-toggler-border-color: get-contrasting-color('body');
+$navbar-dark-toggler-border-color: $border-color;
+$navbar-light-toggler-border-color: $border-color;
 
 $navbar-dark-color: get-contrasting-color('body');
 $navbar-light-color: get-contrasting-color('body');
