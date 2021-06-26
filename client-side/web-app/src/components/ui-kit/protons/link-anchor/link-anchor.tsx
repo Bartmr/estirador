@@ -1,15 +1,13 @@
 import { Link } from 'gatsby';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, SyntheticEvent } from 'react';
 import { useAppNavigation } from 'src/logic/app-internals/app-navigation/use-app-navigation';
-import { AccessibleOnClickPropsHandler } from '../../core/accessibility/make-accessible-on-click-props';
-import { makeAccessibleOnClickProps } from '../../core/accessibility/make-accessible-on-click-props';
 
 type Props = {
   children: ReactNode;
   href: string;
   className?: string;
   activeClassName?: string;
-  onClick?: AccessibleOnClickPropsHandler<HTMLAnchorElement>;
+  onClick?: (event: SyntheticEvent<HTMLAnchorElement>) => void;
   style?: React.CSSProperties;
 };
 
@@ -20,7 +18,18 @@ export function LinkAnchor(props: Props) {
     className: props.className,
     style: props.style,
     ...(props.onClick
-      ? makeAccessibleOnClickProps(props.onClick, 'button')
+      ? {
+          onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
+            if (props.onClick) {
+              props.onClick(e);
+            }
+          },
+          onKeyUp: (e: React.KeyboardEvent<HTMLAnchorElement>) => {
+            if (e.code === 'Enter' && props.onClick) {
+              props.onClick(e);
+            }
+          },
+        }
       : {}),
   };
 

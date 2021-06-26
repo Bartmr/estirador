@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import { makeAccessibleOnClickProps } from 'src/components/ui-kit/core/accessibility/make-accessible-on-click-props';
 import * as styles from './header.module.scss';
 import { HEADER_CSS_CLASS } from './header-constants';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
@@ -71,8 +70,18 @@ export function Header(props: Props) {
       </header>
       {expanded ? (
         <div
-          {...makeAccessibleOnClickProps(() => collapseMenu(), 'switch')}
+          role="switch"
+          onClick={() => {
+            collapseMenu();
+          }}
+          onKeyUp={(e) => {
+            if (e.code === 'Space') {
+              collapseMenu();
+            }
+          }}
           className={styles['header__backdrop'] || missingCssClass()}
+          aria-checked={true}
+          tabIndex={-1}
         />
       ) : null}
     </>

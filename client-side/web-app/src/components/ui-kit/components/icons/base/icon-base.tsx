@@ -37,6 +37,7 @@ export function IconBase(props: Props) {
       aria-hidden
       className={`icon ${sizeClass} ${props.className || ''}`}
       icon={props.icon}
+      style={props.style}
     />
   );
 }

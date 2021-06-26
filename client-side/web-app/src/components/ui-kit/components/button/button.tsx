@@ -1,9 +1,5 @@
-import { ReactNode } from 'react';
-import {
-  AcceptedRoles,
-  AccessibleOnClickPropsHandler,
-} from '../../core/accessibility/make-accessible-on-click-props';
-import { makeAccessibleOnClickProps } from '../../core/accessibility/make-accessible-on-click-props';
+import { AriaRole } from 'react';
+import { ReactNode, SyntheticEvent } from 'react';
 import { LinkAnchor } from '../../protons/link-anchor/link-anchor';
 
 export enum ButtonPriority {
@@ -25,10 +21,10 @@ type Props = {
   disabled?: boolean;
   type?: ButtonType;
   href?: string;
-  onClick?: AccessibleOnClickPropsHandler<HTMLElement>;
+  onClick?: (e: SyntheticEvent<HTMLElement>) => void;
   loading?: boolean;
   loadingWithoutDisabling?: boolean;
-  role?: AcceptedRoles;
+  role?: AriaRole;
 };
 
 export function Button(props: Props) {
@@ -78,15 +74,20 @@ export function Button(props: Props) {
       <LinkAnchor {...propsBase} href={props.href} />
     );
   } else if (props.onClick || props.type) {
-    const onClickProps = props.onClick
-      ? makeAccessibleOnClickProps(props.onClick, props.role || 'button')
-      : {};
-
     return (
       <button
         disabled={disabled}
-        type={props.type}
-        {...onClickProps}
+        type={props.type || 'button'}
+        onClick={(e) => {
+          if (props.onClick) {
+            props.onClick(e);
+          }
+        }}
+        onKeyUp={(e) => {
+          if (e.code === 'Enter' && props.onClick) {
+            props.onClick(e);
+          }
+        }}
         className={className}
       >
         {buttonContents}

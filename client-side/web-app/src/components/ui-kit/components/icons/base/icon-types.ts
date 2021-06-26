@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { Breakpoint } from 'src/components/ui-kit/core/responsive/breakpoints/breakpoints-types';
 
 export enum IconSize {
@@ -8,4 +9,5 @@ export enum IconSize {
 export type IconProps = {
   className?: string;
   size?: IconSize | { [K in IconSize]?: Breakpoint };
+  style?: CSSProperties;
 };
