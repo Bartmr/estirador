@@ -62,10 +62,15 @@ export abstract class JSONApiBase {
       validateStatus: () => true,
     });
 
-    const responseValidation = schema.validate({
-      status: response.status,
-      body: response.data as unknown,
-    });
+    const responseValidation = schema.validate(
+      {
+        status: response.status,
+        body: response.data as unknown,
+      },
+      {
+        abortEarly: true,
+      },
+    );
 
     if (responseValidation.errors) {
       const error = new Error();
