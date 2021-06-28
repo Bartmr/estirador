@@ -10,7 +10,15 @@ const childProcess = require('child_process');
 
 const { getIntrospectionQuery, graphql } = require('gatsby/graphql');
 
-const exists = promisify(fs.exists);
+const access = promisify(fs.access);
+const exists = async (path) => {
+  try {
+    await access(path, fs.constants.F_OK);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
 const exec = promisify(childProcess.exec);
@@ -25,8 +33,7 @@ const { onCreateNode } = require('./src/on-create-node');
 const CONFIG_DIRECTORY_NAME = '__confi' + 'g.';
 
 const GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND =
-  path.resolve(__dirname, 'node_modules', '.bin', 'graphql-codegen') +
-  ' --config codegen.yml';
+  'graphql-codegen --config codegen.yml';
 
 async function saveGraphQLSchemaToFile(store) {
   const { schema } = store.getState();
@@ -34,12 +41,12 @@ async function saveGraphQLSchemaToFile(store) {
 
   const graphQlSchema = await graphql(schema, getIntrospectionQuery());
 
-  const dir = path.join(__dirname, '_graphql-generated_');
+  const dir = '_graphql-generated_';
 
   if (!(await exists(dir))) {
     await mkdir(dir);
   }
-  await writeFile(path.join(dir, 'schema.json'), JSON.stringify(graphQlSchema));
+  await writeFile(`${dir}/schema.json`, JSON.stringify(graphQlSchema));
 }
 
 exports.onCreatePage = onCreatePage;
@@ -51,9 +58,7 @@ exports.onCreateWebpackConfig = async ({
   store,
 }) => {
   if (currentBuildVariant === ALL_BUILD_VARIANTS.DEBUG) {
-    const graphqlTypingsExist = await exists(
-      path.resolve(__dirname, '_graphql-generated_/typescript'),
-    );
+    const graphqlTypingsExist = await exists('_graphql-generated_/typescript');
 
     if (!graphqlTypingsExist) {
       console.info(
@@ -133,12 +138,7 @@ exports.onPreBuild = async ({ store }) => {
 
     console.info('--- Type-checking code and configuration values...');
 
-    const TYPESCRIPT_TYPE_CHECK_COMMAND = `${path.resolve(
-      __dirname,
-      'node_modules',
-      '.bin',
-      'tsc',
-    )} --p tsconfig.${currentBuildVariant}.json`;
+    const TYPESCRIPT_TYPE_CHECK_COMMAND = `tsc --p tsconfig.${currentBuildVariant}.json`;
 
     await exec(TYPESCRIPT_TYPE_CHECK_COMMAND);
   } catch (error) {
