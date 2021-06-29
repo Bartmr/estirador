@@ -33,8 +33,6 @@ To continue with the update write yes and press Enter.
 
   git merge "boilerplate/${git_branch}"
 
-  git remote remove boilerplate
-
   echo "
 -----
 -----
