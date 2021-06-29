@@ -5,10 +5,12 @@ export type RequiredExcept<T, Exceptions extends keyof T> = Required<
 > &
   Pick<T, Exceptions>;
 
-export type RequiredFields<T, RequiredFieldKeys extends keyof T> =
-  OmitWithTypesafeKeys<T, RequiredFieldKeys> &
-    Required<
-      {
-        [RK in RequiredFieldKeys]: T[RK];
-      }
-    >;
+export type RequiredFields<
+  T,
+  RequiredFieldKeys extends keyof T,
+> = OmitWithTypesafeKeys<T, RequiredFieldKeys> &
+  Required<
+    {
+      [RK in RequiredFieldKeys]: T[RK];
+    }
+  >;

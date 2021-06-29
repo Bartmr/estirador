@@ -5,10 +5,12 @@ export type PartialExcept<T, Exceptions extends keyof T> = Partial<
 > &
   Pick<T, Exceptions>;
 
-export type PartialFields<T, PartialFieldKeys extends keyof T> =
-  OmitWithTypesafeKeys<T, PartialFieldKeys> &
-    Partial<
-      {
-        [PK in PartialFieldKeys]: T[PK];
-      }
-    >;
+export type PartialFields<
+  T,
+  PartialFieldKeys extends keyof T,
+> = OmitWithTypesafeKeys<T, PartialFieldKeys> &
+  Partial<
+    {
+      [PK in PartialFieldKeys]: T[PK];
+    }
+  >;
