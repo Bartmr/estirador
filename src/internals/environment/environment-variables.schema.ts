@@ -10,7 +10,7 @@ import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS: (() => {
     if (NODE_ENV === NodeEnv.Development || NODE_ENV === NodeEnv.Test) {
-      return number().defined();
+      return number().required();
     } else {
       return equals([undefined]).transform(() => 0);
     }
@@ -42,13 +42,13 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
     }
   }),
 
-  WEB_APP_ORIGIN: string().filled(),
+  WEB_APP_ORIGIN: string().filled().required(),
 
-  DATABASE_HOST: string().filled(),
-  DATABASE_PORT: number().defined(),
-  DATABASE_NAME: string().filled(),
-  DATABASE_USER: string().filled(),
-  DATABASE_PASSWORD: string().filled(),
+  DATABASE_HOST: string().filled().required(),
+  DATABASE_PORT: number().required(),
+  DATABASE_NAME: string().filled().required(),
+  DATABASE_USER: string().filled().required(),
+  DATABASE_PASSWORD: string().filled().required(),
 
   AUTH_TOKEN_TTL: number().transform((value) => {
     if (value === undefined) {
@@ -57,4 +57,4 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
       return value;
     }
   }),
-}).defined();
+}).required();

@@ -22,10 +22,7 @@ import { AppServerResponse } from 'src/internals/server/types/app-server-respons
 import { UsersService } from 'src/users/users.service';
 import { Connection } from 'typeorm';
 import { AuthContext } from './auth-context';
-import {
-  WithAuthContext,
-  WithOptionalAuthContext,
-} from './auth-context.decorator';
+import { WithOptionalAuthContext } from './auth-context.decorator';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { PublicRoute } from './public-route.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
@@ -86,11 +83,16 @@ export class AuthController {
   }
 
   @Get()
+  @PublicRoute()
   public async getSession(
-    @WithAuthContext() authContext: AuthContext,
+    @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<AuthSessionDTO> {
-    return {
-      userId: authContext.user.id,
-    };
+    if (authContext) {
+      return {
+        userId: authContext.user.id,
+      };
+    } else {
+      throw new NotFoundException();
+    }
   }
 }

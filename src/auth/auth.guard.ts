@@ -47,6 +47,7 @@ export class AuthGuard implements CanActivate {
 
       const authTokenKeyValidation = string()
         .filled()
+        .required()
         .validate(authTokenKeyFromCookie);
 
       if (authTokenKeyValidation.errors) {

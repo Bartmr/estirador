@@ -1,5 +1,4 @@
 import { StoreDispatch } from 'src/logic/app-internals/store/store-types';
-import { useSessionStorage } from 'src/logic/app-internals/transports/use-session-storage';
 import { useLocalStorage } from 'src/logic/app-internals/transports/use-local-storage';
 import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
 import { mainApiReducer } from '../main-api-reducer';
@@ -9,16 +8,12 @@ import { TransportedDataStatus } from 'src/logic/app-internals/transports/transp
 import { LoginRequestDTO } from '@app/shared/auth/auth.dto';
 import { ToJSON } from '@app/shared/internals/transports/json-type-converters';
 import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './main-api-session-constants';
-import { MainApiAuthTokenIdLocalStorageSchema } from './main-api-session-schemas';
-import { useMainApiSessionLogout } from './use-main-api-session-logout';
 
 class MainApiSession {
   constructor(
     private mainApi: ReturnType<typeof useMainJSONApi>,
     private dispatch: StoreDispatch<'mainApi'>,
     private localStorage: ReturnType<typeof useLocalStorage>,
-    private sessionStorage: ReturnType<typeof useSessionStorage>,
-    private mainSessionLogout: ReturnType<typeof useMainApiSessionLogout>,
   ) {}
 
   async login(args: { email: string; password: string }) {
@@ -70,12 +65,12 @@ class MainApiSession {
 
     const res = await this.mainApi.get<
       | { status: 200; body: MainApiSessionData }
-      | { status: 401; body: undefined },
+      | { status: 404; body: undefined },
       undefined
     >({
       path: '/auth',
       query: undefined,
-      acceptableStatusCodes: [200, 401],
+      acceptableStatusCodes: [200, 404],
     });
 
     if (res.failure) {
@@ -86,16 +81,7 @@ class MainApiSession {
         },
       });
     } else {
-      if (res.response.status === 401) {
-        const hasSession = this.localStorage.getItem(
-          MainApiAuthTokenIdLocalStorageSchema,
-          MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
-        );
-
-        if (hasSession) {
-          await this.mainSessionLogout.logout();
-        }
-
+      if (res.response.status === 404) {
         this.setSession(null);
       } else {
         this.setSession(res.response.body);
@@ -110,15 +96,6 @@ export function useMainApiSession() {
   const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
 
   const localStorage = useLocalStorage();
-  const sessionStorage = useSessionStorage();
 
-  const mainSessionLogout = useMainApiSessionLogout();
-
-  return new MainApiSession(
-    mainApi,
-    dispatch,
-    localStorage,
-    sessionStorage,
-    mainSessionLogout,
-  );
+  return new MainApiSession(mainApi, dispatch, localStorage);
 }

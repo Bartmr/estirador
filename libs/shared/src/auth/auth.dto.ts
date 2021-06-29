@@ -4,9 +4,9 @@ import { Schema } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 
 const loginRequestSchema: Schema<LoginRequestDTO> = object({
-  email: string().filled(),
-  password: string().filled(),
-}).defined();
+  email: string().filled().required(),
+  password: string().filled().required(),
+}).required();
 
 @ValidationSchema(loginRequestSchema)
 export class LoginRequestDTO {
