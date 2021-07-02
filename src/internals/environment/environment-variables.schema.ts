@@ -42,13 +42,13 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
     }
   }),
 
-  WEB_APP_ORIGIN: string().filled().required(),
+  WEB_APP_ORIGIN: string().filled(),
 
-  DATABASE_HOST: string().filled().required(),
+  DATABASE_HOST: string().filled(),
   DATABASE_PORT: number().required(),
-  DATABASE_NAME: string().filled().required(),
-  DATABASE_USER: string().filled().required(),
-  DATABASE_PASSWORD: string().filled().required(),
+  DATABASE_NAME: string().filled(),
+  DATABASE_USER: string().filled(),
+  DATABASE_PASSWORD: string().filled(),
 
   AUTH_TOKEN_TTL: number().transform((value) => {
     if (value === undefined) {

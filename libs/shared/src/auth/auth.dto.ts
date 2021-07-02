@@ -4,8 +4,8 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { ValidationSchema } from '../internals/validation/validation-schema.decorator';
 
 const loginRequestSchema: Schema<LoginRequestDTO> = object({
-  email: string().filled().required(),
-  password: string().filled().required(),
+  email: string().filled(),
+  password: string().filled(),
 }).required();
 
 @ValidationSchema(loginRequestSchema)
