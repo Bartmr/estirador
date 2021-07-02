@@ -13,6 +13,7 @@ import { TransportedDataStatus } from 'src/logic/app-internals/transports/transp
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { ErrorIcon } from '../ui-kit/components/icons/error-icon';
 import { IconSize } from '../ui-kit/components/icons/base/icon-types';
+import { useRemoteConfig } from '../../logic/app-internals/remote-config/use-remote-config';
 
 const FatalErrorFrame = () => {
   return (
@@ -71,6 +72,8 @@ const ContentsFrame = (props: { children: ReactNode }) => {
       }
     })();
   }, [mainApiSessionStatus]);
+
+  useRemoteConfig();
 
   return <>{props.children}</>;
 };

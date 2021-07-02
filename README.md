@@ -10,6 +10,7 @@
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
 - Start the project's infrastructure by running `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
 - Generate the first database migration by running `NODE_ENV=development npm run typeorm migration:generate -- -- -n FirstMigration --pretty`
+- Add `await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');` in the first line of the first database migration `up()` method, in order for the database to be able to generate `uuid`s
 - Import and place the newly generated migration in the `ALL_MIGRATIONS` array at `src/internals/databases/all-migrations.ts`
 - **Done**
 
@@ -25,6 +26,7 @@
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
 - Start the project's infrastructure by running `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
 - Generate the first database migration by running `NODE_ENV=development npm run typeorm migration:generate -- -- -n FirstMigration --pretty`
+- Add `await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');` in the first line of the first database migration `up()` method, in order for the database to be able to generate `uuid`s
 - Import and place the newly generated migration in the `ALL_MIGRATIONS` array at `src/internals/databases/all-migrations.ts`
 - **Done**
 
