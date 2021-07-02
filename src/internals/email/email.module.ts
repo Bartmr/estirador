@@ -21,8 +21,10 @@ export const USE_DEV_EMAIL =
 })
 export class EmailModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(express.static(resolveLocalTemporaryFilesPath('dev-email')))
-      .forRoutes('/tmp/dev-email');
+    if (USE_DEV_EMAIL) {
+      consumer
+        .apply(express.static(resolveLocalTemporaryFilesPath('dev-email')))
+        .forRoutes('/tmp/dev-email');
+    }
   }
 }
