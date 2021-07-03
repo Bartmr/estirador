@@ -9,6 +9,7 @@ type Props = {
   activeClassName?: string;
   onClick?: (event: SyntheticEvent<HTMLAnchorElement>) => void;
   style?: React.CSSProperties;
+  openExternalLinkInSameTab?: boolean;
 };
 
 export function LinkAnchor(props: Props) {
@@ -38,7 +39,7 @@ export function LinkAnchor(props: Props) {
       <a
         rel="noopener noreferrer"
         href={props.href}
-        target="_blank"
+        target={props.openExternalLinkInSameTab ? undefined : '_blank'}
         {...commonProps}
       >
         {props.children}
