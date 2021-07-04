@@ -11,6 +11,8 @@ async function navigate(href: string) {
   }
 }
 
+const appUrl = COMMON_CONFIG.hostUrl + COMMON_CONFIG.pathPrefix;
+
 export function useAppNavigation() {
   const location = useLocation();
 
@@ -32,6 +34,7 @@ export function useAppNavigation() {
   };
 
   return {
+    appUrl,
     pathPrefix,
     currentHref,
     navigate,
