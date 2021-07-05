@@ -8,3 +8,8 @@
   text-shadow: $text-shadow-dimensions
     set-contrasting-color-alpha('primary', $text-shadow-opacity);
 }
+
+small,
+.small {
+  font-weight: inherit;
+}
