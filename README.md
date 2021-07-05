@@ -24,10 +24,6 @@ To update the project's boilerplate, just run `update-project-boilerplate.sh`.
 
 You can also use `force-update-project-boilerplate.sh` if you want previously rejected updates to appear again: this script will merge all the content from the boilerplate into the project without considering the _git_ commit history.
 
-### What if the project is not in the repository's root directory
-
-If your project is not on the repository's root directory, you can always run the `force-update-nested-project-boilerplate.sh`. This command does not take into account the _git_ commit history, and will merge all the content from the boilerplate into the project, so any previously rejected updates will be inserted again into this project. It's up to you to reject them again based on the _git_ diff.
-
 ## Development
 
 ### Start development environment
