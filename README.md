@@ -14,22 +14,6 @@
 - Import and place the newly generated migration in the `ALL_MIGRATIONS` array at `src/internals/databases/all-migrations.ts`
 - **Done**
 
-### Setting up a new project inside a repository with multiple projects:
-
-- Clone this repository
-- Delete the `.git` directory inside the recently cloned project directory
-- Rename the project directory to your project's name
-- Remove the `CONTRIBUTING.md` and `LICENSE` files, and also change the `license` field in `package.json`
-- Commit all the boilerplate files
-- Run `npm run install:all`
-- Decide if you want to hook the `precommit` script in `package.json` to your Git pre-commit hook. In a repository with multiple projects, it might be inconvenient for everyone to run this precommit hook even if they haven't changed any code in this project. You can always do a script to only run the `precommit` script if any of the files inside the project were changed
-- Write down the project name and other details in `libs/shared/src/project-details.ts`
-- Start the project's infrastructure by running `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
-- Generate the first database migration by running `NODE_ENV=development npm run typeorm migration:generate -- -- -n FirstMigration --pretty`
-- Add `await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');` in the first line of the first database migration `up()` method, in order for the database to be able to generate `uuid`s
-- Import and place the newly generated migration in the `ALL_MIGRATIONS` array at `src/internals/databases/all-migrations.ts`
-- **Done**
-
 ## CI pipelines:
 
 - Set the `CI` environment variable to `true` so the build process can detect that it's running in a CI pipeline
