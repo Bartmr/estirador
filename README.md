@@ -1,6 +1,6 @@
 ## Setting up a new project
 
-- Clone this repository and rename the newly created directory with the name of your project name
+- Clone this repository and rename the newly created directory with the name of your project
 - Point the terminal to the root directory of this new project
 - Run `git remote remove origin` to remove any unnecessary branches that came with the boilerplate repository and detach the new project from said repository
 - Run `git remote add origin <project repository url>` to start pushing changes to your new project's repository
