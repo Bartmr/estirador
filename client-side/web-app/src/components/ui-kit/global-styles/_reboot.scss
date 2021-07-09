@@ -1,9 +1,5 @@
 @import 'node_modules/bootstrap/scss/reboot';
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   @include on-inverted-color-scheme {
     background-color: $body-bg-inverted;
