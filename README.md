@@ -1,11 +1,11 @@
 ## Setting up a new project
 
-- Clone this repository
-- Point the terminal to the project root directory
+- Clone this repository and rename the newly created directory with the name of your project name
+- Point the terminal to the root directory of this new project
 - Run `git remote remove origin` to remove any unnecessary branches that came with the boilerplate repository and detach the new project from said repository
 - Run `git remote add origin <project repository url>` to start pushing changes to your new project's repository
 - Remove the `CONTRIBUTING.md` and `LICENSE` files, and also change the `license` field in `package.json`
-- **Make sure you're using the recommended NodeJS version.**
+- **Make sure you're using the recommended NodeJS version**
   - There's an `.nvmrc` file in the root of the project, so you can call `nvm use` in the terminal.
   - If you want `nvm` to switch to the recommended version automatically when switching directories, [follow `nvm`'s instructions here](https://github.com/nvm-sh/nvm#deeper-shell-integration)
 - Run `npm run install:all`
