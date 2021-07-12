@@ -2,31 +2,45 @@ import { ProcessContextManager } from 'src/internals/process/process-context-man
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 import { AuditContext } from '../audit-context';
 
-export function createTestAuditContext() {
+export function createAuditContextTestMock() {
   const processContext = ProcessContextManager.getContext();
 
-  const toPersist: AuditContext = {
-    operationId: generateRandomUUID(),
-    processId: processContext.id,
+  const operationId = generateRandomUUID();
+  const processId = processContext.id;
+
+  const auditContext: AuditContext = {
+    operationId,
+    processId,
     requestPath: undefined,
     requestMethod: undefined,
     authContext: undefined,
   };
 
-  const toExpect = {
-    ...toPersist,
-    operationId: undefined,
+  const auditContextEntityProps = {
+    operationId: null,
     processId: undefined,
+    deletedAt: null,
+    archivedByUserId: undefined,
+    requestMethod: undefined,
+    requestPath: undefined,
+    id: expect.any(String) as unknown,
   };
 
-  const toExpectOnArchivedRows = {
-    ...toExpect,
-    operationId: toPersist.operationId,
+  const auditContextArchivedEntityProps = {
+    operationId: auditContext.operationId,
+    processId: undefined,
+    archivedByUserId: undefined,
+    requestMethod: undefined,
+    requestPath: undefined,
+    deletedAt: expect.any(Date) as unknown,
+    id: expect.any(String) as unknown,
   };
 
   return {
-    toPersist,
-    toExpect,
-    toExpectOnArchivedRows,
+    auditContext,
+    persisted: {
+      auditContextEntityProps,
+      auditContextArchivedEntityProps,
+    },
   };
 }

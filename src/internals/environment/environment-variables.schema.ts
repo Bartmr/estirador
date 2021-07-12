@@ -16,7 +16,7 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
     }
   })(),
 
-  LOG_DATABASES: boolean(),
+  LOG_DATABASES: boolean().notNull(),
 
   LOG_DEBUG: boolean(),
 
@@ -24,15 +24,17 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
 
   SHOW_ALL_LOGS_IN_TESTS: boolean(),
 
-  FORK_WORKERS: boolean().transform((value) => {
-    if (module.hot || inspector.url()) {
-      return false;
-    } else if (value === undefined) {
-      return true;
-    } else {
-      return value;
-    }
-  }),
+  FORK_WORKERS: boolean()
+    .notNull()
+    .transform((value) => {
+      if (module.hot || inspector.url()) {
+        return false;
+      } else if (value === undefined) {
+        return true;
+      } else {
+        return value;
+      }
+    }),
 
   ENABLE_SWAGGER: boolean().transform((value) => {
     if (NODE_ENV === NodeEnv.Development) {
@@ -50,11 +52,13 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   DATABASE_USER: string().filled(),
   DATABASE_PASSWORD: string().filled(),
 
-  AUTH_TOKEN_TTL: number().transform((value) => {
-    if (value === undefined) {
-      return 60 * 60 * 24 * 30;
-    } else {
-      return value;
-    }
-  }),
+  AUTH_TOKEN_TTL: number()
+    .notNull()
+    .transform((value) => {
+      if (value === undefined) {
+        return 60 * 60 * 24 * 30;
+      } else {
+        return value;
+      }
+    }),
 }).required();

@@ -8,7 +8,6 @@ import {
 import { AppServerRequest } from '../server/types/app-server-request-types';
 import { LoggingService } from '../logging/logging.service';
 import { AppServerResponse } from '../server/types/app-server-response-types';
-import { stripNullValuesRecursively } from '../utils/strip-null-values-recursively';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
 
 const LOG_REQUEST_CONTENTS_ON_ERROR =
@@ -54,9 +53,7 @@ export class AllExceptionsFilter implements ExceptionFilter<unknown> {
         });
       }
 
-      response
-        .status(statusCode)
-        .json(stripNullValuesRecursively(exception.getResponse()));
+      response.status(statusCode).json(exception.getResponse());
     } else {
       this.logError(exception, request);
 
@@ -64,7 +61,7 @@ export class AllExceptionsFilter implements ExceptionFilter<unknown> {
 
       response
         .status(internalErrorException.getStatus())
-        .json(stripNullValuesRecursively(internalErrorException.getResponse()));
+        .json(internalErrorException.getResponse());
     }
   }
 }

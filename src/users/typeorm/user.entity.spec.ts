@@ -1,10 +1,8 @@
 import { Role } from 'src/auth/roles/roles';
-import { createTestAuditContext } from 'src/internals/auditing/spec/create-test-audit-context';
+import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-test-audit-context';
 import { getDatabaseConnection } from 'src/internals/databases/spec/databases-test-utils';
 import { Connection } from 'typeorm';
 import bcrypt from 'bcrypt';
-import { stripNullValuesRecursively } from 'src/internals/utils/strip-null-values-recursively';
-import type { User } from './user.entity';
 import type { UsersRepository as UsersRepositoryType } from '../users.repository';
 
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
@@ -37,7 +35,7 @@ describe('User entity', () => {
   it('Should not return user credentials on findOne', async () => {
     const repository = connection.getCustomRepository(UsersRepository);
 
-    const auditContext = createTestAuditContext();
+    const auditContextMock = createAuditContextTestMock();
 
     const passwordSalt = await bcrypt.genSalt();
 
@@ -50,7 +48,7 @@ describe('User entity', () => {
         passwordHash,
         passwordSalt,
       },
-      auditContext.toPersist,
+      auditContextMock.auditContext,
     );
 
     const user = await repository.findOne({
@@ -59,11 +57,9 @@ describe('User entity', () => {
       },
     });
 
-    const testUserWithoutNulls = stripNullValuesRecursively(testUser) as User;
-
-    expect(stripNullValuesRecursively(user)).toEqual({
-      ...testUserWithoutNulls,
-      ...auditContext.toExpect,
+    expect(user?.toJSON()).toEqual({
+      ...testUser,
+      ...auditContextMock.persisted.auditContextEntityProps,
       passwordHash: undefined,
       passwordSalt: undefined,
     });

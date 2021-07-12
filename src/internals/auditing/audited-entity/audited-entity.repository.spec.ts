@@ -2,9 +2,7 @@ import { Column, Connection, Entity, EntityRepository } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 import { getDatabaseConnection } from '../../databases/spec/databases-test-utils';
 import { AuditedEntityRepository } from './audited-entity.repository';
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { stripNullValuesRecursively } from 'src/internals/utils/strip-null-values-recursively';
-import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { createAuditContextTestMock } from '../spec/create-test-audit-context';
 
 const TEST_TABLE_NAME = 'audited_entity_spec';
 
@@ -54,15 +52,9 @@ describe('Audited Entity Repository', () => {
       const customRepository =
         connection.manager.getCustomRepository(TestsRepository);
 
-      const auditContext: AuditContext = {
-        operationId: generateRandomUUID(),
-        processId: 'test',
-        requestPath: undefined,
-        requestMethod: undefined,
-        authContext: undefined,
-      };
+      const auditContext = createAuditContextTestMock();
 
-      await customRepository.save(entity, auditContext);
+      await customRepository.save(entity, auditContext.auditContext);
 
       const rows = await repository.find({
         withDeleted: true,
@@ -71,24 +63,16 @@ describe('Audited Entity Repository', () => {
 
       expect(rows.length).toEqual(2);
 
-      const entityWithoutNulls = stripNullValuesRecursively(
-        entity,
-      ) as TestEntity;
-
-      expect(stripNullValuesRecursively(rows)).toEqual([
+      expect(rows.map((c) => c.toJSON())).toEqual([
         {
-          ...entityWithoutNulls,
-          deletedAt: undefined,
+          ...entity,
+          ...auditContext.persisted.auditContextEntityProps,
           id: expect.any(String) as unknown,
         },
         {
-          ...entityWithoutNulls,
-          deletedAt: expect.any(Date) as unknown,
+          ...entity,
+          ...auditContext.persisted.auditContextArchivedEntityProps,
           id: expect.any(String) as unknown,
-          ...auditContext,
-          processId: undefined,
-          requestPath: undefined,
-          requestMethod: undefined,
         },
       ]);
     });
@@ -99,20 +83,14 @@ describe('Audited Entity Repository', () => {
       const newDate = new Date();
       const repository = connection.getCustomRepository(TestsRepository);
 
-      const auditContext: AuditContext = {
-        operationId: generateRandomUUID(),
-        processId: 'test',
-        requestPath: undefined,
-        requestMethod: undefined,
-        authContext: undefined,
-      };
+      const auditContextMock = createAuditContextTestMock();
 
       const entity = await repository.create(
         {
           propA: newDate,
           propB: newDate,
         },
-        auditContext,
+        auditContextMock.auditContext,
       );
 
       const results = await repository.find({
@@ -123,27 +101,14 @@ describe('Audited Entity Repository', () => {
 
       expect(results.rows.length).toEqual(2);
 
-      const entityWithoutNulls = stripNullValuesRecursively(
-        entity,
-      ) as TestEntity;
-
-      expect(stripNullValuesRecursively(results.rows)).toEqual([
+      expect(results.rows.map((c) => c.toJSON())).toEqual([
         {
-          ...entityWithoutNulls,
-          deletedAt: undefined,
-          id: expect.any(String) as unknown,
-          processId: undefined,
-          requestPath: undefined,
-          requestMethod: undefined,
+          ...entity,
+          ...auditContextMock.persisted.auditContextEntityProps,
         },
         {
-          ...entityWithoutNulls,
-          deletedAt: expect.any(Date) as unknown,
-          id: expect.any(String) as unknown,
-          ...auditContext,
-          processId: undefined,
-          requestPath: undefined,
-          requestMethod: undefined,
+          ...entity,
+          ...auditContextMock.persisted.auditContextArchivedEntityProps,
         },
       ]);
     });

@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { ServerResponse } from 'http';
 import { map } from 'rxjs/operators';
-import { stripNullValuesRecursively } from '../utils/strip-null-values-recursively';
 
 @Injectable()
 export class AppInterceptor implements NestInterceptor<unknown, unknown> {
@@ -24,12 +23,7 @@ export class AppInterceptor implements NestInterceptor<unknown, unknown> {
           );
         }
 
-        // Do not strip top level null. Might be useful as a value
-        if (value === null) {
-          return value;
-        }
-
-        return stripNullValuesRecursively(value);
+        return value;
       }),
     );
   }
