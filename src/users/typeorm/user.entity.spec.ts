@@ -1,26 +1,25 @@
 import { Role } from 'src/auth/roles/roles';
 import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-test-audit-context';
 import { getDatabaseConnection } from 'src/internals/databases/spec/databases-test-utils';
-import { Connection } from 'typeorm';
+import { Connection, Entity, EntityRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
-import type { UsersRepository as UsersRepositoryType } from '../users.repository';
 
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { _UserBase } from './user.entity';
+import { _UsersRepositoryBase } from '../users.repository';
 
 const TEST_TABLE_NAME = 'user_entity_test';
 
 let connection: Connection;
-let UsersRepository: typeof UsersRepositoryType;
+
+@Entity(TEST_TABLE_NAME)
+class TestUser extends _UserBase {}
+
+@EntityRepository(TestUser)
+class TestUsersRepository extends _UsersRepositoryBase {}
 
 beforeAll(async () => {
-  jest.mock('./user-entity-table-name', () => ({
-    USER_ENTITY_TABLE_NAME: TEST_TABLE_NAME,
-  }));
-
-  const { User } = await import('./user.entity');
-  UsersRepository = (await import('../users.repository')).UsersRepository;
-
-  connection = await getDatabaseConnection([User]);
+  connection = await getDatabaseConnection([TestUser]);
 
   await connection.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
   await connection.query(`DROP TABLE IF EXISTS ${TEST_TABLE_NAME}`);
@@ -33,7 +32,7 @@ afterAll(async () => {
 
 describe('User entity', () => {
   it('Should not return user credentials on findOne', async () => {
-    const repository = connection.getCustomRepository(UsersRepository);
+    const repository = connection.getCustomRepository(TestUsersRepository);
 
     const auditContextMock = createAuditContextTestMock();
 

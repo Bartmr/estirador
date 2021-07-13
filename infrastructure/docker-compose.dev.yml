@@ -9,5 +9,3 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5433:5432
-    volumes:
-      - /var/lib/postgresql/data
