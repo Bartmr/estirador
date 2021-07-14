@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  estirador_postgres_test:
+  postgres_test_estirador:
     image: postgres
     environment:
       - POSTGRES_DB=postgres_test

@@ -11,8 +11,8 @@
 - Run `npm run install:all`
 - (Optional) hook the `precommit` script in `package.json` to your Git pre-commit hook
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
-- Change the services names in `docker-compose.yml` and `docker-compose.dev.yml` so you don't end up using your other projects services even though you are clearly using this project's _docker-compose_
-  - Example: rename `estirador_postgres` to `my_project_postgres`
+- Change the names of the services in `docker-compose.yml` and `docker-compose.dev.yml`, so you don't end up using your other projects services that have the same name when you are using this project's _docker-compose_
+  - Example: rename `postgres_estirador` to `postgres_my_project`
 - Start the project's infrastructure by running `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
 - Generate the first database migration by running `NODE_ENV=development npm run typeorm migration:generate -- -- -n FirstMigration --pretty`
 - Add `await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');` in the first line of the first database migration `up()` method, in order for the database to be able to generate `uuid`s
