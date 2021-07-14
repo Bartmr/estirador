@@ -11,7 +11,7 @@
 - Run `npm run install:all`
 - (Optional) hook the `precommit` script in `package.json` to your Git pre-commit hook
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
-- Change the names of the services in `docker-compose.yml` and `docker-compose.dev.yml`, so you don't end up using your other projects services that have the same name when you are using this project's _docker-compose_
+- Change the names of the services in `infrastructure/docker-compose.yml` and `infrastructure/docker-compose.dev.yml`, so you don't end up using your other projects services that have the same name when you are using this project's _docker-compose_
   - Example: rename `postgres_estirador` to `postgres_my_project`
 - Start the project's infrastructure by running `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
 - Generate the first database migration by running `NODE_ENV=development npm run typeorm migration:generate -- -- -n FirstMigration --pretty`
