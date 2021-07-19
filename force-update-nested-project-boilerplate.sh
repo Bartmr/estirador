@@ -35,15 +35,22 @@ else
   git checkout -- package-lock.json **/package-lock.json
 
   echo -e "\n-----\n-----\n-----
------ BEFORE CONTINUING:
-- CHECK IF THE UPDATE DIDN'T FAILED HALFWAY:
-  - Make sure the current git repository is again pointing to your project's repository and NOT to the boilerplate repository.
+----- BEFORE CONTINUING
+
+- CHECK IF THE UPDATE DIDN'T FAILED HALFWAY
+  - Make sure the current git repository is again pointing to your project's repository and NOT to the boilerplate repository
     - You can do this by running 'git remote' and checking that there is no remote called 'boilerplate'
-      - If the 'boilerplate' remote still exists:
-        - Delete the '.git/' directory in the root directory of the repository where this project is stored.
+      - If the 'boilerplate' remote still exists
+        - Delete the '.git/' directory in the root directory of the repository where this project is stored
         - If this project is a Git Submodule, check if '.git-file-bkp' file exists and rename it back to '.git'
+
 - Pick the updates you want to add to the project
+
 - Run 'npm run install:all' to update the 'package-lock.json' files with the dependencies changes
-- IF YOU WANT TO ABORT the update, just discard the changes as you normally would with your work.
+
+- Check if any of the changes made by the updates require a new migration to be written
+
+- IF YOU WANT TO ABORT the update, just discard the changes as you normally would with your work
+
 - To finalize the update, commit everything as you would do with regular work"
 fi
