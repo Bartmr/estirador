@@ -1,5 +1,5 @@
 {
-  "include": ["type-declarations/**/*", "src/**/*"],
+  "include": ["src", "type-declarations"],
   "compilerOptions": {
     "paths": {
       "@config/*": ["__config.debug/*"],
