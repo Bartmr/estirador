@@ -47,11 +47,8 @@ module.exports = {
           },
           {
             target: './src',
-            from: './scripts',
-          },
-          {
-            target: './src',
-            from: './scripts-dev',
+            from: '.',
+            except: ['./src', './libs/shared', './node_modules'],
           },
         ],
       },
