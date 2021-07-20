@@ -51,7 +51,7 @@
     "lint": "npm run eslint -- --fix",
     "lint:no-fix": "npm run eslint",
     "integrity-check:api": "npm run clean:api && concurrently \"npm run typecheck:declaration-files\" \"npm run typecheck\" -n \"typecheck:declaration-files,typecheck:code\" --no-color && npm run lint:no-fix",
-    "integrity-check:web-app": "cd client-side/web-app && npm run clean && concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" --no-color && npm run lint:no-fix",
+    "integrity-check:web-app": "cd client-side/web-app && npm run clean:declaration-files && concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" --no-color && npm run lint:no-fix",
     "integrity-check:all": "concurrently \"npm run integrity-check:api\" \"npm run integrity-check:web-app\" -n \"api,web-app\" --no-color",
     "precommit": "lint-staged && npm run integrity-check:all",
     "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install",
