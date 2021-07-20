@@ -34,6 +34,10 @@ const tsConfigFileName =
 require('ts-node').register({
   transpileOnly: true,
   project: tsConfigFileName,
+  compilerOptions: {
+    module: 'commonjs',
+    target: 'es2020',
+  },
 });
 
 const tsConfig = require(`./${tsConfigFileName}`);
