@@ -76,8 +76,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "clean": "rimraf dist .webpack-bundle-analyzer && gatsby clean",
-    "build": "node scripts/generate-config/generate-config-if-ci.js && gatsby build --prefix-paths",
-    "deploy": "npm run build && echo \"Error: deploy command not implemented\" && exit 1",
+    "build": "gatsby build --prefix-paths",
+    "build:ci": "npm run generate:config:release && CI=true npm run build",
     "develop": "gatsby develop",
     "serve": "NODE_ENV=production gatsby serve --prefix-paths --host 0.0.0.0",
     "generate:config:release": "rimraf __config.release && node scripts/generate-config/generate-config.js",

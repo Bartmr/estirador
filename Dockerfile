@@ -1,7 +1,5 @@
 FROM node:14-alpine
 
-ENV CI=true
-
 COPY ./libs/ /usr/src/app/libs/
 COPY ./src/ /usr/src/app/src/
 COPY ./scripts/ /usr/src/app/scripts/

@@ -1,7 +1,5 @@
 FROM node:14-buster
 
-ENV CI=true
-
 COPY ./client-side/web-app/src/ /usr/src/app/client-side/web-app/src/
 COPY ./client-side/web-app/scripts/ /usr/src/app/client-side/web-app/scripts/
 COPY ./client-side/web-app/type-declarations/ /usr/src/app/client-side/web-app/type-declarations/
@@ -36,6 +34,6 @@ ARG MAIN_API_URL
 ENV HOST_URL ${HOST_URL}
 ENV MAIN_API_URL ${MAIN_API_URL}
 
-RUN npm run build
+RUN npm run build:ci
 
 CMD npm run serve

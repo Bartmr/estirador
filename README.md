@@ -26,10 +26,6 @@
 
 - **Done**
 
-## CI pipelines:
-
-- Set the `CI` environment variable to `true` so the build process can detect that it's running in a CI pipeline
-
 ## Updating the project's boilerplate
 
 To update the project's boilerplate, just run `update-project-boilerplate.sh` and input the _Git_ repository URL of the boilerplate your project is based on. In this case `https://github.com/Bartmr/estirador.git`
