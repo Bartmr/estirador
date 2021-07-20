@@ -36,13 +36,7 @@ export function Page(props: Props) {
 
   return (
     <>
-      <Helmet
-        htmlAttributes={{
-          lang: 'en',
-        }}
-        title={props.title}
-        titleTemplate={siteTitle}
-      />
+      <Helmet title={props.title} titleTemplate={siteTitle} />
       <span className="d-none">{`Build date: ${siteBuildDate}`}</span>
       <div
         className="d-flex flex-column"
