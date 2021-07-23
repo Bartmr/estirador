@@ -3,8 +3,9 @@
   "compilerOptions": {
     "paths": {
       "@config/*": ["__config.release/*"],
-      "@app/shared/*": ["../../libs/shared/src/*"]
+      "@app/shared/*": ["../../libs/shared/src/*"],
+      "typeorm": ["../../node_modules/typeorm/typeorm-model-shim.js"]
     },
-    "jsx": "react-jsx"
+    "jsx": "preserve"
   }
 }

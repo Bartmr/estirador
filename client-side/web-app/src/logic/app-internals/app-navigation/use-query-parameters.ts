@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { SerializableJSONValue } from '../transports/json-types';
-import { useLocation } from '@reach/router';
 import { Logger } from '../logging/logger';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
+import { useRouter } from 'next/router';
 
 type SupportedQueryParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;
@@ -18,10 +18,12 @@ export function useQueryParameters<
     | { invalid: false; queryParameters: Readonly<QueryParameters> }
   >;
 
-  const location = useLocation();
+  const router = useRouter();
 
   const queryParameters = useMemo((): QueryParametersResult => {
-    const urlSearchParams = new URLSearchParams(location.search);
+    const split = router.asPath.split('?');
+
+    const urlSearchParams = new URLSearchParams(`?${split[1] || ''}`);
 
     const unparsedQueryParameters: { [key: string]: string } = {};
 
@@ -42,7 +44,7 @@ export function useQueryParameters<
         queryParameters: result.value as QueryParameters,
       };
     }
-  }, [location.search, schema]);
+  }, [router.asPath, schema]);
 
   return queryParameters;
 }

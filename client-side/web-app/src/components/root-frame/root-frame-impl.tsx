@@ -1,4 +1,9 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { DatesContextProvider } from 'src/logic/app-internals/i18n/dates/dates-context';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { Provider } from 'react-redux';
@@ -111,7 +116,10 @@ const GiveContextToContents = (props: { children: ReactNode }) => {
   );
 };
 
-export const _RootFrameImpl = (props: { children: ReactNode }) => {
+export const _RootFrameImpl = (props: {
+  Component: FunctionComponent<{ [key: string]: unknown }>;
+  pageProps: { [key: string]: unknown };
+}) => {
   const [fatalErrorOccurred, replaceFatalErrorOccurredFlag] = useState(false);
 
   useEffect(() => {
@@ -144,8 +152,14 @@ export const _RootFrameImpl = (props: { children: ReactNode }) => {
     };
   }, []);
 
+  const Component = props.Component;
+
   if (COMMON_CONFIG.disableErrorBoundaries) {
-    return <GiveContextToContents>{props.children}</GiveContextToContents>;
+    return (
+      <GiveContextToContents>
+        <Component {...props.pageProps} />
+      </GiveContextToContents>
+    );
   } else {
     if (fatalErrorOccurred) {
       return <FatalErrorFrame />;
@@ -153,7 +167,9 @@ export const _RootFrameImpl = (props: { children: ReactNode }) => {
       return (
         <ErrorBoundary>
           {() => (
-            <GiveContextToContents>{props.children}</GiveContextToContents>
+            <GiveContextToContents>
+              <Component {...props.pageProps} />
+            </GiveContextToContents>
           )}
         </ErrorBoundary>
       );

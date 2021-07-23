@@ -52,10 +52,8 @@ lerna-debug.log*
 /client-side/*/__config*
 !/client-side/*/__config.debug
 
-/client-side/*/.cache
-/client-side/*/public
+/client-side/*/.next
 /client-side/*/dist
-/client-side/*/build
 
 /client-side/*/.webpack-bundle-analyzer
 

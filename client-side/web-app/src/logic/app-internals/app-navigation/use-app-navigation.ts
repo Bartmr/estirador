@@ -1,33 +1,21 @@
-import { useLocation } from '@reach/router';
-import { navigate as navigateWithReachRouter } from '@reach/router';
-import { navigate as navigateWithGatsby } from 'gatsby';
+import { useRouter } from 'next/router';
 import { COMMON_CONFIG } from '@config/common-config';
-
-async function navigate(href: string) {
-  if (href.includes('://') || href.includes('?') || href.includes('#')) {
-    await navigateWithReachRouter(href);
-  } else {
-    await navigateWithGatsby(href);
-  }
-}
 
 const appUrl = COMMON_CONFIG.hostUrl + COMMON_CONFIG.pathPrefix;
 
 export function useAppNavigation() {
-  const location = useLocation();
+  const router = useRouter();
 
-  const pathPrefix = COMMON_CONFIG.pathPrefix;
+  const pathPrefix = router.basePath;
 
-  let pathname = location.pathname;
+  let currentHref = router.asPath;
   if (pathPrefix) {
-    pathname = pathname.replace(pathPrefix, '');
+    currentHref = currentHref.replace(pathPrefix, '');
   }
-
-  const currentHref = pathname + location.search + location.hash;
 
   const goBack = () => {
     if (!window.history.state) {
-      return navigate('/');
+      return router.push('/');
     } else {
       return Promise.resolve(window.history.back());
     }
@@ -37,10 +25,10 @@ export function useAppNavigation() {
     appUrl,
     pathPrefix,
     currentHref,
-    navigate,
+    navigate: (href: string) => router.push(href),
     navigateWithoutAwaiting: (href: string) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      navigate(href);
+      router.push(href);
     },
     goBack,
     goBackWithoutAwaiting: () => {

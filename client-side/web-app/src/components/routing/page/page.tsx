@@ -1,13 +1,9 @@
-import 'src/components/ui-kit/global-styles/global-styles';
-
-import { graphql, useStaticQuery } from 'gatsby';
+import Head from 'next/head';
 import { ReactNode } from 'react';
-import { Helmet } from 'react-helmet';
-import { throwError } from 'src/logic/app-internals/utils/throw-error';
 import { AuthenticatedRouteRules } from '../authenticated-route/authenticated-route-types';
 import { Header } from './header/header';
 import { AuthenticatedRoute } from '../authenticated-route/authenticated-route';
-import { GQLPageQuery } from './page._graphql-generated_';
+import { PROJECT_NAME } from '@app/shared/project-details';
 
 type Props = {
   children: () => ReactNode;
@@ -19,25 +15,18 @@ type Props = {
 };
 
 export function Page(props: Props) {
-  const { site } = useStaticQuery<GQLPageQuery>(graphql`
-    query Page {
-      site {
-        buildTime
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `);
-
-  const siteMetadata = site?.siteMetadata || throwError();
-  const siteTitle = '%s | ' + (siteMetadata.title || throwError());
-  const siteBuildDate = site?.buildTime ?? throwError();
-
   return (
     <>
-      <Helmet title={props.title} titleTemplate={siteTitle} />
-      <span className="d-none">{`Build date: ${siteBuildDate}`}</span>
+      <Head>
+        <title>
+          {props.title} - {PROJECT_NAME}
+        </title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
+          rel="stylesheet"
+        />
+        ,
+      </Head>
       <div
         className="d-flex flex-column"
         style={{ minHeight: '100vh', maxHeight: '100vh' }}

@@ -1,4 +1,4 @@
-import { Link } from 'gatsby';
+import Link from 'next/link';
 import React, { ReactNode, SyntheticEvent } from 'react';
 import { useAppNavigation } from 'src/logic/app-internals/app-navigation/use-app-navigation';
 
@@ -6,7 +6,6 @@ type Props = {
   children: ReactNode;
   href: string;
   className?: string;
-  activeClassName?: string;
   onClick?: (event: SyntheticEvent<HTMLAnchorElement>) => void;
   style?: React.CSSProperties;
   openExternalLinkInSameTab?: boolean;
@@ -62,12 +61,7 @@ export function LinkAnchor(props: Props) {
     );
   } else {
     return (
-      <Link
-        partiallyActive
-        activeClassName={props.activeClassName}
-        to={props.href}
-        {...commonProps}
-      >
+      <Link href={props.href} {...commonProps}>
         {props.children}
       </Link>
     );

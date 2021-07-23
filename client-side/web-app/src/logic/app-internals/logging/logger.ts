@@ -1,9 +1,6 @@
 /* eslint-disable no-console */
 import { COMMON_CONFIG } from '@config/common-config';
-import {
-  isRunningOnClient,
-  isRunningOnServer,
-} from '../runtime/is-running-on-server';
+import { isRunningOnClient } from '../runtime/is-running-on-server';
 
 const LOG_ENTRIES_LIMIT = 3;
 
@@ -62,11 +59,6 @@ class LoggerImpl {
 
     if (typeof extraData !== 'undefined') {
       console.error('Error extra data:', extraData);
-    }
-
-    // Stop building pages if one of them has an error
-    if (isRunningOnServer()) {
-      throw caughtValue;
     }
   }
 }
