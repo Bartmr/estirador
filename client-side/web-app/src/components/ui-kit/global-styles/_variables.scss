@@ -15,7 +15,7 @@ $body-bg: $light;
 
 $body-bg-inverted: $dark;
 
-$dark-background-is-dominant: is-color-dark($body-bg);
+$inverted-is-dark-mode: true;
 
 $theme-colors: (
   (

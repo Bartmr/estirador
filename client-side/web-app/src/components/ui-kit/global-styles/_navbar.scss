@@ -1,7 +1,18 @@
 @import 'node_modules/bootstrap/scss/navbar';
 
+.navbar,
 .navbar.navbar-light,
 .navbar.navbar-dark {
+  background-color: $navbar-bg;
+
+  @include with-contrasting-colors($navbar-bg);
+
+  @include on-inverted-color-scheme {
+    background-color: $navbar-bg-inverted;
+
+    @include with-contrasting-colors($navbar-bg-inverted);
+  }
+
   .navbar-nav {
     .nav-link,
     .navbar-text {
@@ -15,20 +26,6 @@
         color: get-contrasting-color('body-hover');
       }
     }
-  }
-}
-
-.navbar,
-.navbar.navbar-light,
-.navbar.navbar-dark {
-  background-color: $light;
-
-  @include with-contrasting-colors($light);
-
-  @include on-inverted-color-scheme {
-    background-color: $dark;
-
-    @include with-contrasting-colors($dark);
   }
 
   .navbar-toggler {
