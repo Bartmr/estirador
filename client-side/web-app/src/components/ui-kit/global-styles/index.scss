@@ -24,7 +24,11 @@ $spinner-width-lg: 3rem;
 $spinner-height-lg: 3rem;
 $spinner-border-width-lg: 0.3em;
 
+$navbar-bg: get-theme-color('primary');
+$navbar-bg-inverted: get-inverted-theme-color('primary');
+
 $navbar-dark-toggler-icon: none;
+
 $navbar-dark-toggler-icon-bg: $navbar-dark-toggler-icon;
 $navbar-light-toggler-icon-bg: $navbar-dark-toggler-icon;
 
