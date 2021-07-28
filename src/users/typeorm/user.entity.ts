@@ -7,7 +7,7 @@ import { Column, Entity } from 'typeorm';
  * BASE CLASS CREATED FOR TESTING!
  */
 export abstract class _UserBase extends AuditedEntity {
-  @Column()
+  @Column('text')
   email!: string;
 
   @Column()
@@ -16,8 +16,8 @@ export abstract class _UserBase extends AuditedEntity {
   @Column()
   passwordSalt!: string;
 
-  @Column({ nullable: true })
-  isVerified?: boolean;
+  @Column('boolean', { nullable: true })
+  isVerified?: boolean | null;
 
   @Column({
     type: 'enum',

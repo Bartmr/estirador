@@ -16,7 +16,6 @@ class TestEntity extends SimpleEntity {
 beforeAll(async () => {
   connection = await getDatabaseConnection([TestEntity]);
 
-  await connection.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
   await connection.query(`DROP TABLE IF EXISTS ${TEST_TABLE_NAME}`);
   await connection.synchronize();
 });
@@ -29,13 +28,15 @@ describe('Simple Entity Repository', () => {
   it('Entity should be mutated and not cloned when saving an entity using regular TypeORM repositories', async () => {
     const repository = connection.getRepository(TestEntity);
 
+    const id = generateSecureUniqueUUID();
+
     const entity = new TestEntity();
-
+    entity.id = id;
     entity.propA = generateSecureUniqueUUID();
-
     const entityReturnedFromCreation = await repository.save(entity);
 
     expect(entity).toBe(entityReturnedFromCreation);
+    expect(entity.id).toBe(id);
 
     entity.propA = generateSecureUniqueUUID();
 

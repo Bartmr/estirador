@@ -6,6 +6,7 @@ import {
   MoreThan,
 } from 'typeorm';
 import { AuthToken } from './typeorm/auth-token.entity';
+import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 
 @EntityRepository(AuthToken)
 export class AuthTokensRepository extends AbstractRepository<AuthToken> {
@@ -27,6 +28,9 @@ export class AuthTokensRepository extends AbstractRepository<AuthToken> {
     const ttlInMilliseconds = ttl * 1000;
 
     const token = new AuthToken();
+
+    token.id = generateRandomUUID();
+    token.httpsOnlyKey = generateRandomUUID();
 
     token.user = user;
 
