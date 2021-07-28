@@ -9,9 +9,9 @@ import { ProcessContextManager } from 'src/internals/process/process-context-man
 import { ProcessType } from 'src/internals/process/process-context';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 import { UsersRepository } from 'src/users/users.repository';
-import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-test-audit-context';
 import bcrypt from 'bcrypt';
 import { Role } from 'src/auth/roles/roles';
+import { AuditContext } from '../src/internals/auditing/audit-context';
 
 async function seed() {
   if (NODE_ENV === NodeEnv.Development) {
@@ -36,7 +36,18 @@ async function seed() {
 
     const repository = defaultDBConnection.getCustomRepository(UsersRepository);
 
-    const auditContextMock = createAuditContextTestMock();
+    const processContext = ProcessContextManager.getContext();
+
+    const operationId = generateRandomUUID();
+    const processId = processContext.id;
+
+    const auditContext: AuditContext = {
+      operationId,
+      processId,
+      requestPath: undefined,
+      requestMethod: undefined,
+      authContext: undefined,
+    };
 
     const passwordSalt = await bcrypt.genSalt();
 
@@ -50,7 +61,7 @@ async function seed() {
         passwordSalt,
         isVerified: true,
       },
-      auditContextMock.auditContext,
+      auditContext,
     );
 
     await Promise.all([defaultDBConnection.close()]);
