@@ -6,16 +6,16 @@ module.exports = (phase) => {
     webpack: (config, options) => {
       config.resolve.alias = {
         ...config.resolve.alias,
-        typeorm: path.resolve(
+        typeorm: path.join(
           __dirname,
           '../../node_modules/typeorm/typeorm-model-shim.js',
         ),
-        '@app/shared': path.resolve(
+        '@app/shared': path.join(
           __dirname,
           // Bypass grep search for imports pointing to outside the project
           '../../' + 'libs/shared/src',
         ),
-        '@config': path.resolve(
+        '@config': path.join(
           __dirname,
           `__config.${
             phase === PHASE_DEVELOPMENT_SERVER ? 'debug' : 'release'
