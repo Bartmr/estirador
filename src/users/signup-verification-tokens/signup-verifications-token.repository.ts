@@ -6,6 +6,7 @@ import {
 } from 'typeorm';
 import { User } from '../typeorm/user.entity';
 import { SignupVerificationToken } from './typeorm/signup-verification-token.entity';
+import { generateRandomUUID } from '../../internals/utils/generate-random-uuid';
 
 @EntityRepository(SignupVerificationToken)
 export class SignupVerificationTokensRepository extends AbstractRepository<SignupVerificationToken> {
@@ -27,6 +28,8 @@ export class SignupVerificationTokensRepository extends AbstractRepository<Signu
     const ttlInMilliseconds = ttl * 1000;
 
     const token = new SignupVerificationToken();
+
+    token.id = generateRandomUUID();
 
     token.user = user;
 

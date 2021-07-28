@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class SignupVerificationToken {
-  @PrimaryColumn('uuid', { default: () => 'uuid_generate_v4()' })
+  @PrimaryColumn('uuid')
   id!: string;
 
   @ManyToOne(() => User, { eager: true })

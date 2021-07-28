@@ -10,23 +10,23 @@ export abstract class AuditedEntity extends SimpleEntity {
   @DeleteDateColumn()
   deletedAt?: Date;
 
-  @Column('uuid', { default: () => 'uuid_generate_v1mc()' })
+  @Column('uuid')
   instanceId!: string;
 
   @Column('uuid', { nullable: true })
-  operationId?: string;
+  operationId?: string | null;
 
-  @Column({ nullable: true })
-  requestPath?: string;
+  @Column('text', { nullable: true })
+  requestPath?: string | null;
 
-  @Column({ nullable: true })
-  requestMethod?: string;
+  @Column('text', { nullable: true })
+  requestMethod?: string | null;
 
-  @Column({ nullable: true })
-  processId?: string;
+  @Column('text', { nullable: true })
+  processId?: string | null;
 
   @Column('uuid', { nullable: true })
-  archivedByUserId?: string;
+  archivedByUserId?: string | null;
 
   // Set in AuditedEntityRepository. No need for @CreatedAtColumn()
   @Column('timestamp')

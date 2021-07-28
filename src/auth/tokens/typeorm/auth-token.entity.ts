@@ -3,10 +3,10 @@ import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class AuthToken {
-  @PrimaryColumn('uuid', { default: () => 'uuid_generate_v4()' })
+  @PrimaryColumn('uuid')
   id!: string;
 
-  @Column('uuid', { default: () => 'uuid_generate_v4()' })
+  @Column('uuid')
   httpsOnlyKey!: string;
 
   @ManyToOne(() => User, { eager: true })

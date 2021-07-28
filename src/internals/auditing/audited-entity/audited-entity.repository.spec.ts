@@ -25,7 +25,6 @@ class TestsRepository extends AuditedEntityRepository<TestEntity> {}
 beforeAll(async () => {
   connection = await getDatabaseConnection([TestEntity]);
 
-  await connection.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
   await connection.query(`DROP TABLE IF EXISTS ${TEST_TABLE_NAME}`);
   await connection.synchronize();
 });
@@ -38,41 +37,37 @@ describe('Audited Entity Repository', () => {
   describe('Update', () => {
     it('Should have created an archived version of the entity after an update', async () => {
       const newDate = new Date();
-      const repository = connection.getRepository(TestEntity);
 
-      const unpersistedEntity = new TestEntity();
+      const repository = connection.getCustomRepository(TestsRepository);
 
-      unpersistedEntity.createdAt = newDate;
-      unpersistedEntity.updatedAt = newDate;
+      const auditContextMock = createAuditContextTestMock();
 
-      const entity = await connection.manager.save(unpersistedEntity);
+      const entity = await repository.create(
+        {
+          propA: newDate,
+          propB: newDate,
+        },
+        auditContextMock.auditContext,
+      );
 
-      entity.propA = newDate;
-
-      const customRepository =
-        connection.manager.getCustomRepository(TestsRepository);
-
-      const auditContext = createAuditContextTestMock();
-
-      await customRepository.save(entity, auditContext.auditContext);
-
-      const rows = await repository.find({
+      const result = await repository.find({
         withDeleted: true,
         where: { instanceId: entity.instanceId },
+        skip: 0,
       });
 
-      expect(rows.length).toEqual(2);
+      expect(result.total).toEqual(2);
 
-      expect(rows.map((c) => c.toJSON())).toEqual([
+      expect(result.rows.map((c) => c.toJSON())).toEqual([
         {
           ...entity,
-          ...auditContext.persisted.auditContextEntityProps,
-          id: expect.any(String) as unknown,
+          ...auditContextMock.persisted.auditContextEntityProps,
         },
         {
           ...entity,
-          ...auditContext.persisted.auditContextArchivedEntityProps,
+          ...auditContextMock.persisted.auditContextArchivedEntityProps,
           id: expect.any(String) as unknown,
+          deletedAt: expect.any(Date) as unknown,
         },
       ]);
     });
