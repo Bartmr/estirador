@@ -27,6 +27,7 @@ export type OutgoingHeaders = { [key: string]: string | undefined };
 @Injectable()
 export abstract class JSONApiBase {
   public abstract apiUrl: string;
+  public abstract getDefaultHeaders: () => OutgoingHeaders;
 
   constructor(private loggingService: LoggingService) {}
 
@@ -59,7 +60,10 @@ export abstract class JSONApiBase {
     const response = await axios({
       method,
       url,
-      headers,
+      headers: {
+        ...this.getDefaultHeaders(),
+        ...headers,
+      },
       data: body,
       validateStatus: () => true,
     });

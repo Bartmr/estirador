@@ -8,15 +8,15 @@ if (NODE_ENV !== NodeEnv.Test) {
   throw new Error();
 }
 
-const typeormConfigPath = path.resolve(
+const typeormConfigPath = path.join(
   process.cwd(),
   'src/internals/databases/typeorm-ormconfig-with-migrations.ts',
 );
-const allMigrationsArrayPath = path.resolve(
+const allMigrationsArrayPath = path.join(
   process.cwd(),
   'src/internals/databases/all-migrations.ts',
 );
-const migrationsDirectoryPath = path.resolve(
+const migrationsDirectoryPath = path.join(
   process.cwd(),
   'src/internals/databases/migrations',
 );

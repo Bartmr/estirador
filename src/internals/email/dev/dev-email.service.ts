@@ -1,7 +1,7 @@
 import util from 'util';
 import fs from 'fs';
 import path from 'path';
-import { resolveLocalTemporaryFilesPath } from 'src/internals/local-temporary-files/local-temporary-files-path';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
 import { Email, EmailService } from '../email.service';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
@@ -25,11 +25,14 @@ export class DevEmailService extends EmailService {
   async sendEmail(email: Email): Promise<void> {
     const emailFileName = `${generateRandomUUID()}.html`;
 
-    const emailsDirectoryPath = resolveLocalTemporaryFilesPath('dev-email');
+    const emailsDirectoryPath = path.join(
+      LOCAL_TEMPORARY_FILES_PATH,
+      'dev-email',
+    );
 
     await mkDir(emailsDirectoryPath, { recursive: true });
 
-    const emailPath = path.resolve(emailsDirectoryPath, emailFileName);
+    const emailPath = path.join(emailsDirectoryPath, emailFileName);
 
     await writeFile(emailPath, this.renderEmail(email), { encoding: 'utf8' });
 

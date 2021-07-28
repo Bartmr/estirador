@@ -23,11 +23,9 @@ const mainApiConfigString = `export const MAIN_API_CONFIG = {
 const dir = path.join(process.cwd(), '__confi' + 'g.' + 'release');
 
 mkdir(dir)
+  .then(() => writeFile(path.join(dir, 'common-config.ts'), commonConfigString))
   .then(() =>
-    writeFile(path.resolve(dir, 'common-config.ts'), commonConfigString),
-  )
-  .then(() =>
-    writeFile(path.resolve(dir, 'main-api-config.ts'), mainApiConfigString),
+    writeFile(path.join(dir, 'main-api-config.ts'), mainApiConfigString),
   )
   .catch((err) => {
     console.error(err);
