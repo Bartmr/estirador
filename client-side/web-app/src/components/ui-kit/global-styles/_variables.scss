@@ -166,7 +166,8 @@ $light-contrasting-colors: (
 
 $body-color: get-contrasting-color('body');
 
-$selected-bg: set-contrasting-color-alpha('body', 0.1);
+$hovered-bg: set-contrasting-color-alpha('body', 0.15);
+$selected-bg: set-contrasting-color-alpha('body', 0.3);
 
 $spacer: 1rem;
 $spacers: (
