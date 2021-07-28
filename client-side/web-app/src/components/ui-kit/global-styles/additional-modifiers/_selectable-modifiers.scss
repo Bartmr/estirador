@@ -1,0 +1,22 @@
+.selectable {
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    background-color: $hovered-bg;
+  }
+
+  &:active {
+    cursor: pointer;
+    background-color: $selected-bg;
+  }
+}
+a.selectable {
+  &:hover,
+  &:focus,
+  &:active,
+  &:link,
+  &:visited {
+    color: inherit !important;
+    text-decoration: inherit;
+  }
+}

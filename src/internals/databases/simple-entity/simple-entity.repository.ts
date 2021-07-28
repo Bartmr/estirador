@@ -27,17 +27,20 @@ export type Where<Entity extends SimpleEntity> =
   | WhereObject<Entity>
   | Array<WhereObject<Entity>>;
 
-type FindOptionsBase = {
+type FindOptionsBase<Entity extends SimpleEntity> = {
   withDeleted?: boolean;
+  order?: {
+    [K in keyof Entity]?: 'ASC' | 'DESC' | 1 | -1;
+  };
 };
 
 export interface FindOneOptions<Entity extends SimpleEntity>
-  extends FindOptionsBase {
+  extends FindOptionsBase<Entity> {
   where: Where<Entity>;
 }
 
 export interface FindOptions<Entity extends SimpleEntity>
-  extends FindOptionsBase {
+  extends FindOptionsBase<Entity> {
   where?: Where<Entity>;
   skip: number;
 }
@@ -52,33 +55,28 @@ export abstract class SimpleEntityRepository<
   >;
 
   findOne(
-    { where, withDeleted }: FindOneOptions<Entity>,
+    query: FindOneOptions<Entity>,
     options?: Partial<{ manager: EntityManager }>,
   ): Promise<Entity | undefined> {
     const repository = options?.manager
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    return repository.findOne({
-      where,
-      withDeleted,
-    });
+    return repository.findOne(query);
   }
 
   async find(
-    { where, withDeleted, skip }: FindOptions<Entity>,
+    query: FindOptions<Entity>,
     options?: Partial<{ manager: EntityManager }>,
   ) {
     const repository = options?.manager
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const limit = 20;
+    const limit = 50;
     const results = await repository.findAndCount({
-      where,
-      withDeleted,
+      ...query,
       take: limit,
-      skip,
     });
 
     return {
