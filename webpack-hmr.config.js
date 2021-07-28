@@ -36,7 +36,7 @@ module.exports = function (options, webpack, nodeArgs) {
     },
     output: {
       filename: '[name].js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.join(__dirname, 'dist'),
     },
     externals: [
       nodeExternals({

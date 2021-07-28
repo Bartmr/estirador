@@ -1,5 +1,3 @@
 import path from 'path';
 
-export function resolveLocalTemporaryFilesPath(...segments: string[]) {
-  return path.resolve(path.resolve(process.cwd(), '_tmp', ...segments));
-}
+export const LOCAL_TEMPORARY_FILES_PATH = path.join(process.cwd(), '_tmp');

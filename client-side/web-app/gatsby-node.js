@@ -89,17 +89,17 @@ exports.onCreateWebpackConfig = async ({
           That's why we use a `src` alias instead of
           pointing the imports root directly to the root of the project.
         */
-        src: path.resolve(__dirname, `src`),
-        typeorm: path.resolve(
+        src: path.join(__dirname, `src`),
+        typeorm: path.join(
           __dirname,
           '../../node_modules/typeorm/typeorm-model-shim.js',
         ),
-        '@app/shared': path.resolve(
+        '@app/shared': path.join(
           __dirname,
           // Bypass grep search for imports pointing to outside the project
           '../../' + 'libs/shared/src',
         ),
-        '@config': path.resolve(
+        '@config': path.join(
           __dirname,
           `${CONFIG_DIRECTORY_NAME}${currentBuildVariant}`,
         ),

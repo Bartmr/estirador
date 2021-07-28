@@ -102,7 +102,7 @@ module.exports = {
         openAnalyzer: isNotCI,
         analyzerMode: 'static',
         defaultSizes: 'gzip',
-        reportFilename: path.resolve(
+        reportFilename: path.join(
           __dirname,
           '.webpack-bundle-analyzer',
           'report.html',
