@@ -8,20 +8,20 @@ import axios from 'axios';
 import querystring from 'querystring';
 import { LoggingService } from '../logging/logging.service';
 
-export type JSONResponseSchema = Schema<{
+type JSONResponseSchema = Schema<{
   status: number;
   body?: JSONData | undefined;
 }>;
 
-export type JsonHEADResponseSchema = Schema<{
+type JsonHEADResponseSchema = Schema<{
   status: number;
 }>;
 
-export type QueryParams = {
+type QueryParams = {
   [key: string]: undefined | JSONPrimitive;
 };
 
-export type OutgoingHeaders = { [key: string]: string | undefined };
+type OutgoingHeaders = { [key: string]: string | undefined };
 
 export abstract class JSONApiBase {
   public abstract apiUrl: string;
