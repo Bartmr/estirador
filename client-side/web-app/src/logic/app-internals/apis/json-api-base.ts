@@ -27,13 +27,13 @@ export abstract class JSONApiBase {
   private jsonHttp: ReturnType<typeof useJSONHttp>;
   private apiUrl: string;
   private getHeaders: () => OutgoingHeaders;
-  private onInvalidAuthToken: undefined | (() => Promise<void>);
+  private onInvalidAuthToken: null | (() => Promise<void>);
 
   constructor(params: {
     jsonHttp: JSONApiBase['jsonHttp'];
     apiUrl: JSONApiBase['apiUrl'];
     getHeaders: JSONApiBase['getHeaders'];
-    onInvalidAuthToken?: JSONApiBase['onInvalidAuthToken'];
+    onInvalidAuthToken: JSONApiBase['onInvalidAuthToken'];
   }) {
     this.jsonHttp = params.jsonHttp;
     this.apiUrl = params.apiUrl;
