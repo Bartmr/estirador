@@ -7,7 +7,6 @@ import {
 import axios from 'axios';
 import querystring from 'querystring';
 import { LoggingService } from '../logging/logging.service';
-import { Injectable } from '@nestjs/common';
 
 export type JSONResponseSchema = Schema<{
   status: number;
@@ -24,7 +23,6 @@ export type QueryParams = {
 
 export type OutgoingHeaders = { [key: string]: string | undefined };
 
-@Injectable()
 export abstract class JSONApiBase {
   public abstract apiUrl: string;
   public abstract getDefaultHeaders: () => OutgoingHeaders;

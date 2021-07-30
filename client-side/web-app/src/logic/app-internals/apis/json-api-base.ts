@@ -14,10 +14,10 @@ import {
 } from '../transports/json-types';
 import { toQueryString } from '../urls/to-query-string';
 
-type SupportedRequestQueryParams = {
+export type SupportedRequestQueryParams = {
   [key: string]: undefined | SerializableJSONValue | SerializableJSONValue[];
 };
-type SupportedRequestBody =
+export type SupportedRequestBody =
   | SerializableJSONObject
   | SerializableJSONArray
   | FormData
@@ -27,7 +27,7 @@ export abstract class JSONApiBase {
   private jsonHttp: ReturnType<typeof useJSONHttp>;
   private apiUrl: string;
   private getHeaders: () => OutgoingHeaders;
-  private onInvalidAuthToken: () => Promise<void>;
+  private onInvalidAuthToken: null | (() => Promise<void>);
 
   constructor(params: {
     jsonHttp: JSONApiBase['jsonHttp'];
@@ -101,7 +101,7 @@ export abstract class JSONApiBase {
         return { failure: TransportFailure.NotFound };
       } else if (res.response.status === 403) {
         return { failure: TransportFailure.Forbidden };
-      } else if (res.response.status === 401) {
+      } else if (this.onInvalidAuthToken && res.response.status === 401) {
         await this.onInvalidAuthToken();
 
         return { failure: TransportFailure.AbortedAndDealtWith };
