@@ -31,6 +31,8 @@ const { onCreateNode } = require('./src/on-create-node');
 
 // Bypass grep search for hardcoded config imports
 const CONFIG_DIRECTORY_NAME = '__confi' + 'g.';
+// Bypass grep search for relative imports of the shared library
+const SHARED_LIBRARY_RELATIVE_IMPORT_SNIPPET = '../../libs/' + 'shared/src';
 
 const GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND =
   'graphql-codegen --config codegen.yml';
@@ -129,6 +131,19 @@ exports.onPreBuild = async ({ store }) => {
         if (hardcodedConfigImports.stdout.trim()) {
           throw new Error(
             `Hardcoded configuration imports were found. Use the "@config" alias instead to import configuration files:\n${hardcodedConfigImports.stdout}`,
+          );
+        } else if (hardcodedConfigImports.stderr.trim()) {
+          throw new Error(hardcodedConfigImports.stderr);
+        }
+      })(),
+      (async () => {
+        const hardcodedConfigImports = await exec(
+          `grep -r "${SHARED_LIBRARY_RELATIVE_IMPORT_SNIPPET}" ${grepScope} || true`,
+        );
+
+        if (hardcodedConfigImports.stdout.trim()) {
+          throw new Error(
+            `Relative path imports of the shared library were found. Use the "@app/shared" alias instead of relative paths:\n${hardcodedConfigImports.stdout}`,
           );
         } else if (hardcodedConfigImports.stderr.trim()) {
           throw new Error(hardcodedConfigImports.stderr);
