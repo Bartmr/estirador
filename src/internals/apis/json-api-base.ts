@@ -24,10 +24,9 @@ type QueryParams = {
 type OutgoingHeaders = { [key: string]: string | undefined };
 
 export abstract class JSONApiBase {
-  public abstract apiUrl: string;
-  public abstract getDefaultHeaders: () => OutgoingHeaders;
-
-  constructor(private loggingService: LoggingService) {}
+  protected abstract apiUrl: string;
+  protected abstract getDefaultHeaders: () => OutgoingHeaders;
+  protected abstract loggingService: LoggingService;
 
   private async _doRequest<S extends JSONResponseSchema>(
     schema: S,
