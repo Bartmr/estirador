@@ -4,7 +4,7 @@ const packageRestrictionRuleConfig = [
     {
       name: 'uuid',
       message:
-        "'uuid' package needed overrides (like using node bytes that don't reference the MAC address). Please use the generate-random-uuid.ts and generate-secure-unique-uuid.ts files in the project to generate the best uuid for your needs.",
+        'Please use the generate-random-uuid and generate-unique-uuid modules in src/internals/utils to generate the best uuid for your needs.',
     },
   ],
 ];

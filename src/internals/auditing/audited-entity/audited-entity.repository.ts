@@ -2,7 +2,7 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
 import { EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
-import { generateSecureUniqueUUID } from '../../utils/generate-secure-unique-uuid';
+import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,
@@ -48,7 +48,7 @@ export abstract class AuditedEntityRepository<
       ) as Partial<Entity>;
 
       delete _entityLikeObject.deletedAt;
-      _entityLikeObject.instanceId = generateSecureUniqueUUID();
+      _entityLikeObject.instanceId = generateUniqueUUID();
       delete _entityLikeObject.operationId;
       delete _entityLikeObject.requestPath;
       delete _entityLikeObject.requestMethod;

@@ -1,7 +1,7 @@
 import { Column, Connection, Entity } from 'typeorm';
 import { getDatabaseConnection } from '../../databases/spec/databases-test-utils';
 import { SimpleEntity } from './simple.entity';
-import { generateSecureUniqueUUID } from 'src/internals/utils/generate-secure-unique-uuid';
+import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 
 const TEST_TABLE_NAME = 'simple_entity_spec';
 
@@ -28,17 +28,17 @@ describe('Simple Entity Repository', () => {
   it('Entity should be mutated and not cloned when saving an entity using regular TypeORM repositories', async () => {
     const repository = connection.getRepository(TestEntity);
 
-    const id = generateSecureUniqueUUID();
+    const id = generateUniqueUUID();
 
     const entity = new TestEntity();
     entity.id = id;
-    entity.propA = generateSecureUniqueUUID();
+    entity.propA = generateUniqueUUID();
     const entityReturnedFromCreation = await repository.save(entity);
 
     expect(entity).toBe(entityReturnedFromCreation);
     expect(entity.id).toBe(id);
 
-    entity.propA = generateSecureUniqueUUID();
+    entity.propA = generateUniqueUUID();
 
     const entityReturnedFromUpdate = await repository.save(entity);
 
