@@ -7,11 +7,11 @@ import { Column, DeleteDateColumn } from 'typeorm';
 */
 
 export abstract class AuditedEntity extends SimpleEntity {
-  @DeleteDateColumn()
-  deletedAt?: Date;
-
   @Column('uuid')
   instanceId!: string;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   @Column('uuid', { nullable: true })
   operationId?: string | null;

@@ -10,7 +10,7 @@ import {
   FindOperator,
 } from 'typeorm';
 import { SimpleEntity } from './simple.entity';
-import { generateSecureUniqueUUID } from '../../utils/generate-secure-unique-uuid';
+import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 
 type WhereObject<Entity extends SimpleEntity> = {
   [K in keyof Entity]?:
@@ -95,12 +95,14 @@ export abstract class SimpleEntityRepository<
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const _entityLikeObject = Object.assign({}, entityLikeObject) as {
+    const _entityLikeObject = {
+      ...entityLikeObject,
+    } as {
       id?: unknown;
       [key: string]: unknown;
     };
 
-    _entityLikeObject.id = generateSecureUniqueUUID();
+    _entityLikeObject.id = generateUniqueUUID();
 
     /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
     const EntityClass = this.repository.target as ConcreteClass<{
