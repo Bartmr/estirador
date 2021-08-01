@@ -1,8 +1,9 @@
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
-import { EntityManager } from 'typeorm';
+import { DeepPartial, EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
+import { ConcreteClass } from '@app/shared/internals/utils/types/classes-types';
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,
@@ -29,7 +30,6 @@ export abstract class AuditedEntityRepository<
   ): Promise<void> {
     const entityDataClone = {
       ...updatedEntity,
-      id: undefined,
     };
 
     this.assignArchiveAttributesToEntity(entityDataClone, auditContext);
@@ -42,13 +42,22 @@ export abstract class AuditedEntityRepository<
     auditContext: AuditContext,
   ): Promise<Entity> {
     const run = async (manager: EntityManager) => {
-      const _entityLikeObject = Object.assign(
-        {},
-        entityLikeObject,
-      ) as Partial<Entity>;
+      const repository = manager.getRepository<Entity>(this.repository.target);
+
+      const _entityLikeObject = {
+        ...entityLikeObject,
+      } as Partial<Entity>;
+
+      const id = generateUniqueUUID();
+      _entityLikeObject.id = id;
+
+      /*
+        instanceId will always be unique
+        because it reuses the id that will be used as primary key
+      */
+      _entityLikeObject.instanceId = id;
 
       delete _entityLikeObject.deletedAt;
-      _entityLikeObject.instanceId = generateUniqueUUID();
       delete _entityLikeObject.operationId;
       delete _entityLikeObject.requestPath;
       delete _entityLikeObject.requestMethod;
@@ -59,15 +68,21 @@ export abstract class AuditedEntityRepository<
       _entityLikeObject.createdAt = createdAt;
       _entityLikeObject.updatedAt = createdAt;
 
-      const createdEntity = await super.create(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        _entityLikeObject as any,
-        auditContext,
-        { manager },
-      );
+      const EntityClass = this.repository.target as ConcreteClass<
+        Partial<Entity>
+      >;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const _createdEntity = new EntityClass();
+      for (const _k of Object.keys(_entityLikeObject)) {
+        const key = _k as keyof Partial<Entity>;
+
+        _createdEntity[key] = _entityLikeObject[key];
+      }
+      await repository.save(_createdEntity as DeepPartial<Entity>);
+
+      const createdEntity = _createdEntity as Entity;
       await this.archiveChange(createdEntity, auditContext, manager);
-
       return createdEntity;
     };
 

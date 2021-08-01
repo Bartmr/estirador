@@ -95,7 +95,9 @@ export abstract class SimpleEntityRepository<
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const _entityLikeObject = Object.assign({}, entityLikeObject) as {
+    const _entityLikeObject = {
+      ...entityLikeObject,
+    } as {
       id?: unknown;
       [key: string]: unknown;
     };
