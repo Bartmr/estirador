@@ -86,10 +86,7 @@ export abstract class AuditedEntityRepository<
       return createdEntity;
     };
 
-    if (
-      this.manager.queryRunner &&
-      this.manager.queryRunner.isTransactionActive
-    ) {
+    if (this.manager.queryRunner?.isTransactionActive) {
       return run(this.manager);
     } else {
       return this.manager.transaction(run);
@@ -105,10 +102,7 @@ export abstract class AuditedEntityRepository<
       await this.archiveChange(entity, auditContext, manager);
     };
 
-    if (
-      this.manager.queryRunner &&
-      this.manager.queryRunner.isTransactionActive
-    ) {
+    if (this.manager.queryRunner?.isTransactionActive) {
       return run(this.manager);
     } else {
       return this.manager.transaction(run);
@@ -122,10 +116,7 @@ export abstract class AuditedEntityRepository<
       await super.save(entity, auditContext, { manager });
     };
 
-    if (
-      this.manager.queryRunner &&
-      this.manager.queryRunner.isTransactionActive
-    ) {
+    if (this.manager.queryRunner?.isTransactionActive) {
       return run(this.manager);
     } else {
       return this.manager.transaction(run);
