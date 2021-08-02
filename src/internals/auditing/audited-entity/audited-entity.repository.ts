@@ -16,11 +16,13 @@ export abstract class AuditedEntityRepository<
     entity: Entity,
     auditContext: AuditContext,
   ) {
-    Object.assign(entity, {
-      ...auditContext,
-      deletedAt: new Date(),
-      archivedByUserId: auditContext.authContext?.user.id,
-    });
+    entity.operationId = auditContext.operationId;
+    entity.requestPath = auditContext.requestPath;
+    entity.requestMethod = auditContext.requestMethod;
+    entity.processId = auditContext.processId;
+
+    entity.deletedAt = new Date();
+    entity.archivedByUserId = auditContext.authContext?.user.id;
   }
 
   private async archiveChange(
