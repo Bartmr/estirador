@@ -97,28 +97,25 @@ export abstract class SimpleEntityRepository<
 
     const _entityLikeObject = {
       ...entityLikeObject,
-    } as {
-      id?: unknown;
-      [key: string]: unknown;
-    };
+    } as Partial<Entity>;
 
     _entityLikeObject.id = generateUniqueUUID();
 
-    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
-    const EntityClass = this.repository.target as ConcreteClass<{
-      [key: string]: unknown;
-    }>;
+    const EntityClass = this.repository.target as ConcreteClass<
+      Partial<Entity>
+    >;
 
-    const entity = new EntityClass() as any;
+    const entity = new EntityClass();
 
-    for (const key of Object.keys(_entityLikeObject)) {
+    for (const _k of Object.keys(_entityLikeObject)) {
+      const key = _k as keyof Partial<Entity>;
+
       entity[key] = _entityLikeObject[key];
     }
 
-    await repository.save(entity);
+    await repository.save(entity as DeepPartial<Entity>);
 
-    return entity;
-    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
+    return entity as Entity;
   }
 
   async save(
