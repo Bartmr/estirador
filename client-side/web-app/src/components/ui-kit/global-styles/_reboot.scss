@@ -1,5 +1,3 @@
-@import 'node_modules/bootstrap/scss/reboot';
-
 body {
   @include on-inverted-color-scheme {
     background-color: $body-bg-inverted;
