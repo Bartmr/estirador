@@ -1,4 +1,3 @@
-import { AriaRole } from 'react';
 import { ReactNode, SyntheticEvent } from 'react';
 import { LinkAnchor } from '../../protons/link-anchor/link-anchor';
 
@@ -24,7 +23,6 @@ type Props = {
   onClick?: (e: SyntheticEvent<HTMLElement>) => void;
   loading?: boolean;
   loadingWithoutDisabling?: boolean;
-  role?: AriaRole;
 };
 
 export function Button(props: Props) {
