@@ -1,9 +1,6 @@
 /* eslint-disable no-console */
 import { COMMON_CONFIG } from '@config/common-config';
-import {
-  isRunningOnClient,
-  isRunningOnServer,
-} from '../runtime/is-running-on-server';
+import { RUNNING_IN_CLIENT, RUNNING_IN_SERVER } from '../runtime/running-in';
 
 const LOG_ENTRIES_LIMIT = 3;
 
@@ -65,7 +62,7 @@ class LoggerImpl {
     }
 
     // Stop building pages if one of them has an error
-    if (isRunningOnServer()) {
+    if (RUNNING_IN_SERVER) {
       throw caughtValue;
     }
   }
@@ -73,7 +70,7 @@ class LoggerImpl {
 
 const Logger = new LoggerImpl();
 
-if (isRunningOnClient()) {
+if (RUNNING_IN_CLIENT) {
   /*
     Wrap in IIFE to avoid crashing due to unexisting `window` variable
   */
