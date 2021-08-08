@@ -1,3 +1,17 @@
+.btn,
+.btn-link {
+  &:disabled,
+  &.disabled {
+    cursor: not-allowed;
+
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: line-through;
+    }
+  }
+}
+
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
     border-color: set-contrasting-color-alpha('body', 0.3);
@@ -9,14 +23,7 @@
 
     &:disabled,
     &.disabled {
-      cursor: not-allowed;
       border-color: set-contrasting-color-alpha('body', 0.3);
-
-      &:hover,
-      &:focus,
-      &:active {
-        text-decoration: line-through;
-      }
     }
   }
 }

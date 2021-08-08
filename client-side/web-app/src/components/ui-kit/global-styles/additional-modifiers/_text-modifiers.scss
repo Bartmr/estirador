@@ -1,9 +1,3 @@
-a:not(.btn).disabled,
-.text-link.disabled {
-  pointer-events: none;
-  color: set-contrasting-color-alpha('body', $text-muted-opacity);
-}
-
 .text-link {
   color: $link-color;
   text-decoration: $link-decoration;
