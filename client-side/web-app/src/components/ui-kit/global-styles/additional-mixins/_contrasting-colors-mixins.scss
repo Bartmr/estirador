@@ -1,7 +1,5 @@
 @mixin attach-map-of-contrasting-colors($contrasting-colors-map) {
   @each $color-name in $contrasting-colors-names {
-    $value: null;
-
     $value: map-get($contrasting-colors-map, $color-name);
 
     @if ($value == null) {

@@ -32,3 +32,25 @@
 @function get-contrasting-color($name) {
   @return var(#{get-contrasting-color-css-custom-property($name)});
 }
+
+@function get-contrasting-color-absolute-value($fill, $name) {
+  $fill-is-dark: is-color-dark($fill);
+
+  @if ($fill-is-dark == true) {
+    $value: map-get($light-contrasting-colors, $name);
+
+    @if ($value == null) {
+      @error "-> #{$name} does not exist in light-contrasting-colors";
+    }
+
+    @return $value;
+  } @else {
+    $value: map-get($dark-contrasting-colors, $name);
+
+    @if ($value == null) {
+      @error "-> #{$name} does not exist in dark-contrasting-colors";
+    }
+
+    @return $value;
+  }
+}
