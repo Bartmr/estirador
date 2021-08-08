@@ -1,17 +1,3 @@
-.btn,
-.btn-link {
-  &:disabled,
-  &.disabled {
-    cursor: not-allowed;
-
-    &:hover,
-    &:focus,
-    &:active {
-      text-decoration: line-through;
-    }
-  }
-}
-
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
     border-color: set-contrasting-color-alpha('body', 0.3);
@@ -23,7 +9,7 @@
 
     &:disabled,
     &.disabled {
-      border-color: set-contrasting-color-alpha('body', 0.3);
+      filter: grayscale(100%);
     }
   }
 }
