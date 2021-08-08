@@ -34,7 +34,7 @@
         width: $spinner-width-sm;
         height: $spinner-height-sm;
       }
-      &.spinner#{$infix}-default {
+      &.spinner#{$infix}-md {
         width: $spinner-width;
         height: $spinner-height;
       }
@@ -64,7 +64,7 @@
       &.spinner#{$infix}-sm {
         border-width: $spinner-border-width-sm;
       }
-      &.spinner#{$infix}-default {
+      &.spinner#{$infix}-md {
         border-width: $spinner-border-width;
       }
       &.spinner#{$infix}-lg {
