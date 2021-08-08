@@ -128,16 +128,18 @@ module.exports = {
     */
     'jsx-a11y/label-has-for': 'off',
     //
-    "no-restricted-globals": [
-      "error",
+    'no-restricted-globals': [
+      'error',
       {
-        "name": "localStorage",
-        "message": "Use the local storage instance returned by the useLocalStorage hook at client-side/web-app/src/logic/app-internals/transports/use-local-storage"
+        name: 'localStorage',
+        message:
+          'Use the local storage instance returned by the useLocalStorage hook at client-side/web-app/src/logic/app-internals/transports/use-local-storage',
       },
       {
-        "name": "sessionStorage",
-        "message": "Use the session storage instance returned by the useSessionStorage hook at client-side/web-app/src/logic/app-internals/transports/use-session-storage"
+        name: 'sessionStorage',
+        message:
+          'Use the session storage instance returned by the useSessionStorage hook at client-side/web-app/src/logic/app-internals/transports/use-session-storage',
       },
-    ]
+    ],
   },
 };

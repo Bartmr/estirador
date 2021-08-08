@@ -24,8 +24,8 @@ $default-inverted: null;
   $default: $light;
   $default-inverted: $dark;
 } @else {
-  $default: $light;
-  $default-inverted: $dark;
+  $default: $dark;
+  $default-inverted: $light;
 }
 
 $theme-colors: (
