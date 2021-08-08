@@ -19,6 +19,7 @@ import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reduc
 import { ErrorIcon } from '../ui-kit/components/icons/error-icon';
 import { IconSize } from '../ui-kit/components/icons/base/icon-types';
 import { useRemoteConfig } from '../../logic/app-internals/remote-config/use-remote-config';
+import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 
 const FatalErrorFrame = () => {
   return (
@@ -96,7 +97,7 @@ const GiveContextToContents = (props: { children: ReactNode }) => {
     const storeManager =
       storeManagerFromPreviousRuntime || createStoreManager();
 
-    if (module.hot) {
+    if (module.hot && RUNNING_IN_CLIENT) {
       module.hot.dispose((data: ModuleHotData) => {
         data.storeManager = storeManager;
       });

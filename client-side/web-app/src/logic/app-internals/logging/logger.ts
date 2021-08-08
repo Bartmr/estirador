@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { COMMON_CONFIG } from '@config/common-config';
-import { isRunningOnClient } from '../runtime/is-running-on-server';
+import { RUNNING_IN_CLIENT } from '../runtime/running-in';
 
 const LOG_ENTRIES_LIMIT = 3;
 
@@ -65,7 +65,7 @@ class LoggerImpl {
 
 const Logger = new LoggerImpl();
 
-if (isRunningOnClient()) {
+if (RUNNING_IN_CLIENT) {
   /*
     Wrap in IIFE to avoid crashing due to unexisting `window` variable
   */

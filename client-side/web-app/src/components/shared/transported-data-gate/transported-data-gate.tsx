@@ -2,10 +2,6 @@ import React, { ReactNode } from 'react';
 import { IconSize } from 'src/components/ui-kit/components/icons/base/icon-types';
 import { ErrorIcon } from 'src/components/ui-kit/components/icons/error-icon';
 import { SearchIcon } from 'src/components/ui-kit/components/icons/search-icon';
-import {
-  LoadingSpinner,
-  SpinnerSize,
-} from 'src/components/ui-kit/components/loading-spinner/loading-spinner';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import {
@@ -45,10 +41,12 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       ? 'flex-row justify-content-center align-items-center'
       : 'flex-column justify-content-center align-items-center'
   }`;
-  const spinnerSize =
+  const spinnerSizeClass =
     layout === TransportedDataGateLayout.Tape
-      ? SpinnerSize.Default
-      : SpinnerSize.Large;
+      ? 'spinner-default'
+      : 'spinner-lg';
+  const spinnerPaddingClass =
+    layout === TransportedDataGateLayout.Tape ? '' : 'p-3';
 
   const iconSize =
     layout === TransportedDataGateLayout.Tape ? undefined : IconSize.Thumbnail;
@@ -63,7 +61,17 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       case TransportedDataStatus.Loading:
         return (
           <div className={flexClassName}>
-            <LoadingSpinner size={spinnerSize} />
+            <div
+              className={`w-auto ${spinnerPaddingClass}`}
+              style={{ position: 'relative', zIndex: 1 }}
+            >
+              <div
+                className={`${spinnerSizeClass} spinner-border text-primary`}
+                role="status"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
             {loadingMessage ? (
               <p className={`${textClassName} text-primary mb-0`}>
                 {loadingMessage}
@@ -74,14 +82,22 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       case TransportedDataStatus.Refreshing:
         return (
           <>
-            <LoadingSpinner
-              size={spinnerSize}
+            <div
+              className={`w-auto ${spinnerPaddingClass}`}
               style={{
+                zIndex: 1,
                 right: 'var(--spacer-3)',
                 marginTop: 'var(--spacer-3)',
                 position: 'fixed',
               }}
-            />
+            >
+              <div
+                className={`${spinnerSizeClass} spinner-border text-primary`}
+                role="status"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
             {children({ data: dataWrapper.data as UnwrapTransportedData<T> })}
           </>
         );

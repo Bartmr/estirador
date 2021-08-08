@@ -2,11 +2,6 @@ import { useState } from 'react';
 import { AuthenticatedRouteAccess } from 'src/components/routing/authenticated-route/authenticated-route-types';
 import { Page } from 'src/components/routing/page/page';
 import {
-  Button,
-  ButtonPriority,
-  ButtonType,
-} from 'src/components/ui-kit/components/button/button';
-import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
@@ -83,13 +78,13 @@ function Content() {
           <div className="invalid-feedback">Password is required</div>
         </div>
         <div className="d-flex align-items-center">
-          <Button
-            priority={ButtonPriority.Primary}
-            label="Login"
+          <button
             disabled={submissionStatus.status === TransportedDataStatus.Loading}
-            type={ButtonType.Submit}
-            className="mr-4"
-          />
+            type={'submit'}
+            className="btn btn-default mr-4"
+          >
+            Login
+          </button>
           <TransportedDataGate
             layout={TransportedDataGateLayout.Tape}
             dataWrapper={submissionStatus}

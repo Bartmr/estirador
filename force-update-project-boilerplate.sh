@@ -51,6 +51,8 @@ else
 
 - Check if any of the changes made by the updates require a new migration to be written
 
+- Run 'npm run integrity-check:all' to make sure the updates didn't break any part of your project
+
 - IF YOU WANT TO ABORT the update, just discard the changes as you normally would with your work
 
 - To finalize the update, commit everything as you would do with regular work"
