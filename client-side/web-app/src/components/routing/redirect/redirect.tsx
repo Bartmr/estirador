@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppNavigation } from 'src/logic/app-internals/app-navigation/use-app-navigation';
 
 type Props = {

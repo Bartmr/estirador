@@ -1,8 +1,22 @@
-.btn.btn-light {
-  border: $border-width solid $border-color;
-}
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    border-color: set-contrasting-color-alpha('body', 0.3);
 
-.btn:disabled,
-.btn.disabled {
-  filter: grayscale(100%);
+    &:hover,
+    &:focus {
+      border-color: set-contrasting-color-alpha('body', 0.3);
+    }
+
+    &:disabled,
+    &.disabled {
+      cursor: not-allowed;
+      border-color: set-contrasting-color-alpha('body', 0.3);
+
+      &:hover,
+      &:focus,
+      &:active {
+        text-decoration: line-through;
+      }
+    }
+  }
 }

@@ -9,3 +9,14 @@ html,
 body {
   font-size: 16px;
 }
+
+*:disabled,
+*.disabled {
+  cursor: not-allowed;
+  text-decoration: line-through;
+
+  opacity: 0.5;
+  filter: grayscale(100%);
+
+  pointer-events: none;
+}
