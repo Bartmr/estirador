@@ -17,8 +17,20 @@ $body-bg-inverted: $dark;
 
 $inverted-is-dark-mode: true;
 
+$default: null;
+$default-inverted: null;
+
+@if ($inverted-is-dark-mode) {
+  $default: $light;
+  $default-inverted: $dark;
+} @else {
+  $default: $light;
+  $default-inverted: $dark;
+}
+
 $theme-colors: (
   (
+    'default': $default,
     'primary': $primary,
     'secondary': $secondary,
     'success': $success,
@@ -35,6 +47,7 @@ $theme-colors: (
 
 $inverted-theme-colors: (
   (
+    'default': $default-inverted,
     'primary': $primary,
     'secondary': $secondary,
     'success': $success,
@@ -111,6 +124,7 @@ $contrasting-color-css-custom-properties: ();
 /* Dark text colors to use in light background colors */
 
 $dark-contrasting-colors: (
+  default: $dark,
   primary: $primary,
   secondary: $secondary,
   success: $success,
@@ -134,6 +148,7 @@ $dark-contrasting-colors: (
 /* Light text colors to use in dark background colors */
 
 $light-contrasting-colors: (
+  default: $light,
   primary: change-color($primary, $lightness: 80%),
   secondary: change-color($secondary, $lightness: 80%),
   success: change-color($success, $lightness: 80%),
