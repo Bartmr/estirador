@@ -15,8 +15,19 @@
       border-color: set-contrasting-color-alpha('body', 0.3);
     }
 
+    &:focus,
+    &.focus {
+      box-shadow: 0
+        0
+        0
+        $btn-focus-width
+        set-contrasting-color-alpha($color, 0.5);
+    }
+
     &:disabled,
     &.disabled {
+      border-color: transparent;
+
       &:hover,
       &:active {
         border-color: transparent;
@@ -57,6 +68,7 @@
       &:focus,
       &:active {
         text-decoration: line-through;
+        border-color: $outline-color;
       }
     }
   }
