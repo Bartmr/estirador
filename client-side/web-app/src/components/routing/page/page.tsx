@@ -43,15 +43,13 @@ export function Page(props: Props) {
         style={{ minHeight: '100vh', maxHeight: '100vh' }}
       >
         <Header menuHtmlId="page-header-menu" />
-        <div className={`flex-fill w-100 max-h-100 overflow-y-auto d-flex`}>
+        <div className={`flex-fill w-100 max-h-100 overflow-y-auto`}>
           <AuthenticatedRoute authenticationRules={props.authenticationRules}>
             {() => (
               <main
-                className={`w-100 flex-fill ${
-                  props.noContainment ? '' : 'container'
-                } ${props.noTopPadding ? '' : 'pt-3'} ${
-                  props.noBottomPadding ? '' : 'pb-3'
-                }`}
+                className={`w-100 ${props.noContainment ? '' : 'container'} ${
+                  props.noTopPadding ? '' : 'pt-3'
+                } ${props.noBottomPadding ? '' : 'pb-3'}`}
               >
                 {props.children()}
               </main>
