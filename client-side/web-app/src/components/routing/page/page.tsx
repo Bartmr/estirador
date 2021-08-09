@@ -27,29 +27,24 @@ export function Page(props: Props) {
         />
         ,
       </Head>
-      <div
-        className="d-flex flex-column"
-        style={{ minHeight: '100vh', maxHeight: '100vh' }}
-      >
-        <Header menuHtmlId="page-header-menu" />
-        <div className={`flex-fill w-100 overflow-y-auto d-flex flex-column`}>
-          <AuthenticatedRoute authenticationRules={props.authenticationRules}>
-            {() => (
-              <>
-                <main
-                  className={`w-100 flex-fill ${
-                    props.noContainment ? '' : 'container'
-                  } ${props.noTopPadding ? '' : 'pt-3'} ${
-                    props.noBottomPadding ? '' : 'pb-3'
-                  }`}
-                >
-                  {props.children()}
-                </main>
-                {/* Footer goes here */}
-              </>
-            )}
-          </AuthenticatedRoute>
-        </div>
+      <div className="min-vh-100 d-flex flex-column">
+        <Header menuHtmlId="page-header-menu" className="sticky-top" />
+        <AuthenticatedRoute authenticationRules={props.authenticationRules}>
+          {() => (
+            <>
+              <main
+                className={`flex-fill ${
+                  props.noContainment ? '' : 'container'
+                } ${props.noTopPadding ? '' : 'pt-3'} ${
+                  props.noBottomPadding ? '' : 'pb-3'
+                }`}
+              >
+                {props.children()}
+              </main>
+              {/* Footer goes here */}
+            </>
+          )}
+        </AuthenticatedRoute>
       </div>
     </>
   );
