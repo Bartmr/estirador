@@ -1,7 +1,7 @@
 /* eslint-disable node/no-process-env */
 
 import { InferType } from 'not-me/lib/schemas/schema';
-import { isRunningOnServer } from '../runtime/is-running-on-server';
+import { RUNNING_IN_SERVER } from '../runtime/running-in';
 import { ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA } from './environment-variables.schema';
 
 function validateVariables() {
@@ -24,7 +24,7 @@ function validateVariables() {
 let variables:
   | undefined
   | InferType<typeof ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA> =
-  isRunningOnServer() ? validateVariables() : undefined;
+  RUNNING_IN_SERVER ? validateVariables() : undefined;
 
 export const EnvironmentVariablesService = {
   getVariables: () => {
