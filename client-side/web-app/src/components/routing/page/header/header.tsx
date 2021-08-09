@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
-import { HEADER_CSS_CLASS } from './header-constants';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { INDEX_ROUTE } from 'src/components/templates/index/index-routes';
 import { Nav } from 'react-bootstrap';
@@ -11,6 +10,7 @@ import { HamburguerMenuIcon } from '../../../ui-kit/components/icons/hamburguer-
 
 type Props = {
   menuHtmlId: string;
+  className: string;
 };
 
 export function Header(props: Props) {
@@ -40,7 +40,7 @@ export function Header(props: Props) {
 
   return (
     <>
-      <header className={`sticky-top border-bottom ${HEADER_CSS_CLASS}`}>
+      <header className={`border-bottom ${props.className}`}>
         <Navbar collapseOnSelect expand="lg" expanded={expanded}>
           <Navbar.Toggle
             onClick={() => {
