@@ -38,7 +38,7 @@ export function Page(props: Props) {
     <>
       <Helmet title={props.title} titleTemplate={siteTitle} />
       <span className="d-none">{`Build date: ${siteBuildDate}`}</span>
-      <div className="min-vh-100 d-flex flex-column">
+      <div className="min-vh-100 d-flex flex-column align-items-stretch">
         <Header menuHtmlId="page-header-menu" className="sticky-top" />
         <AuthenticatedRoute authenticationRules={props.authenticationRules}>
           {() => (
