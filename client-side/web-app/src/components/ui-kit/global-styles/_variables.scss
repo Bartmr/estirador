@@ -21,11 +21,11 @@ $default: null;
 $default-inverted: null;
 
 @if ($inverted-is-dark-mode) {
-  $default: darken($light, 5);
-  $default-inverted: lighten($dark, 5);
+  $default: $light;
+  $default-inverted: $dark;
 } @else {
-  $default: lighten($dark, 5);
-  $default-inverted: darken($light, 5);
+  $default: $dark;
+  $default-inverted: $light;
 }
 
 $theme-colors: (
