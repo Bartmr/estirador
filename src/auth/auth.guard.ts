@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
@@ -50,7 +49,7 @@ export class AuthGuard implements CanActivate {
         .validate(authTokenKeyFromCookie);
 
       if (authTokenKeyValidation.errors) {
-        throw new BadRequestException();
+        throw new UnauthorizedException();
       }
 
       const authTokenKey = authTokenKeyValidation.value;
