@@ -8,11 +8,11 @@
 
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
-    border-color: set-contrasting-color-alpha('body', 0.3);
+    border-color: set-contrasting-color-alpha($color, 0.3);
 
     &:hover,
     &:focus {
-      border-color: set-contrasting-color-alpha('body', 0.3);
+      border-color: set-contrasting-color-alpha($color, 0.3);
     }
 
     &:focus,
