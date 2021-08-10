@@ -26,7 +26,7 @@ export function Page(props: Props) {
           rel="stylesheet"
         />
       </Head>
-      <div className="min-vh-100 d-flex flex-column">
+      <div className="min-vh-100 d-flex flex-column align-items-stretch">
         <Header menuHtmlId="page-header-menu" className="sticky-top" />
         <AuthenticatedRoute authenticationRules={props.authenticationRules}>
           {() => (
