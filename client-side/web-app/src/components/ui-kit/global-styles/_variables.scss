@@ -217,6 +217,7 @@ $font-size-base: 1rem;
 
 $link-color: get-contrasting-color('primary');
 $link-hover-color: get-contrasting-color('primary-hover');
+$link-decoration: underline;
 
 $text-muted-opacity: 0.5;
 $text-muted: set-contrasting-color-alpha('body', $text-muted-opacity);
