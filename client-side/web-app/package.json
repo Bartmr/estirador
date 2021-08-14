@@ -66,10 +66,9 @@
     "typecheck": "tsc",
     "typecheck:declaration-files": "tsc -p tsconfig.declaration-files.json",
     "clean:declaration-files": "rimraf dist",
-    "eslint": "eslint . --ext .ts,.tsx --max-warnings 0",
+    "lint": "eslint --ext .ts,.tsx --max-warnings 0 .",
+    "lint:fix": "eslint --ext .ts,.tsx --max-warnings 0 --fix .",
     "lint:extra": "node scripts/extra-lint.js",
-    "lint": "npm run eslint -- --fix",
-    "lint:no-fix": "npm run eslint",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
     "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install"
   }
