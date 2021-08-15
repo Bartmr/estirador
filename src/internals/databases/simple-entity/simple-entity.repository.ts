@@ -12,13 +12,13 @@ import {
 import { SimpleEntity } from './simple.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 
+type AnyEntity = {
+  id: number | string;
+};
+
 type WhereObject<Entity extends SimpleEntity> = {
   [K in keyof Entity]?:
-    | (Entity[K] extends {
-        id: number | string;
-      }
-        ? Entity[K] | Entity[K]['id']
-        : never)
+    | (Entity[K] extends AnyEntity ? Entity[K]['id'] : never)
     | Entity[K]
     | FindOperator<Entity[K]>;
 };
