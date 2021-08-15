@@ -12,15 +12,16 @@ import {
 import { SimpleEntity } from './simple.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 
+type AnyEntity = {
+  id: number | string;
+};
+
 type WhereObject<Entity extends SimpleEntity> = {
-  [K in keyof Entity]?:
-    | (Entity[K] extends {
-        id: number | string;
-      }
-        ? Entity[K] | Entity[K]['id']
-        : never)
-    | Entity[K]
-    | FindOperator<Entity[K]>;
+  [K in keyof Entity]?: Entity[K] extends AnyEntity | AnyEntity[]
+    ? undefined
+    : Entity[K] extends Promise<AnyEntity> | Promise<AnyEntity[]>
+    ? undefined
+    : Entity[K] | FindOperator<Entity[K]>;
 };
 
 export type Where<Entity extends SimpleEntity> =
@@ -156,5 +157,9 @@ export abstract class SimpleEntityRepository<
     } else {
       await repository.remove(entity);
     }
+  }
+
+  createQueryBuilder(alias: string) {
+    return this.repository.createQueryBuilder(alias);
   }
 }
