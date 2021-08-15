@@ -8,6 +8,7 @@ import {
   DeepPartial,
   EntityManager,
   FindOperator,
+  SelectQueryBuilder,
 } from 'typeorm';
 import { SimpleEntity } from './simple.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
@@ -46,6 +47,8 @@ export interface FindOptions<Entity extends SimpleEntity>
   skip: number;
 }
 
+const FIND_LIMIT = 50;
+
 export abstract class SimpleEntityRepository<
   Entity extends SimpleEntity,
   FieldsOmittedBeforePersistence extends keyof Entity = never,
@@ -74,7 +77,7 @@ export abstract class SimpleEntityRepository<
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const limit = 50;
+    const limit = FIND_LIMIT;
     const results = await repository.findAndCount({
       ...query,
       take: limit,
@@ -82,8 +85,8 @@ export abstract class SimpleEntityRepository<
 
     return {
       limit,
-      total: results[1],
       rows: results[0],
+      total: results[1],
     };
   }
 
@@ -159,7 +162,32 @@ export abstract class SimpleEntityRepository<
     }
   }
 
-  createQueryBuilder(alias: string) {
-    return this.repository.createQueryBuilder(alias);
+  async getManyAndCount(
+    options: {
+      alias: string;
+      withDeleted?: boolean;
+      skip: number;
+    },
+    builderFn: (
+      queryBuilder: SelectQueryBuilder<Entity>,
+    ) => SelectQueryBuilder<Entity>,
+  ) {
+    const limit = FIND_LIMIT;
+
+    let queryBuilder = this.repository.createQueryBuilder(options.alias);
+
+    if (options.withDeleted) {
+      queryBuilder = queryBuilder.withDeleted();
+    }
+
+    queryBuilder = builderFn(queryBuilder).skip(options.skip).take(limit);
+
+    const results = await queryBuilder.getManyAndCount();
+
+    return {
+      limit,
+      rows: results[0],
+      total: results[1],
+    };
   }
 }
