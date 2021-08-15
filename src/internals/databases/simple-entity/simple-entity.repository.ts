@@ -158,4 +158,8 @@ export abstract class SimpleEntityRepository<
       await repository.remove(entity);
     }
   }
+
+  createQueryBuilder(alias: string) {
+    return this.repository.createQueryBuilder(alias);
+  }
 }
