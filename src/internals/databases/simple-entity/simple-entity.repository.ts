@@ -17,10 +17,11 @@ type AnyEntity = {
 };
 
 type WhereObject<Entity extends SimpleEntity> = {
-  [K in keyof Entity]?:
-    | (Entity[K] extends AnyEntity ? Entity[K]['id'] : never)
-    | Entity[K]
-    | FindOperator<Entity[K]>;
+  [K in keyof Entity]?: Entity[K] extends AnyEntity | AnyEntity[]
+    ? undefined
+    : Entity[K] extends Promise<AnyEntity> | Promise<AnyEntity[]>
+    ? undefined
+    : Entity[K] | FindOperator<Entity[K]>;
 };
 
 export type Where<Entity extends SimpleEntity> =
