@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { SimpleEntity } from './simple.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
+import { throwError } from 'src/internals/utils/throw-error';
 
 type AnyEntity = {
   id: number | string;
@@ -95,31 +96,51 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: Partial<{ manager?: EntityManager }>,
   ): Promise<Entity> {
+    const result = await this.createMany(
+      [entityLikeObject],
+      auditContext,
+      options,
+    );
+
+    return result[0] || throwError();
+  }
+
+  async createMany(
+    entityLikeObjects: Array<this['_EntityCreationAttributes']>,
+    auditContext: AuditContext,
+    options?: Partial<{ manager?: EntityManager }>,
+  ): Promise<Entity[]> {
     const repository = options?.manager
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const _entityLikeObject = {
-      ...entityLikeObject,
-    } as Partial<Entity>;
+    const toSave: DeepPartial<Entity>[] = [];
 
-    _entityLikeObject.id = generateUniqueUUID();
+    for (const entityLikeObject of entityLikeObjects) {
+      const _entityLikeObject = {
+        ...entityLikeObject,
+      } as Partial<Entity>;
 
-    const EntityClass = this.repository.target as ConcreteClass<
-      Partial<Entity>
-    >;
+      _entityLikeObject.id = generateUniqueUUID();
 
-    const entity = new EntityClass();
+      const EntityClass = this.repository.target as ConcreteClass<
+        Partial<Entity>
+      >;
 
-    for (const _k of Object.keys(_entityLikeObject)) {
-      const key = _k as keyof Partial<Entity>;
+      const entity = new EntityClass();
 
-      entity[key] = _entityLikeObject[key];
+      for (const _k of Object.keys(_entityLikeObject)) {
+        const key = _k as keyof Partial<Entity>;
+
+        entity[key] = _entityLikeObject[key];
+      }
+
+      toSave.push(entity as DeepPartial<Entity>);
     }
 
-    await repository.save(entity as DeepPartial<Entity>);
+    await repository.save(toSave);
 
-    return entity as Entity;
+    return toSave as unknown as Entity[];
   }
 
   async save(
@@ -127,17 +148,27 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: Partial<{ manager?: EntityManager }>,
   ): Promise<void> {
-    const EntityClass = this.repository.target as Class;
+    return this.saveMany([entity], auditContext, options);
+  }
 
-    if (!(entity instanceof EntityClass)) {
-      throw new Error();
-    }
-
+  async saveMany(
+    entities: Entity[],
+    auditContext: AuditContext,
+    options?: Partial<{ manager?: EntityManager }>,
+  ): Promise<void> {
     const repository = options?.manager
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    await repository.save(entity as unknown as DeepPartial<Entity>);
+    for (const entity of entities) {
+      const EntityClass = this.repository.target as Class;
+
+      if (!(entity instanceof EntityClass)) {
+        throw new Error();
+      }
+    }
+
+    await repository.save(entities as unknown as DeepPartial<Entity>[]);
   }
 
   async remove(
@@ -145,20 +176,30 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     manager?: EntityManager,
   ): Promise<void> {
-    const EntityClass = this.repository.target as Class;
+    return this.removeMany([entity], auditContext, manager);
+  }
 
-    if (!(entity instanceof EntityClass)) {
-      throw new Error();
-    }
-
+  async removeMany(
+    entities: Entity[],
+    auditContext: AuditContext,
+    manager?: EntityManager,
+  ): Promise<void> {
     const repository = manager
-      ? manager.getRepository<Entity>(EntityClass)
+      ? manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
+    for (const entity of entities) {
+      const EntityClass = this.repository.target as Class;
+
+      if (!(entity instanceof EntityClass)) {
+        throw new Error();
+      }
+    }
+
     if (this.repository.metadata.deleteDateColumn) {
-      await repository.softRemove(entity as unknown as DeepPartial<Entity>);
+      await repository.softRemove(entities as unknown as DeepPartial<Entity>[]);
     } else {
-      await repository.remove(entity);
+      await repository.remove(entities);
     }
   }
 

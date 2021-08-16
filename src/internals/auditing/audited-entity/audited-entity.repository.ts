@@ -4,6 +4,7 @@ import { DeepPartial, EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 import { ConcreteClass } from '@app/shared/internals/utils/types/classes-types';
+import { throwError } from 'src/internals/utils/throw-error';
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,
@@ -25,67 +26,91 @@ export abstract class AuditedEntityRepository<
     entity.archivedByUserId = auditContext.authContext?.user.id;
   }
 
-  private async archiveChange(
-    updatedEntity: Entity,
+  private async archiveChanges(
+    updatedEntities: Entity[],
     auditContext: AuditContext,
     manager: EntityManager,
   ): Promise<void> {
-    const entityDataClone = {
-      ...updatedEntity,
-    };
+    const toArchive: this['_EntityCreationAttributes'][] = [];
 
-    this.assignArchiveAttributesToEntity(entityDataClone, auditContext);
+    for (const updatedEntity of updatedEntities) {
+      const entityDataClone = {
+        ...updatedEntity,
+      };
 
-    await super.create(entityDataClone, auditContext, { manager });
+      this.assignArchiveAttributesToEntity(entityDataClone, auditContext);
+
+      toArchive.push(entityDataClone);
+    }
+
+    await super.createMany(toArchive, auditContext, { manager });
   }
 
   async create(
     entityLikeObject: this['_EntityCreationAttributes'],
     auditContext: AuditContext,
   ): Promise<Entity> {
+    const result = await this.createMany([entityLikeObject], auditContext);
+
+    return result[0] || throwError();
+  }
+
+  async createMany(
+    entityLikeObjects: Array<this['_EntityCreationAttributes']>,
+    auditContext: AuditContext,
+  ): Promise<Entity[]> {
     const run = async (manager: EntityManager) => {
       const repository = manager.getRepository<Entity>(this.repository.target);
 
-      const _entityLikeObject = {
-        ...entityLikeObject,
-      } as Partial<Entity>;
+      const toSave: DeepPartial<Entity>[] = [];
 
-      const id = generateUniqueUUID();
-      _entityLikeObject.id = id;
+      for (const entityLikeObject of entityLikeObjects) {
+        const _entityLikeObject = {
+          ...entityLikeObject,
+        } as Partial<Entity>;
 
-      /*
-        instanceId will always be unique
-        because it reuses the id that will be used as primary key
-      */
-      _entityLikeObject.instanceId = id;
+        const id = generateUniqueUUID();
+        _entityLikeObject.id = id;
 
-      delete _entityLikeObject.deletedAt;
-      delete _entityLikeObject.operationId;
-      delete _entityLikeObject.requestPath;
-      delete _entityLikeObject.requestMethod;
-      delete _entityLikeObject.processId;
-      delete _entityLikeObject.archivedByUserId;
+        /*
+          instanceId will always be unique
+          because it reuses the id that will be used as primary key
+        */
+        _entityLikeObject.instanceId = id;
 
-      const createdAt = new Date();
-      _entityLikeObject.createdAt = createdAt;
-      _entityLikeObject.updatedAt = createdAt;
+        delete _entityLikeObject.deletedAt;
+        delete _entityLikeObject.operationId;
+        delete _entityLikeObject.requestPath;
+        delete _entityLikeObject.requestMethod;
+        delete _entityLikeObject.processId;
+        delete _entityLikeObject.archivedByUserId;
 
-      const EntityClass = this.repository.target as ConcreteClass<
-        Partial<Entity>
-      >;
+        const createdAt = new Date();
+        _entityLikeObject.createdAt = createdAt;
+        _entityLikeObject.updatedAt = createdAt;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const _createdEntity = new EntityClass();
-      for (const _k of Object.keys(_entityLikeObject)) {
-        const key = _k as keyof Partial<Entity>;
+        const EntityClass = this.repository.target as ConcreteClass<
+          Partial<Entity>
+        >;
 
-        _createdEntity[key] = _entityLikeObject[key];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const _createdEntity = new EntityClass();
+        for (const _k of Object.keys(_entityLikeObject)) {
+          const key = _k as keyof Partial<Entity>;
+
+          _createdEntity[key] = _entityLikeObject[key];
+        }
+
+        toSave.push(_createdEntity as DeepPartial<Entity>);
       }
-      await repository.save(_createdEntity as DeepPartial<Entity>);
 
-      const createdEntity = _createdEntity as Entity;
-      await this.archiveChange(createdEntity, auditContext, manager);
-      return createdEntity;
+      await repository.save(toSave);
+
+      const createdEntities = toSave as Entity[];
+
+      await this.archiveChanges(createdEntities, auditContext, manager);
+
+      return createdEntities;
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {
@@ -96,12 +121,21 @@ export abstract class AuditedEntityRepository<
   }
 
   async save(entity: Entity, auditContext: AuditContext): Promise<void> {
+    return this.saveMany([entity], auditContext);
+  }
+
+  async saveMany(
+    entities: Entity[],
+    auditContext: AuditContext,
+  ): Promise<void> {
     const run = async (manager: EntityManager) => {
-      entity.updatedAt = new Date();
+      for (const entity of entities) {
+        entity.updatedAt = new Date();
+      }
 
-      await super.save(entity, auditContext, { manager });
+      await super.saveMany(entities, auditContext, { manager });
 
-      await this.archiveChange(entity, auditContext, manager);
+      await this.archiveChanges(entities, auditContext, manager);
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {
@@ -112,10 +146,19 @@ export abstract class AuditedEntityRepository<
   }
 
   async remove(entity: Entity, auditContext: AuditContext): Promise<void> {
-    const run = async (manager: EntityManager) => {
-      this.assignArchiveAttributesToEntity(entity, auditContext);
+    return this.removeMany([entity], auditContext);
+  }
 
-      await super.save(entity, auditContext, { manager });
+  async removeMany(
+    entities: Entity[],
+    auditContext: AuditContext,
+  ): Promise<void> {
+    const run = async (manager: EntityManager) => {
+      for (const entity of entities) {
+        this.assignArchiveAttributesToEntity(entity, auditContext);
+      }
+
+      await super.saveMany(entities, auditContext, { manager });
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {
