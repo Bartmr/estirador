@@ -1,9 +1,13 @@
 import { Locale } from 'date-fns';
 import enUSDateFnsLocale from 'date-fns/locale/en-US';
 import React, { ReactNode, useContext } from 'react';
+import {
+  TransportedData,
+  TransportedDataStatus,
+} from '../../transports/transported-data/transported-data-types';
 
 type DatesContextData = {
-  dateFnsLocale?: Locale;
+  dateFnsLocale: TransportedData<Locale>;
 };
 
 const DatesContext = React.createContext<null | DatesContextData>(null);
@@ -13,20 +17,25 @@ type DatesProviderProps = {
 };
 
 export function useDatesContext() {
-  const value = useContext(DatesContext);
+  const datesContext = useContext(DatesContext);
 
-  if (!value) {
+  if (!datesContext) {
     throw new Error();
   }
 
-  return {
-    dateFnsLocale: value.dateFnsLocale,
-  };
+  return datesContext;
 }
 
 export const DatesContextProvider = ({ children }: DatesProviderProps) => {
   return (
-    <DatesContext.Provider value={{ dateFnsLocale: enUSDateFnsLocale }}>
+    <DatesContext.Provider
+      value={{
+        dateFnsLocale: {
+          status: TransportedDataStatus.Done,
+          data: enUSDateFnsLocale,
+        },
+      }}
+    >
       {children}
     </DatesContext.Provider>
   );
