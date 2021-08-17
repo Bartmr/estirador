@@ -14,7 +14,11 @@ export function useFormatDate() {
       return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
     }
 
-    return format(date, dateFormat, { locale: dateFnsLocale });
+    if (!dateFnsLocale.data) {
+      return '---';
+    }
+
+    return format(date, dateFormat, { locale: dateFnsLocale.data });
   }
 
   return formatDate;

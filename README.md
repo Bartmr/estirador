@@ -29,8 +29,6 @@
 
 To update the project's boilerplate, just run `update-project-boilerplate.sh` and input the _Git_ repository URL of the boilerplate your project is based on. In this case `https://github.com/Bartmr/estirador.git`
 
-You can also use `force-update-project-boilerplate.sh` if you want previously rejected updates to appear again: this script will merge all the content from the boilerplate into the project without considering the _git_ commit history.
-
 ## How to extend Estirador and create a similar updatable boilerplate for my company?
 
 - Just create a new repository following the instructions above on how to setup a new project, and do the changes you need to accommodate your company's requirements. That's it. It is now your company's own _Estirador_. Now when you create a project from it, remember to input your company's boilerplate _git_ repository URL instead of the official _Estirador_ URL. Also remember to keep your company's own boilerplate updated with _Estirador_'s by running the same update script in your company's boilerplate, but targeted to _Estirador_'s repository URL.

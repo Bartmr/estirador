@@ -79,7 +79,7 @@ function makeJsonHttpRequest({
   return new Promise<JsonHttpResponse<JsonHttpResponseBase>>((resolve) => {
     const request = new XMLHttpRequest();
 
-    if (withCredentials) {
+    if (typeof withCredentials === 'boolean') {
       request.withCredentials = withCredentials;
     }
 

@@ -25,7 +25,7 @@ export class ExternalJSONApi {
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams;
+      query: SupportedRequestQueryParams | undefined;
     },
   ): Promise<JsonHttpResponse<I>> {
     const res = await this.jsonApi.get(params);
@@ -51,7 +51,7 @@ export class ExternalJSONApi {
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams;
+      query: SupportedRequestQueryParams | undefined;
       body: SupportedRequestBody;
     },
   ): Promise<JsonHttpResponse<I>> {
@@ -78,7 +78,7 @@ export class ExternalJSONApi {
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams;
+      query: SupportedRequestQueryParams | undefined;
       body: SupportedRequestBody;
     },
   ): Promise<JsonHttpResponse<I>> {
@@ -105,7 +105,7 @@ export class ExternalJSONApi {
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams;
+      query: SupportedRequestQueryParams | undefined;
       body: SupportedRequestBody;
     },
   ): Promise<JsonHttpResponse<I>> {
@@ -132,7 +132,7 @@ export class ExternalJSONApi {
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams;
+      query: SupportedRequestQueryParams | undefined;
     },
   ): Promise<JsonHttpResponse<I>> {
     const res = await this.jsonApi.delete(params);
@@ -152,7 +152,7 @@ export class ExternalJSONApi {
 
   async head(params: {
     path: string;
-    query: SupportedRequestQueryParams;
+    query: SupportedRequestQueryParams | undefined;
     acceptableStatusCodes: number[];
   }): Promise<JsonHttpHEADResponse> {
     return this.jsonApi.head(params);
