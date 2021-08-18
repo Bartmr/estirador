@@ -61,8 +61,8 @@ export function LinkAnchor(props: Props) {
     );
   } else {
     return (
-      <Link href={props.href} {...commonProps}>
-        {props.children}
+      <Link href={props.href} passHref>
+        <a {...commonProps}>{props.children}</a>
       </Link>
     );
   }
