@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { attachAuditContext } from 'src/internals/auditing/attach-audit-context';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
+import { isUUID } from 'src/internals/utils/is-uuid';
 import { AuthContext } from './auth-context';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { PUBLIC_ROUTE_METADATA_KEY } from './public-route.decorator';
@@ -19,6 +20,14 @@ import {
   RolePermissionType,
 } from './roles/roles.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
+
+const authTokenIdSchema = string().test((v) =>
+  v == undefined || isUUID(v) ? null : 'Invalid token',
+);
+
+const authTokenKeySchema = string()
+  .filled()
+  .test((v) => (isUUID(v) ? null : 'Invalid token'));
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -37,16 +46,24 @@ export class AuthGuard implements CanActivate {
       .switchToHttp()
       .getRequest<AppServerRequest>();
 
-    const authTokenId = request.header('authorization');
+    const authTokenIdValidationResult = authTokenIdSchema.validate(
+      request.header('authorization'),
+    );
+
+    if (authTokenIdValidationResult.errors) {
+      throw new UnauthorizedException();
+    }
+
+    const authTokenId = authTokenIdValidationResult.value;
 
     if (authTokenId) {
       const authTokenKeyFromCookie = (
         request.cookies as { [key: string]: unknown }
       )[AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE];
 
-      const authTokenKeyValidation = string()
-        .filled()
-        .validate(authTokenKeyFromCookie);
+      const authTokenKeyValidation = authTokenKeySchema.validate(
+        authTokenKeyFromCookie,
+      );
 
       if (authTokenKeyValidation.errors) {
         throw new UnauthorizedException();
