@@ -12,7 +12,7 @@ import { generateRandomUUID } from '../../internals/utils/generate-random-uuid';
 export class SignupVerificationTokensRepository extends AbstractRepository<SignupVerificationToken> {
   deleteExpired() {
     return this.repository.delete({
-      expires: LessThan(Date.now()),
+      expires: LessThan(new Date()),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
   }
@@ -48,7 +48,7 @@ export class SignupVerificationTokensRepository extends AbstractRepository<Signu
     return this.repository.findOne({
       where: {
         id,
-        expires: MoreThan(Date.now()),
+        expires: MoreThan(new Date()),
       },
     });
   }
@@ -57,7 +57,7 @@ export class SignupVerificationTokensRepository extends AbstractRepository<Signu
     return this.repository.findOne({
       where: {
         user,
-        expires: MoreThan(Date.now()),
+        expires: MoreThan(new Date()),
       },
     });
   }

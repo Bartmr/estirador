@@ -12,7 +12,7 @@ import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 export class AuthTokensRepository extends AbstractRepository<AuthToken> {
   deleteExpired() {
     return this.repository.delete({
-      expires: LessThan(Date.now()),
+      expires: LessThan(new Date()),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
   }
