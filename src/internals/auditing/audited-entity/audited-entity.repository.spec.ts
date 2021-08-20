@@ -37,45 +37,6 @@ afterAll(async () => {
 });
 
 describe('Audited Entity Repository', () => {
-  describe('Update', () => {
-    it('Should have created an archived version of the entity after an update', async () => {
-      const newDate = new Date();
-
-      const repository = connection.getCustomRepository(TestsRepository);
-
-      const auditContextMock = createAuditContextTestMock();
-
-      const entity = await repository.create(
-        {
-          propA: newDate,
-          propB: newDate,
-        },
-        auditContextMock.auditContext,
-      );
-
-      const result = await repository.find({
-        withDeleted: true,
-        where: { instanceId: entity.instanceId },
-        skip: 0,
-      });
-
-      expect(result.total).toEqual(2);
-
-      expect(result.rows.map((c) => c.toJSON())).toEqual([
-        {
-          ...entity,
-          ...auditContextMock.persisted.auditContextEntityProps,
-        },
-        {
-          ...entity,
-          ...auditContextMock.persisted.auditContextArchivedEntityProps,
-          id: expect.any(String) as unknown,
-          deletedAt: expect.any(Date) as unknown,
-        },
-      ]);
-    });
-  });
-
   describe('Create', () => {
     it('Should have created an archived version of the entity after creating it', async () => {
       const newDate = new Date();
@@ -96,8 +57,6 @@ describe('Audited Entity Repository', () => {
         where: { instanceId: entity.instanceId },
         skip: 0,
       });
-
-      expect(results.rows.length).toEqual(2);
 
       expect(results.rows.map((c) => c.toJSON())).toEqual([
         {
@@ -142,8 +101,6 @@ describe('Audited Entity Repository', () => {
         skip: 0,
       });
 
-      expect(results.rows.length).toEqual(2);
-
       expect(results.rows.map((c) => c.toJSON())).toEqual([
         {
           ...entity,
@@ -153,6 +110,11 @@ describe('Audited Entity Repository', () => {
           ...entity,
           propC: 2,
           ...auditContextMock.persisted.auditContextEntityProps,
+        },
+        {
+          ...entity,
+          propC: 2,
+          ...auditContextMock.persisted.auditContextArchivedEntityProps,
         },
       ]);
     });
