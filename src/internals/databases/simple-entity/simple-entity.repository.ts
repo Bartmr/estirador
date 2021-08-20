@@ -13,6 +13,7 @@ import {
 import { SimpleEntity } from './simple.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 import { throwError } from 'src/internals/utils/throw-error';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 type AnyEntity = {
   id: number | string;
@@ -174,18 +175,18 @@ export abstract class SimpleEntityRepository<
   async remove(
     entity: Entity,
     auditContext: AuditContext,
-    manager?: EntityManager,
+    options?: Partial<{ manager?: EntityManager }>,
   ): Promise<void> {
-    return this.removeMany([entity], auditContext, manager);
+    return this.removeMany([entity], auditContext, options);
   }
 
   async removeMany(
     entities: Entity[],
     auditContext: AuditContext,
-    manager?: EntityManager,
+    options?: Partial<{ manager?: EntityManager }>,
   ): Promise<void> {
-    const repository = manager
-      ? manager.getRepository<Entity>(this.repository.target)
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
     for (const entity of entities) {
@@ -230,5 +231,30 @@ export abstract class SimpleEntityRepository<
       rows: results[0],
       total: results[1],
     };
+  }
+
+  async incrementalUpdateById(
+    id: Entity['id'],
+    values: QueryDeepPartialEntity<Entity>,
+    auditContext: AuditContext,
+    options?: { manager?: EntityManager },
+  ): Promise<undefined | { [key: string]: unknown }> {
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    const result = await repository
+      .createQueryBuilder()
+      .update(this.repository.target)
+      .whereInIds([id])
+      .set(values)
+      .returning('*')
+      .execute();
+
+    const changedEntity = result.generatedMaps[0] as
+      | undefined
+      | { [key: string]: unknown };
+
+    return changedEntity;
   }
 }

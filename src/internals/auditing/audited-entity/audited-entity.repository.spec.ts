@@ -17,6 +17,9 @@ class TestEntityBase extends AuditedEntity {
 class TestEntity extends TestEntityBase {
   @Column({ default: () => 'now()' })
   propB!: Date;
+
+  @Column({ nullable: true })
+  propC?: number;
 }
 
 @EntityRepository(TestEntity)
@@ -104,6 +107,52 @@ describe('Audited Entity Repository', () => {
         {
           ...entity,
           ...auditContextMock.persisted.auditContextArchivedEntityProps,
+        },
+      ]);
+    });
+  });
+
+  describe('Incremental updates', () => {
+    it('Should increment the update and created an archived version of the entity after', async () => {
+      const newDate = new Date();
+      const repository = connection.getCustomRepository(TestsRepository);
+
+      const auditContextMock = createAuditContextTestMock();
+
+      const entity = await repository.create(
+        {
+          propA: newDate,
+          propB: newDate,
+          propC: 1,
+        },
+        auditContextMock.auditContext,
+      );
+
+      await repository.incrementalUpdateById(
+        entity.id,
+        {
+          propC: () => `"propC" + 1`,
+        },
+        auditContextMock.auditContext,
+      );
+
+      const results = await repository.find({
+        withDeleted: true,
+        where: { instanceId: entity.instanceId },
+        skip: 0,
+      });
+
+      expect(results.rows.length).toEqual(2);
+
+      expect(results.rows.map((c) => c.toJSON())).toEqual([
+        {
+          ...entity,
+          ...auditContextMock.persisted.auditContextArchivedEntityProps,
+        },
+        {
+          ...entity,
+          propC: 2,
+          ...auditContextMock.persisted.auditContextEntityProps,
         },
       ]);
     });

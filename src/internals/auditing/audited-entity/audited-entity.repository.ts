@@ -5,6 +5,7 @@ import { AuditedEntity } from './audited.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 import { ConcreteClass } from '@app/shared/internals/utils/types/classes-types';
 import { throwError } from 'src/internals/utils/throw-error';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,
@@ -159,6 +160,37 @@ export abstract class AuditedEntityRepository<
       }
 
       await super.saveMany(entities, auditContext, { manager });
+    };
+
+    if (this.manager.queryRunner?.isTransactionActive) {
+      return run(this.manager);
+    } else {
+      return this.manager.transaction(run);
+    }
+  }
+
+  async incrementalUpdateById(
+    id: Entity['id'],
+    values: QueryDeepPartialEntity<Entity>,
+    auditContext: AuditContext,
+  ): Promise<undefined | { [key: string]: unknown }> {
+    const run = async (manager: EntityManager) => {
+      const changedEntity = await super.incrementalUpdateById(
+        id,
+        values,
+        auditContext,
+        { manager },
+      );
+
+      if (changedEntity) {
+        await this.archiveChanges(
+          [changedEntity as unknown as Entity],
+          auditContext,
+          manager,
+        );
+      }
+
+      return changedEntity;
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {
