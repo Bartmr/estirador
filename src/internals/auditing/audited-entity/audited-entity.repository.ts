@@ -169,28 +169,15 @@ export abstract class AuditedEntityRepository<
     }
   }
 
-  async incrementalUpdateById(
-    id: Entity['id'],
+  async incrementalUpdate(
+    entity: Entity,
     values: QueryDeepPartialEntity<Entity>,
     auditContext: AuditContext,
-  ): Promise<undefined | { [key: string]: unknown }> {
+  ): Promise<void> {
     const run = async (manager: EntityManager) => {
-      const changedEntity = await super.incrementalUpdateById(
-        id,
-        values,
-        auditContext,
-        { manager },
-      );
+      await super.incrementalUpdate(entity, values, auditContext, { manager });
 
-      if (changedEntity) {
-        await this.archiveChanges(
-          [changedEntity as unknown as Entity],
-          auditContext,
-          manager,
-        );
-      }
-
-      return changedEntity;
+      await this.archiveChanges([entity], auditContext, manager);
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {
