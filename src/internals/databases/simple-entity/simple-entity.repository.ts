@@ -251,9 +251,9 @@ export abstract class SimpleEntityRepository<
       .returning('*')
       .execute();
 
-    const changedEntity = result.generatedMaps[0] as
-      | undefined
-      | { [key: string]: unknown };
+    const rawResults = result.raw as Array<{ [key: string]: unknown }>;
+
+    const changedEntity = rawResults[0];
 
     return changedEntity;
   }
