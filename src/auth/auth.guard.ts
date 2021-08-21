@@ -1,3 +1,4 @@
+import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
 import {
   CanActivate,
   ExecutionContext,
@@ -6,10 +7,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { string } from 'not-me/lib/schemas/string/string-schema';
 import { attachAuditContext } from 'src/internals/auditing/attach-audit-context';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
-import { isUUID } from 'src/internals/utils/is-uuid';
 import { AuthContext } from './auth-context';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { PUBLIC_ROUTE_METADATA_KEY } from './public-route.decorator';
@@ -21,13 +20,9 @@ import {
 } from './roles/roles.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 
-const authTokenIdSchema = string().test((v) =>
-  v == undefined || isUUID(v) ? null : 'Invalid token',
-);
+const authTokenIdSchema = uuid('Invalid token').required();
 
-const authTokenKeySchema = string()
-  .filled()
-  .test((v) => (isUUID(v) ? null : 'Invalid token'));
+const authTokenKeySchema = uuid('Invalid token').required();
 
 @Injectable()
 export class AuthGuard implements CanActivate {
