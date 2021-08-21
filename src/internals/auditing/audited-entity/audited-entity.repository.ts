@@ -186,4 +186,24 @@ export abstract class AuditedEntityRepository<
       return this.manager.transaction(run);
     }
   }
+
+  async incrementalUpdateForMany(
+    entities: Entity[],
+    values: QueryDeepPartialEntity<Entity>,
+    auditContext: AuditContext,
+  ): Promise<void> {
+    const run = async (manager: EntityManager) => {
+      await super.incrementalUpdateForMany(entities, values, auditContext, {
+        manager,
+      });
+
+      await this.archiveChanges(entities, auditContext, manager);
+    };
+
+    if (this.manager.queryRunner?.isTransactionActive) {
+      return run(this.manager);
+    } else {
+      return this.manager.transaction(run);
+    }
+  }
 }
