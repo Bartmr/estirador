@@ -1,6 +1,1 @@
-// eslint-disable-next-line node/no-restricted-import
-import { v1 } from 'uuid';
-
-export function generateUniqueUUID(): string {
-  return v1();
-}
+export * from '@app/shared/internals/utils/uuid/generate-unique-uuid';
