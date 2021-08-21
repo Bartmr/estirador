@@ -245,8 +245,28 @@ export abstract class SimpleEntityRepository<
 
     await repository
       .createQueryBuilder()
-      .update(this.repository.target, values)
+      .update(this.repository.target)
+      .set(values)
       .whereEntity(entity)
+      .returning('*')
+      .execute();
+  }
+
+  async incrementalUpdateForMany(
+    entities: Entity[],
+    values: QueryDeepPartialEntity<Entity>,
+    auditContext: AuditContext,
+    options?: { manager?: EntityManager },
+  ): Promise<void> {
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    await repository
+      .createQueryBuilder()
+      .update(this.repository.target)
+      .set(values)
+      .whereEntity(entities)
       .returning('*')
       .execute();
   }
