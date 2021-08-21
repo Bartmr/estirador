@@ -87,8 +87,12 @@ describe('Audited Entity Repository', () => {
         auditContextMock.auditContext,
       );
 
-      await repository.incrementalUpdateById(
-        entity.id,
+      const entityBeforeUpdate = {
+        ...entity,
+      };
+
+      await repository.incrementalUpdate(
+        entity,
         {
           propC: () => `"propC" + 1`,
         },
@@ -101,18 +105,22 @@ describe('Audited Entity Repository', () => {
         skip: 0,
       });
 
+      // Updated entity should be mutated
+      expect(entity.propC).toBe(2);
+
       expect(results.rows.map((c) => c.toJSON())).toEqual([
         {
-          ...entity,
+          ...entityBeforeUpdate,
           ...auditContextMock.persisted.auditContextArchivedEntityProps,
         },
+
         {
-          ...entity,
+          ...entityBeforeUpdate,
           propC: 2,
           ...auditContextMock.persisted.auditContextEntityProps,
         },
         {
-          ...entity,
+          ...entityBeforeUpdate,
           propC: 2,
           ...auditContextMock.persisted.auditContextArchivedEntityProps,
         },

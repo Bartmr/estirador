@@ -233,28 +233,21 @@ export abstract class SimpleEntityRepository<
     };
   }
 
-  async incrementalUpdateById(
-    id: Entity['id'],
+  async incrementalUpdate(
+    entity: Entity,
     values: QueryDeepPartialEntity<Entity>,
     auditContext: AuditContext,
     options?: { manager?: EntityManager },
-  ): Promise<undefined | { [key: string]: unknown }> {
+  ): Promise<void> {
     const repository = options?.manager
       ? options.manager.getRepository<Entity>(this.repository.target)
       : this.repository;
 
-    const result = await repository
+    await repository
       .createQueryBuilder()
-      .update(this.repository.target)
-      .whereInIds([id])
-      .set(values)
+      .update(this.repository.target, values)
+      .whereEntity(entity)
       .returning('*')
       .execute();
-
-    const rawResults = result.raw as Array<{ [key: string]: unknown }>;
-
-    const changedEntity = rawResults[0];
-
-    return changedEntity;
   }
 }
