@@ -1,6 +1,7 @@
 import {
   Column,
   Connection,
+  DeleteDateColumn,
   Entity,
   EntityRepository,
   UpdateDateColumn,
@@ -22,6 +23,9 @@ class TestEntity extends SimpleEntity {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @DeleteDateColumn()
+  someUnpredictableDeletedAtProp?: Date;
 }
 
 @EntityRepository(TestEntity)
@@ -30,10 +34,38 @@ class TestEntityRepository extends SimpleEntityRepository<
   'updatedAt'
 > {}
 
+/* --- */
+/* --- */
+
+const TEST_ENTITY_WITHOUT_DELETE_DATE_COLUMN_TABLE_NAME =
+  'simple_entity_spec_no_delete_date';
+
+@Entity(TEST_ENTITY_WITHOUT_DELETE_DATE_COLUMN_TABLE_NAME)
+class TestEntityWithoutDeleteDateColumn extends SimpleEntity {
+  @Column('uuid')
+  propA!: string;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
+}
+
+@EntityRepository(TestEntityWithoutDeleteDateColumn)
+class TestEntityWithoutDeleteDateColumnRepository extends SimpleEntityRepository<
+  TestEntityWithoutDeleteDateColumn,
+  'updatedAt'
+> {}
+
 beforeAll(async () => {
-  connection = await getDatabaseConnection([TestEntity]);
+  connection = await getDatabaseConnection([
+    TestEntity,
+    TestEntityWithoutDeleteDateColumn,
+  ]);
 
   await connection.query(`DROP TABLE IF EXISTS ${TEST_TABLE_NAME}`);
+  await connection.query(
+    `DROP TABLE IF EXISTS ${TEST_ENTITY_WITHOUT_DELETE_DATE_COLUMN_TABLE_NAME}`,
+  );
+
   await connection.synchronize();
 });
 
@@ -87,6 +119,54 @@ describe('Simple Entity Repository', () => {
       expect(JSON.stringify(oldDate)).not.toBe(
         JSON.stringify(entity.updatedAt),
       );
+    });
+  });
+
+  describe('remove', () => {
+    it('Should soft delete entities with @DeleteDateColumn', async () => {
+      const repository = connection.getCustomRepository(TestEntityRepository);
+      const auditContextMock = createAuditContextTestMock();
+
+      const entity = await repository.create(
+        {
+          propA: generateUniqueUUID(),
+        },
+        auditContextMock.auditContext,
+      );
+
+      await repository.remove(entity, auditContextMock.auditContext);
+
+      const deletedEntity = await repository.findOne({
+        where: { id: entity.id },
+        withDeleted: true,
+      });
+
+      expect(deletedEntity?.someUnpredictableDeletedAtProp).toEqual(
+        expect.any(Date),
+      );
+    });
+
+    it('Should actually delete from database entities without @DeleteDateColumn', async () => {
+      const repository = connection.getCustomRepository(
+        TestEntityWithoutDeleteDateColumnRepository,
+      );
+      const auditContextMock = createAuditContextTestMock();
+
+      const entity = await repository.create(
+        {
+          propA: generateUniqueUUID(),
+        },
+        auditContextMock.auditContext,
+      );
+
+      await repository.remove(entity, auditContextMock.auditContext);
+
+      const deletedEntity = await repository.findOne({
+        where: { id: entity.id },
+        withDeleted: true,
+      });
+
+      expect(deletedEntity).toBe(undefined);
     });
   });
 });
