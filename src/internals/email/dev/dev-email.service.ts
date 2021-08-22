@@ -23,8 +23,6 @@ export class DevEmailService extends EmailService {
   }
 
   async sendEmail(email: Email): Promise<void> {
-    const emailFileName = `${generateRandomUUID()}.html`;
-
     const emailsDirectoryPath = path.join(
       LOCAL_TEMPORARY_FILES_PATH,
       'dev-email',
@@ -32,6 +30,7 @@ export class DevEmailService extends EmailService {
 
     await mkDir(emailsDirectoryPath, { recursive: true });
 
+    const emailFileName = `${generateRandomUUID()}.html`;
     const emailPath = path.join(emailsDirectoryPath, emailFileName);
 
     await writeFile(emailPath, this.renderEmail(email), { encoding: 'utf8' });
@@ -51,7 +50,6 @@ being served from http://localhost:${port}/tmp/dev-email/${emailFileName}`,
         ...email,
         // Already rendered and saved in temporary files
         body: undefined,
-        emailPath,
       },
     );
   }
