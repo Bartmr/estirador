@@ -133,6 +133,7 @@ export class UsersService
   async sendVerificationLinkEmail(to: string, verificationLink: string) {
     await this.emailService.sendEmail({
       to,
+      subject: 'Verify your account',
       body: `
 <p>Click or copy this link to verify your newly created account: <a href="${verificationLink}" target="_blank">${verificationLink}</a></p>
 `,
