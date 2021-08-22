@@ -175,6 +175,9 @@ export abstract class AuditedEntityRepository<
     auditContext: AuditContext,
   ): Promise<void> {
     const run = async (manager: EntityManager) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      values.updatedAt = new Date() as any;
+
       await super.incrementalUpdate(entity, values, auditContext, { manager });
 
       await this.archiveChanges([entity], auditContext, manager);
@@ -193,6 +196,9 @@ export abstract class AuditedEntityRepository<
     auditContext: AuditContext,
   ): Promise<void> {
     const run = async (manager: EntityManager) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      values.updatedAt = new Date() as any;
+
       await super.incrementalUpdateForMany(entities, values, auditContext, {
         manager,
       });

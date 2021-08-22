@@ -23,7 +23,7 @@ class TestEntity extends TestEntityBase {
 }
 
 @EntityRepository(TestEntity)
-class TestsRepository extends AuditedEntityRepository<TestEntity> {}
+class TestEntityRepository extends AuditedEntityRepository<TestEntity> {}
 
 beforeAll(async () => {
   connection = await getDatabaseConnection([TestEntity]);
@@ -40,7 +40,7 @@ describe('Audited Entity Repository', () => {
   describe('Create', () => {
     it('Should have created an archived version of the entity after creating it', async () => {
       const newDate = new Date();
-      const repository = connection.getCustomRepository(TestsRepository);
+      const repository = connection.getCustomRepository(TestEntityRepository);
 
       const auditContextMock = createAuditContextTestMock();
 
@@ -71,10 +71,10 @@ describe('Audited Entity Repository', () => {
     });
   });
 
-  describe('Incremental updates', () => {
+  describe('incrementalUpdated', () => {
     it('Should increment the update and created an archived version of the entity after', async () => {
       const newDate = new Date();
-      const repository = connection.getCustomRepository(TestsRepository);
+      const repository = connection.getCustomRepository(TestEntityRepository);
 
       const auditContextMock = createAuditContextTestMock();
 
@@ -112,19 +112,80 @@ describe('Audited Entity Repository', () => {
         {
           ...entityBeforeUpdate,
           ...auditContextMock.persisted.auditContextArchivedEntityProps,
+          updatedAt: expect.any(Date) as unknown,
         },
 
         {
           ...entityBeforeUpdate,
           propC: 2,
           ...auditContextMock.persisted.auditContextEntityProps,
+          updatedAt: expect.any(Date) as unknown,
         },
         {
           ...entityBeforeUpdate,
           propC: 2,
           ...auditContextMock.persisted.auditContextArchivedEntityProps,
+          updatedAt: expect.any(Date) as unknown,
         },
       ]);
+    });
+
+    it('Should change updatedAt when updating', async () => {
+      const repository = connection.getCustomRepository(TestEntityRepository);
+      const auditContextMock = createAuditContextTestMock();
+
+      const entity = await repository.create(
+        {
+          propA: new Date(),
+          propB: new Date(),
+          propC: 1,
+        },
+        auditContextMock.auditContext,
+      );
+
+      const oldDate = entity.updatedAt;
+
+      await repository.incrementalUpdate(
+        entity,
+        {
+          propA: new Date(),
+        },
+        auditContextMock.auditContext,
+      );
+
+      expect(JSON.stringify(oldDate)).not.toBe(
+        JSON.stringify(entity.updatedAt),
+      );
+    });
+  });
+
+  describe('incrementalUpdatedForMany', () => {
+    it('Should change updatedAt when updating', async () => {
+      const repository = connection.getCustomRepository(TestEntityRepository);
+      const auditContextMock = createAuditContextTestMock();
+
+      const entity = await repository.create(
+        {
+          propA: new Date(),
+          propB: new Date(),
+          propC: 1,
+        },
+        auditContextMock.auditContext,
+      );
+
+      const oldDate = entity.updatedAt;
+
+      await repository.incrementalUpdateForMany(
+        [entity],
+        {
+          propA: new Date(),
+        },
+        auditContextMock.auditContext,
+      );
+
+      expect(JSON.stringify(oldDate)).not.toBe(
+        JSON.stringify(entity.updatedAt),
+      );
     });
   });
 });

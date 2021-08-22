@@ -1,7 +1,15 @@
-import { Column, Connection, Entity } from 'typeorm';
+import {
+  Column,
+  Connection,
+  Entity,
+  EntityRepository,
+  UpdateDateColumn,
+} from 'typeorm';
 import { getDatabaseConnection } from '../../databases/spec/databases-test-utils';
 import { SimpleEntity } from './simple.entity';
 import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
+import { SimpleEntityRepository } from './simple-entity.repository';
+import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-test-audit-context';
 
 const TEST_TABLE_NAME = 'simple_entity_spec';
 
@@ -11,7 +19,16 @@ let connection: Connection;
 class TestEntity extends SimpleEntity {
   @Column('uuid')
   propA!: string;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
+
+@EntityRepository(TestEntity)
+class TestEntityRepository extends SimpleEntityRepository<
+  TestEntity,
+  'updatedAt'
+> {}
 
 beforeAll(async () => {
   connection = await getDatabaseConnection([TestEntity]);
@@ -43,5 +60,33 @@ describe('Simple Entity Repository', () => {
     const entityReturnedFromUpdate = await repository.save(entity);
 
     expect(entity).toBe(entityReturnedFromUpdate);
+  });
+
+  describe('incrementalUpdate', () => {
+    it('Should change updatedAt when updating', async () => {
+      const repository = connection.getCustomRepository(TestEntityRepository);
+      const auditContextMock = createAuditContextTestMock();
+
+      const entity = await repository.create(
+        {
+          propA: generateUniqueUUID(),
+        },
+        auditContextMock.auditContext,
+      );
+
+      const oldDate = entity.updatedAt;
+
+      await repository.incrementalUpdate(
+        entity,
+        {
+          propA: generateUniqueUUID(),
+        },
+        auditContextMock.auditContext,
+      );
+
+      expect(JSON.stringify(oldDate)).not.toBe(
+        JSON.stringify(entity.updatedAt),
+      );
+    });
   });
 });
