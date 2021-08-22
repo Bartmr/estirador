@@ -71,7 +71,7 @@ describe('Audited Entity Repository', () => {
     });
   });
 
-  describe('incrementalUpdated', () => {
+  describe('incrementalUpdate', () => {
     it('Should increment the update and created an archived version of the entity after', async () => {
       const newDate = new Date();
       const repository = connection.getCustomRepository(TestEntityRepository);
@@ -147,36 +147,6 @@ describe('Audited Entity Repository', () => {
 
       await repository.incrementalUpdate(
         entity,
-        {
-          propA: new Date(),
-        },
-        auditContextMock.auditContext,
-      );
-
-      expect(JSON.stringify(oldDate)).not.toBe(
-        JSON.stringify(entity.updatedAt),
-      );
-    });
-  });
-
-  describe('incrementalUpdatedForMany', () => {
-    it('Should change updatedAt when updating', async () => {
-      const repository = connection.getCustomRepository(TestEntityRepository);
-      const auditContextMock = createAuditContextTestMock();
-
-      const entity = await repository.create(
-        {
-          propA: new Date(),
-          propB: new Date(),
-          propC: 1,
-        },
-        auditContextMock.auditContext,
-      );
-
-      const oldDate = entity.updatedAt;
-
-      await repository.incrementalUpdateForMany(
-        [entity],
         {
           propA: new Date(),
         },

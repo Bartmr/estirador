@@ -4,7 +4,6 @@ import { DeepPartial, EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 import { ConcreteClass } from '@app/shared/internals/utils/types/classes-types';
-import { throwError } from 'src/internals/utils/throw-error';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class AuditedEntityRepository<
@@ -45,15 +44,6 @@ export abstract class AuditedEntityRepository<
     }
 
     await super.createMany(toArchive, auditContext, { manager });
-  }
-
-  async create(
-    entityLikeObject: this['_EntityCreationAttributes'],
-    auditContext: AuditContext,
-  ): Promise<Entity> {
-    const result = await this.createMany([entityLikeObject], auditContext);
-
-    return result[0] || throwError();
   }
 
   async createMany(
@@ -121,10 +111,6 @@ export abstract class AuditedEntityRepository<
     }
   }
 
-  async save(entity: Entity, auditContext: AuditContext): Promise<void> {
-    return this.saveMany([entity], auditContext);
-  }
-
   async saveMany(
     entities: Entity[],
     auditContext: AuditContext,
@@ -146,10 +132,6 @@ export abstract class AuditedEntityRepository<
     }
   }
 
-  async remove(entity: Entity, auditContext: AuditContext): Promise<void> {
-    return this.removeMany([entity], auditContext);
-  }
-
   async removeMany(
     entities: Entity[],
     auditContext: AuditContext,
@@ -160,27 +142,6 @@ export abstract class AuditedEntityRepository<
       }
 
       await super.saveMany(entities, auditContext, { manager });
-    };
-
-    if (this.manager.queryRunner?.isTransactionActive) {
-      return run(this.manager);
-    } else {
-      return this.manager.transaction(run);
-    }
-  }
-
-  async incrementalUpdate(
-    entity: Entity,
-    values: QueryDeepPartialEntity<Entity>,
-    auditContext: AuditContext,
-  ): Promise<void> {
-    const run = async (manager: EntityManager) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-      values.updatedAt = new Date() as any;
-
-      await super.incrementalUpdate(entity, values, auditContext, { manager });
-
-      await this.archiveChanges([entity], auditContext, manager);
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {

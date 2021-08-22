@@ -239,17 +239,12 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: { manager?: EntityManager },
   ): Promise<void> {
-    const repository = options?.manager
-      ? options.manager.getRepository<Entity>(this.repository.target)
-      : this.repository;
-
-    await repository
-      .createQueryBuilder()
-      .update(this.repository.target)
-      .set(values)
-      .whereEntity(entity)
-      .returning('*')
-      .execute();
+    return this.incrementalUpdateForMany(
+      [entity],
+      values,
+      auditContext,
+      options,
+    );
   }
 
   async incrementalUpdateForMany(
