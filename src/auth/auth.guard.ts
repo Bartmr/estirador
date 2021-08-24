@@ -20,7 +20,7 @@ import {
 } from './roles/roles.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 
-const authTokenIdSchema = uuid('Invalid token').required();
+const authTokenIdSchema = uuid('Invalid token');
 
 const authTokenKeySchema = uuid('Invalid token').required();
 
