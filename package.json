@@ -70,7 +70,7 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
     "glob": "^7.1.7",
-    "not-me": "^4.0.2",
+    "not-me": "^4.0.3",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
