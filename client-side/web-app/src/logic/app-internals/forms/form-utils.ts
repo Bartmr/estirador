@@ -1,7 +1,7 @@
 import { FieldError, FieldPath, UseFormReturn } from 'react-hook-form';
 import get from 'lodash/get';
 
-type FormValueBase = { [key: string]: unknown };
+type FormValueBase = {};
 
 type FormUtils<FormValue extends FormValueBase> = {
   getErrorFromField: (path: FieldPath<FormValue>) => FieldError | undefined;
