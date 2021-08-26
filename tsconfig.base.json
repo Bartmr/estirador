@@ -20,7 +20,7 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@app/shared/*": ["libs/shared/src/*"]
+      "@app/shared*": ["libs/shared/src*"]
     }
   }
 }
