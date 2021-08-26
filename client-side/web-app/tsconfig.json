@@ -2,8 +2,8 @@
   "include": ["src", "type-declarations"],
   "compilerOptions": {
     "paths": {
-      "@config/*": ["__config.debug/*"],
-      "@app/shared/*": ["../../libs/shared/src/*"]
+      "@config*": ["__config.debug*"],
+      "@app/shared*": ["../../libs/shared/src*"]
     },
     "noEmit": true,
     "skipLibCheck": true,
