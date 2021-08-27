@@ -1,0 +1,43 @@
+.valid-feedback {
+  color: get-contrasting-color('success');
+}
+
+.invalid-feedback {
+  color: get-contrasting-color('danger');
+}
+
+.form-control {
+  @include form-validation-state-selector('valid') {
+    border-color: get-contrasting-color('success');
+
+    &:focus {
+      border-color: get-contrasting-color('success');
+      box-shadow: 0 0 0 $input-focus-width
+        set-contrasting-color-alpha('success', 0.25);
+    }
+  }
+
+  @include form-validation-state-selector('invalid') {
+    border-color: get-contrasting-color('danger');
+
+    &:focus {
+      border-color: get-contrasting-color('danger');
+      box-shadow: 0 0 0 $input-focus-width
+        set-contrasting-color-alpha('danger', 0.25);
+    }
+  }
+}
+
+.form-check-input {
+  @include form-validation-state-selector('valid') {
+    ~ .form-check-label {
+      color: get-contrasting-color('success');
+    }
+  }
+
+  @include form-validation-state-selector('invalid') {
+    ~ .form-check-label {
+      color: get-contrasting-color('danger');
+    }
+  }
+}

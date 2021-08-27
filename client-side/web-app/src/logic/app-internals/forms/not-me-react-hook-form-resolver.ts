@@ -3,9 +3,7 @@ import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-t
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import { FieldError, FieldErrors, ResolverResult } from 'react-hook-form';
 
-type FormValueBase = {
-  [key: string]: unknown;
-};
+type FormValueBase = {};
 
 type ErrorMessagesTreeObject = { [key: string]: AnyErrorMessagesTree };
 
