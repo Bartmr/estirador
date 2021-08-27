@@ -1,3 +1,14 @@
+const packageRestrictionRuleConfig = [
+  'error',
+  [
+    {
+      name: '@hookform/devtools',
+      message:
+        'It should only be used during development, or else it will end up in the production bundle',
+    },
+  ],
+];
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -141,5 +152,7 @@ module.exports = {
           'Use the session storage instance returned by the useSessionStorage hook at client-side/web-app/src/logic/app-internals/transports/use-session-storage',
       },
     ],
+    'node/no-restricted-import': packageRestrictionRuleConfig,
+    'node/no-restricted-require': packageRestrictionRuleConfig,
   },
 };
