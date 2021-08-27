@@ -1,0 +1,27 @@
+.valid-feedback {
+  color: get-contrasting-color('success');
+}
+
+.invalid-feedback {
+  color: get-contrasting-color('danger');
+}
+
+.form-control {
+  @include form-validation-state-selector('valid') {
+    border-color: get-contrasting-color('success');
+
+    &:focus {
+      box-shadow: 0 0 0 $input-focus-width
+        set-contrasting-color-alpha('success', 0.25);
+    }
+  }
+
+  @include form-validation-state-selector('invalid') {
+    border-color: get-contrasting-color('danger');
+
+    &:focus {
+      box-shadow: 0 0 0 $input-focus-width
+        set-contrasting-color-alpha('danger', 0.25);
+    }
+  }
+}
