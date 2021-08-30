@@ -153,7 +153,7 @@ exports.onPreBuild = async ({ store }) => {
 
     console.info('--- Type-checking code and configuration values...');
 
-    const TYPESCRIPT_TYPE_CHECK_COMMAND = `tsc --p tsconfig.${currentBuildVariant}.json`;
+    const TYPESCRIPT_TYPE_CHECK_COMMAND = `tsc -p tsconfig.${currentBuildVariant}.json`;
 
     await exec(TYPESCRIPT_TYPE_CHECK_COMMAND);
   } catch (error) {
