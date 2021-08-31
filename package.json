@@ -54,7 +54,6 @@
     "integrity-check:all": "concurrently \"npm run integrity-check:api\" \"npm run integrity-check:web-app\" -n \"api,web-app\" --no-color",
     "precommit": "lint-staged && npm run integrity-check:all",
     "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install",
-    "list-deprecated-dependencies": "./scripts-dev/list-deprecated-dependencies.sh",
     "reset-repository": "git clean -Xdf",
     "nest": "nest",
     "typeorm": "npm run ts-node ./node_modules/.bin/typeorm",
