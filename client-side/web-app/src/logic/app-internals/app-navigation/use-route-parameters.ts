@@ -1,10 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { SerializableJSONValue } from '../transports/json-types';
 import { useParams } from '@reach/router';
 import { useAppNavigation } from './use-app-navigation';
 import { Logger } from '../logging/logger';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { RUNNING_IN_SERVER } from '../runtime/running-in';
 
 type SupportedRouteParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;
@@ -13,9 +12,6 @@ type SupportedRouteParametersSchema = Schema<{
 export function useRouteParameters<
   RouteParametersSchema extends SupportedRouteParametersSchema,
 >(schema: RouteParametersSchema) {
-  const unparsedParameters = useParams() as unknown;
-  const appNavigation = useAppNavigation();
-
   type RouteParameters = InferType<RouteParametersSchema>;
 
   type RouteParametersResult = Readonly<
@@ -23,6 +19,12 @@ export function useRouteParameters<
     | { isServerSide: false; invalid: true }
     | { isServerSide: false; invalid: false; data: Readonly<RouteParameters> }
   >;
+
+  const [routeParameters, replaceRouteParameters] =
+    useState<RouteParametersResult>({ isServerSide: true });
+
+  const unparsedParameters = useParams() as unknown;
+  const appNavigation = useAppNavigation();
 
   const parse = (): RouteParametersResult => {
     const result = schema.validate(unparsedParameters || {});
@@ -42,12 +44,8 @@ export function useRouteParameters<
     }
   };
 
-  const routeParameters = useMemo((): RouteParametersResult => {
-    if (RUNNING_IN_SERVER) {
-      return { isServerSide: true };
-    } else {
-      return parse();
-    }
+  useEffect(() => {
+    replaceRouteParameters(parse());
   }, [appNavigation.currentHref, schema]);
 
   return routeParameters;

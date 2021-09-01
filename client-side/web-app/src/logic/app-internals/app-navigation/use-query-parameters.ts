@@ -1,9 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { SerializableJSONValue } from '../transports/json-types';
 import { useLocation } from '@reach/router';
 import { Logger } from '../logging/logger';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { RUNNING_IN_SERVER } from '../runtime/running-in';
 
 type SupportedQueryParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;
@@ -19,6 +18,9 @@ export function useQueryParameters<
     | { isServerSide: false; invalid: true }
     | { isServerSide: false; invalid: false; data: Readonly<QueryParameters> }
   >;
+
+  const [queryParameters, replaceQueryParameters] =
+    useState<QueryParametersResult>({ isServerSide: true });
 
   const location = useLocation();
 
@@ -48,12 +50,8 @@ export function useQueryParameters<
     }
   };
 
-  const queryParameters = useMemo((): QueryParametersResult => {
-    if (RUNNING_IN_SERVER) {
-      return { isServerSide: true };
-    } else {
-      return parse();
-    }
+  useEffect(() => {
+    replaceQueryParameters(parse());
   }, [location.search, schema]);
 
   return queryParameters;
