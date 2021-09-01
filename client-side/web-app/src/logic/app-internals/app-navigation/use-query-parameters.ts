@@ -14,8 +14,7 @@ export function useQueryParameters<
   type QueryParameters = InferType<QueryParametersSchema>;
 
   type QueryParametersResult = Readonly<
-    | { invalid: true }
-    | { invalid: false; queryParameters: Readonly<QueryParameters> }
+    { invalid: true } | { invalid: false; data: Readonly<QueryParameters> }
   >;
 
   const location = useLocation();
@@ -39,7 +38,7 @@ export function useQueryParameters<
     } else {
       return {
         invalid: false,
-        queryParameters: result.value as QueryParameters,
+        data: result.value as QueryParameters,
       };
     }
   }, [location.search, schema]);
