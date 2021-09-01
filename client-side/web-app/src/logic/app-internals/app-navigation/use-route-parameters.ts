@@ -46,7 +46,7 @@ export function useRouteParameters<
 
   useEffect(() => {
     replaceRouteParameters(parse());
-  }, [appNavigation.currentHref, schema]);
+  }, [appNavigation.currentHref]);
 
   return routeParameters;
 }

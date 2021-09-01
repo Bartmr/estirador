@@ -52,7 +52,7 @@ export function useQueryParameters<
 
   useEffect(() => {
     replaceQueryParameters(parse());
-  }, [location.search, schema]);
+  }, [location.search]);
 
   return queryParameters;
 }
