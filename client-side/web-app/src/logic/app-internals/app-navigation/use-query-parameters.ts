@@ -54,7 +54,7 @@ export function useQueryParameters<
 
   useEffect(() => {
     replaceQueryParameters(parse());
-  }, [router.asPath, schema]);
+  }, [router.asPath]);
 
   return queryParameters;
 }
