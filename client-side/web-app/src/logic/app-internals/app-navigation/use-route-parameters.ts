@@ -19,8 +19,7 @@ export function useRouteParameters<
   type RouteParameters = InferType<RouteParametersSchema>;
 
   type RouteParametersResult = Readonly<
-    | { invalid: true }
-    | { invalid: false; routeParameters: Readonly<RouteParameters> }
+    { invalid: true } | { invalid: false; data: Readonly<RouteParameters> }
   >;
 
   const routeParameters = useMemo((): RouteParametersResult => {
@@ -34,7 +33,7 @@ export function useRouteParameters<
     } else {
       return {
         invalid: false,
-        routeParameters: result.value as RouteParameters,
+        data: result.value as RouteParameters,
       };
     }
   }, [appNavigation.currentHref, schema]);
