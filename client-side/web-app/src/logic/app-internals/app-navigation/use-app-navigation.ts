@@ -18,10 +18,7 @@ export function useAppNavigation() {
 
   const pathPrefix = COMMON_CONFIG.pathPrefix;
 
-  let pathname = location.pathname;
-  if (pathPrefix) {
-    pathname = pathname.replace(pathPrefix, '');
-  }
+  const pathname = location.pathname.replace(pathPrefix, '') || '/';
 
   const currentHref = pathname + location.search + location.hash;
 
@@ -36,6 +33,7 @@ export function useAppNavigation() {
   return {
     appUrl,
     pathPrefix,
+    pathname,
     currentHref,
     navigate,
     navigateWithoutAwaiting: (href: string) => {
