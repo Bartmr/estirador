@@ -14,15 +14,15 @@ import {
 } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
 import { isTransportFailure } from 'src/logic/app-internals/transports/transported-data/is-transport-failure';
-import { useAppNavigation } from 'src/logic/app-internals/app-navigation/use-app-navigation';
 import { INDEX_ROUTE } from '../index/index-routes';
+import { useRouter } from 'next/router';
 
 type LoginFormValue = { email: string; password: string };
 type UncompleteLoginFormValue = UncompletedForm<LoginFormValue, true>;
 
 function Content() {
   const apiSession = useMainApiSession();
-  const appNavigation = useAppNavigation();
+  const router = useRouter();
 
   const [submissionStatus, replaceSubmissionStatus] = useState<
     TransportedData<'wrong-credentials'>
@@ -50,7 +50,8 @@ function Content() {
         data: res,
       });
     } else {
-      appNavigation.navigateWithoutAwaiting(INDEX_ROUTE.getHref());
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      router.push(INDEX_ROUTE.getHref());
     }
   };
 

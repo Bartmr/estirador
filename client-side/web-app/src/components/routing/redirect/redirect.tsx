@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
-import { useAppNavigation } from 'src/logic/app-internals/app-navigation/use-app-navigation';
+import { useRouter } from 'next/router';
 
 type Props = {
   href: string;
 };
 
 export function Redirect(props: Props) {
-  const appNavigation = useAppNavigation();
+  const router = useRouter();
 
   useEffect(() => {
     if (props.href.includes('://')) {
       window.location.href = props.href;
     } else {
-      appNavigation.navigateWithoutAwaiting(props.href);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      router.push(props.href);
     }
   }, []);
 
