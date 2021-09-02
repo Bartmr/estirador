@@ -31,12 +31,16 @@ export function Page(props: Props) {
   `);
 
   const siteMetadata = site?.siteMetadata || throwError();
-  const siteTitle = '%s | ' + (siteMetadata.title || throwError());
+  const siteTitle = siteMetadata.title || throwError();
   const siteBuildDate = site?.buildTime ?? throwError();
+
+  const title = `${props.title} - ${siteTitle}`;
 
   return (
     <>
-      <Helmet title={props.title} titleTemplate={siteTitle} />
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <span className="d-none">{`Build date: ${siteBuildDate}`}</span>
       <div className="min-vh-100 d-flex flex-column align-items-stretch">
         <Header menuHtmlId="page-header-menu" className="sticky-top" />

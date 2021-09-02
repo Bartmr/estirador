@@ -6,12 +6,10 @@
 
 import React from 'react';
 import { RootFrame } from './src/components/root-frame/root-frame';
-import { attachFontsProviders } from './src/components/ui-kit/fonts-ssr-apis';
+import { onPreRenderHTML as onPreRenderHTMLImpl } from './src/on-pre-render-html';
 
 export const wrapRootElement = ({ element }) => (
   <RootFrame>{element}</RootFrame>
 );
 
-export const onPreRenderHTML = (...args) => {
-  attachFontsProviders(...args);
-};
+export const onPreRenderHTML = onPreRenderHTMLImpl;

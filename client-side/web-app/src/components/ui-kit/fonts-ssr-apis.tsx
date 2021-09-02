@@ -1,7 +1,7 @@
 import { PreRenderHTMLArgs } from 'gatsby';
 import React from 'react';
 
-export const attachFontsProviders = async ({
+export const attachFontsProviders = ({
   getPostBodyComponents,
   replacePostBodyComponents,
 }: PreRenderHTMLArgs) => {
