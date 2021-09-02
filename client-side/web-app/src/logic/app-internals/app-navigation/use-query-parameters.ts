@@ -51,7 +51,13 @@ export function useQueryParameters<
   };
 
   useEffect(() => {
-    replaceQueryParameters(parse());
+    const newQueryParameters = parse();
+
+    if (
+      JSON.stringify(newQueryParameters) !== JSON.stringify(queryParameters)
+    ) {
+      replaceQueryParameters(newQueryParameters);
+    }
   }, [router.asPath]);
 
   return queryParameters;
