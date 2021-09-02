@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { SerializableJSONValue } from '../transports/json-types';
-import { useAppNavigation } from './use-app-navigation';
 import { Logger } from '../logging/logger';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import { useRouter } from 'next/router';
@@ -24,7 +23,6 @@ export function useRouteParameters<
     useState<RouteParametersResult>({ isServerSide: true });
 
   const router = useRouter();
-  const appNavigation = useAppNavigation();
 
   const parse = (): RouteParametersResult => {
     const result = schema.validate(router.query);
@@ -46,7 +44,7 @@ export function useRouteParameters<
 
   useEffect(() => {
     replaceRouteParameters(parse());
-  }, [appNavigation.currentHref]);
+  }, [router.pathname]);
 
   return routeParameters;
 }
