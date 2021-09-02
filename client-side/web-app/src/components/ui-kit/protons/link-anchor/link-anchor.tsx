@@ -1,6 +1,6 @@
+import { COMMON_CONFIG } from '@config/common-config';
 import { Link } from 'gatsby';
 import React, { ReactNode, SyntheticEvent } from 'react';
-import { useAppNavigation } from 'src/logic/app-internals/app-navigation/use-app-navigation';
 
 type Props = {
   children: ReactNode;
@@ -13,8 +13,6 @@ type Props = {
 };
 
 export function LinkAnchor(props: Props) {
-  const { pathPrefix } = useAppNavigation();
-
   const commonProps = {
     className: props.className,
     style: props.style,
@@ -56,7 +54,7 @@ export function LinkAnchor(props: Props) {
     );
   } else if (props.href.includes('#')) {
     return (
-      <a href={pathPrefix + props.href} {...commonProps}>
+      <a href={COMMON_CONFIG.pathPrefix + props.href} {...commonProps}>
         {props.children}
       </a>
     );

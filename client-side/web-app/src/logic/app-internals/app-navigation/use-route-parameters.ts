@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SerializableJSONValue } from '../transports/json-types';
-import { useParams } from '@reach/router';
-import { useAppNavigation } from './use-app-navigation';
+import { useParams, useLocation } from '@reach/router';
 import { Logger } from '../logging/logger';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 
@@ -24,7 +23,7 @@ export function useRouteParameters<
     useState<RouteParametersResult>({ isServerSide: true });
 
   const unparsedParameters = useParams() as unknown;
-  const appNavigation = useAppNavigation();
+  const location = useLocation();
 
   const parse = (): RouteParametersResult => {
     const result = schema.validate(unparsedParameters || {});
@@ -46,7 +45,7 @@ export function useRouteParameters<
 
   useEffect(() => {
     replaceRouteParameters(parse());
-  }, [appNavigation.pathname]);
+  }, [location.pathname]);
 
   return routeParameters;
 }
