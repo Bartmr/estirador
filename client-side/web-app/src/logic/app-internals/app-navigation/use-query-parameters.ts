@@ -25,9 +25,7 @@ export function useQueryParameters<
   const router = useRouter();
 
   const parse = (): QueryParametersResult => {
-    const split = router.asPath.split('?');
-
-    const urlSearchParams = new URLSearchParams(`?${split[1] || ''}`);
+    const urlSearchParams = new URLSearchParams(location.search);
 
     const unparsedQueryParameters: { [key: string]: string } = {};
 
