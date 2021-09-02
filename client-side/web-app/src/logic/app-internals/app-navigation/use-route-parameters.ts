@@ -8,43 +8,56 @@ type SupportedRouteParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;
 }>;
 
+type RouteParameters<
+  RouteParametersSchema extends SupportedRouteParametersSchema,
+> =
+  | { isServerSide: true }
+  | { isServerSide: false; invalid: true }
+  | {
+      isServerSide: false;
+      invalid: false;
+      data: InferType<RouteParametersSchema>;
+    };
+
+function parse<RouteParametersSchema extends SupportedRouteParametersSchema>(
+  schema: RouteParametersSchema,
+  unparsedParameters: unknown,
+): RouteParameters<RouteParametersSchema> {
+  const result = schema.validate(unparsedParameters || {});
+
+  if (result.errors) {
+    Logger.logDebug('use-route-parameters:invalid-params', { result });
+    return {
+      isServerSide: false,
+      invalid: true,
+    };
+  } else {
+    return {
+      isServerSide: false,
+      invalid: false,
+      data: result.value,
+    };
+  }
+}
+
 export function useRouteParameters<
   RouteParametersSchema extends SupportedRouteParametersSchema,
 >(schema: RouteParametersSchema) {
-  type RouteParameters = InferType<RouteParametersSchema>;
-
-  type RouteParametersResult = Readonly<
-    | { isServerSide: true }
-    | { isServerSide: false; invalid: true }
-    | { isServerSide: false; invalid: false; data: Readonly<RouteParameters> }
-  >;
-
-  const [routeParameters, replaceRouteParameters] =
-    useState<RouteParametersResult>({ isServerSide: true });
+  const [routeParameters, replaceRouteParameters] = useState<
+    RouteParameters<RouteParametersSchema>
+  >({ isServerSide: true });
 
   const unparsedParameters = useParams() as unknown;
   const location = useLocation();
 
-  const parse = (): RouteParametersResult => {
-    const result = schema.validate(unparsedParameters || {});
-
-    if (result.errors) {
-      Logger.logDebug('use-route-parameters:invalid-params', { result });
-      return {
-        isServerSide: false,
-        invalid: true,
-      };
-    } else {
-      return {
-        isServerSide: false,
-        invalid: false,
-        data: result.value as RouteParameters,
-      };
-    }
-  };
-
   useEffect(() => {
-    replaceRouteParameters(parse());
+    const newRouteParameters = parse(schema, unparsedParameters);
+
+    if (
+      JSON.stringify(newRouteParameters) !== JSON.stringify(routeParameters)
+    ) {
+      replaceRouteParameters(newRouteParameters);
+    }
   }, [location.pathname]);
 
   return routeParameters;
