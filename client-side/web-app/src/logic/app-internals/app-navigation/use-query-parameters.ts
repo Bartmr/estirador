@@ -8,50 +8,57 @@ type SupportedQueryParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;
 }>;
 
+type QueryParameters<
+  QueryParametersSchema extends SupportedQueryParametersSchema,
+> =
+  | { isServerSide: true }
+  | { isServerSide: false; invalid: true }
+  | {
+      isServerSide: false;
+      invalid: false;
+      data: InferType<QueryParametersSchema>;
+    };
+
+function parse<QueryParametersSchema extends SupportedQueryParametersSchema>(
+  schema: QueryParametersSchema,
+  location: Location,
+): QueryParameters<QueryParametersSchema> {
+  const urlSearchParams = new URLSearchParams(location.search);
+
+  const unparsedQueryParameters: { [key: string]: string } = {};
+
+  urlSearchParams.forEach((value, key) => {
+    unparsedQueryParameters[key] = value;
+  });
+
+  const result = schema.validate(unparsedQueryParameters);
+
+  if (result.errors) {
+    Logger.logDebug('use-query-parameters:invalid-params', { result });
+    return {
+      isServerSide: false,
+      invalid: true,
+    };
+  } else {
+    return {
+      isServerSide: false,
+      invalid: false,
+      data: result.value,
+    };
+  }
+}
+
 export function useQueryParameters<
   QueryParametersSchema extends SupportedQueryParametersSchema,
 >(schema: QueryParametersSchema) {
-  type QueryParameters = InferType<QueryParametersSchema>;
-
-  type QueryParametersResult = Readonly<
-    | { isServerSide: true }
-    | { isServerSide: false; invalid: true }
-    | { isServerSide: false; invalid: false; data: Readonly<QueryParameters> }
-  >;
-
-  const [queryParameters, replaceQueryParameters] =
-    useState<QueryParametersResult>({ isServerSide: true });
+  const [queryParameters, replaceQueryParameters] = useState<
+    QueryParameters<QueryParametersSchema>
+  >({ isServerSide: true });
 
   const router = useRouter();
 
-  const parse = (): QueryParametersResult => {
-    const urlSearchParams = new URLSearchParams(location.search);
-
-    const unparsedQueryParameters: { [key: string]: string } = {};
-
-    urlSearchParams.forEach((value, key) => {
-      unparsedQueryParameters[key] = value;
-    });
-
-    const result = schema.validate(unparsedQueryParameters);
-
-    if (result.errors) {
-      Logger.logDebug('use-query-parameters:invalid-params', { result });
-      return {
-        isServerSide: false,
-        invalid: true,
-      };
-    } else {
-      return {
-        isServerSide: false,
-        invalid: false,
-        data: result.value as QueryParameters,
-      };
-    }
-  };
-
   useEffect(() => {
-    const newQueryParameters = parse();
+    const newQueryParameters = parse(schema, location);
 
     if (
       JSON.stringify(newQueryParameters) !== JSON.stringify(queryParameters)
