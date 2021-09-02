@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { SerializableJSONValue } from '../transports/json-types';
-import { useParams } from '@reach/router';
+import { useParams, useLocation } from '@reach/router';
 import { Logger } from '../logging/logger';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { getWindow } from '../utils/get-window';
 
 type SupportedRouteParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;
@@ -24,6 +23,7 @@ export function useRouteParameters<
     useState<RouteParametersResult>({ isServerSide: true });
 
   const unparsedParameters = useParams() as unknown;
+  const location = useLocation();
 
   const parse = (): RouteParametersResult => {
     const result = schema.validate(unparsedParameters || {});
@@ -45,7 +45,7 @@ export function useRouteParameters<
 
   useEffect(() => {
     replaceRouteParameters(parse());
-  }, [getWindow()?.location.pathname]);
+  }, [location.pathname]);
 
   return routeParameters;
 }

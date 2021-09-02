@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { SerializableJSONValue } from '../transports/json-types';
+import { useLocation } from '@reach/router';
 import { Logger } from '../logging/logger';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { getWindow } from '../utils/get-window';
 
 type SupportedQueryParametersSchema = Schema<{
   [key: string]: SerializableJSONValue | undefined;
@@ -21,6 +21,8 @@ export function useQueryParameters<
 
   const [queryParameters, replaceQueryParameters] =
     useState<QueryParametersResult>({ isServerSide: true });
+
+  const location = useLocation();
 
   const parse = (): QueryParametersResult => {
     const urlSearchParams = new URLSearchParams(location.search);
@@ -50,7 +52,7 @@ export function useQueryParameters<
 
   useEffect(() => {
     replaceQueryParameters(parse());
-  }, [getWindow()?.location.search]);
+  }, [location.search]);
 
   return queryParameters;
 }
