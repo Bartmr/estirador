@@ -65,6 +65,7 @@ beforeAll(async () => {
   await connection.query(
     `DROP TABLE IF EXISTS ${TEST_ENTITY_WITHOUT_DELETE_DATE_COLUMN_TABLE_NAME}`,
   );
+  await connection.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
   await connection.synchronize();
 });

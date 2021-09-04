@@ -1,9 +1,9 @@
 import { User } from 'src/users/typeorm/user.entity';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class SignupVerificationToken {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @ManyToOne(() => User, { eager: true })

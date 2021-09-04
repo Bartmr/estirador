@@ -11,7 +11,6 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { SimpleEntity } from './simple.entity';
-import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 import { throwError } from 'src/internals/utils/throw-error';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -111,8 +110,12 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: Partial<{ manager?: EntityManager }>,
   ): Promise<Entity[]> {
+    const EntityClass = this.repository.target as ConcreteClass<
+      Partial<Entity>
+    >;
+
     const repository = options?.manager
-      ? options.manager.getRepository<Entity>(this.repository.target)
+      ? options.manager.getRepository<Entity>(EntityClass)
       : this.repository;
 
     const toSave: DeepPartial<Entity>[] = [];
@@ -122,11 +125,7 @@ export abstract class SimpleEntityRepository<
         ...entityLikeObject,
       } as Partial<Entity>;
 
-      _entityLikeObject.id = generateUniqueUUID();
-
-      const EntityClass = this.repository.target as ConcreteClass<
-        Partial<Entity>
-      >;
+      delete _entityLikeObject.id;
 
       const entity = new EntityClass();
 
