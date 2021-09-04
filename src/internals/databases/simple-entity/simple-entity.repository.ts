@@ -134,6 +134,12 @@ export abstract class SimpleEntityRepository<
 
       delete _entityLikeObject.id;
 
+      if (this.repository.metadata.createDateColumn) {
+        delete _entityLikeObject[
+          this.repository.metadata.createDateColumn.propertyName as keyof Entity
+        ];
+      }
+
       const entity = new EntityClass();
 
       for (const _k of Object.keys(_entityLikeObject)) {
