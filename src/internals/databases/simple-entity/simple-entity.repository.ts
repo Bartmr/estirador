@@ -94,7 +94,7 @@ export abstract class SimpleEntityRepository<
   async create(
     entityLikeObject: this['_EntityCreationAttributes'],
     auditContext: AuditContext,
-    options?: Partial<{ manager?: EntityManager }>,
+    options?: Partial<{ manager: EntityManager }>,
   ): Promise<Entity> {
     const result = await this.createMany(
       [entityLikeObject],
@@ -108,7 +108,10 @@ export abstract class SimpleEntityRepository<
   async createMany(
     entityLikeObjects: Array<this['_EntityCreationAttributes']>,
     auditContext: AuditContext,
-    options?: Partial<{ manager?: EntityManager }>,
+    options?: Partial<{
+      manager: EntityManager;
+      _allowMutationsToEntityLikeObjects: boolean;
+    }>,
   ): Promise<Entity[]> {
     const EntityClass = this.repository.target as ConcreteClass<
       Partial<Entity>
@@ -121,9 +124,13 @@ export abstract class SimpleEntityRepository<
     const toSave: DeepPartial<Entity>[] = [];
 
     for (const entityLikeObject of entityLikeObjects) {
-      const _entityLikeObject = {
-        ...entityLikeObject,
-      } as Partial<Entity>;
+      const _entityLikeObject = (
+        options?._allowMutationsToEntityLikeObjects
+          ? entityLikeObject
+          : {
+              ...entityLikeObject,
+            }
+      ) as Partial<Entity>;
 
       delete _entityLikeObject.id;
 
@@ -146,7 +153,7 @@ export abstract class SimpleEntityRepository<
   async save(
     entity: Entity,
     auditContext: AuditContext,
-    options?: Partial<{ manager?: EntityManager }>,
+    options?: Partial<{ manager: EntityManager }>,
   ): Promise<void> {
     return this.saveMany([entity], auditContext, options);
   }
@@ -154,7 +161,7 @@ export abstract class SimpleEntityRepository<
   async saveMany(
     entities: Entity[],
     auditContext: AuditContext,
-    options?: Partial<{ manager?: EntityManager }>,
+    options?: Partial<{ manager: EntityManager }>,
   ): Promise<void> {
     const EntityClass = this.repository.target as Class;
 
@@ -174,7 +181,7 @@ export abstract class SimpleEntityRepository<
   async remove(
     entity: Entity,
     auditContext: AuditContext,
-    options?: Partial<{ manager?: EntityManager }>,
+    options?: Partial<{ manager: EntityManager }>,
   ): Promise<void> {
     return this.removeMany([entity], auditContext, options);
   }
@@ -182,7 +189,7 @@ export abstract class SimpleEntityRepository<
   async removeMany(
     entities: Entity[],
     auditContext: AuditContext,
-    options?: Partial<{ manager?: EntityManager }>,
+    options?: Partial<{ manager: EntityManager }>,
   ): Promise<void> {
     const EntityClass = this.repository.target as Class;
 
