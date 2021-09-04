@@ -29,6 +29,7 @@ beforeAll(async () => {
   connection = await getDatabaseConnection([TestEntity]);
 
   await connection.query(`DROP TABLE IF EXISTS ${TEST_TABLE_NAME}`);
+  await connection.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
   await connection.synchronize();
 });
 

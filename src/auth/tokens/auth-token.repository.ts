@@ -13,15 +13,13 @@ export class AuthTokensRepository extends AbstractRepository<AuthToken> {
   deleteExpired() {
     return this.repository.delete({
       expires: LessThan(new Date()),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    });
   }
 
   deleteToken(tokenString: string) {
     return this.repository.delete({
       id: tokenString,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    });
   }
 
   public async createToken(user: User, ttl: number): Promise<AuthToken> {
@@ -29,7 +27,6 @@ export class AuthTokensRepository extends AbstractRepository<AuthToken> {
 
     const token = new AuthToken();
 
-    token.id = generateRandomUUID();
     token.httpsOnlyKey = generateRandomUUID();
 
     token.user = user;
@@ -39,10 +36,7 @@ export class AuthTokensRepository extends AbstractRepository<AuthToken> {
 
     token.expires = expiration;
 
-    return this.repository.save(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      token as any,
-    ) as Promise<AuthToken>;
+    return this.repository.save(token);
   }
 
   public findTokenById(id: string) {

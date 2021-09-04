@@ -6,30 +6,28 @@ import {
 } from 'typeorm';
 import { User } from '../typeorm/user.entity';
 import { SignupVerificationToken } from './typeorm/signup-verification-token.entity';
-import { generateRandomUUID } from '../../internals/utils/generate-random-uuid';
 
 @EntityRepository(SignupVerificationToken)
 export class SignupVerificationTokensRepository extends AbstractRepository<SignupVerificationToken> {
   deleteExpired() {
     return this.repository.delete({
       expires: LessThan(new Date()),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    });
   }
 
   deleteFromUser(user: User) {
     return this.repository.delete({
       user: user,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    });
   }
 
-  public async createToken(user: User, ttl: number) {
+  public async createToken(
+    user: User,
+    ttl: number,
+  ): Promise<SignupVerificationToken> {
     const ttlInMilliseconds = ttl * 1000;
 
     const token = new SignupVerificationToken();
-
-    token.id = generateRandomUUID();
 
     token.user = user;
 
@@ -38,10 +36,7 @@ export class SignupVerificationTokensRepository extends AbstractRepository<Signu
 
     token.expires = expiration;
 
-    return this.repository.save(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      token as any,
-    ) as Promise<SignupVerificationToken>;
+    return this.repository.save(token);
   }
 
   public findTokenById(id: string) {

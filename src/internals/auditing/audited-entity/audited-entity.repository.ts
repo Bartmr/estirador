@@ -2,7 +2,6 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
 import { DeepPartial, EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
-import { generateUniqueUUID } from '../../utils/generate-unique-uuid';
 import { ConcreteClass } from '@app/shared/internals/utils/types/classes-types';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -50,7 +49,11 @@ export abstract class AuditedEntityRepository<
     auditContext: AuditContext,
   ): Promise<Entity[]> {
     const run = async (manager: EntityManager) => {
-      const repository = manager.getRepository<Entity>(this.repository.target);
+      const EntityClass = this.repository.target as ConcreteClass<
+        Partial<Entity>
+      >;
+
+      const repository = manager.getRepository<Entity>(EntityClass);
 
       const toSave: DeepPartial<Entity>[] = [];
 
@@ -59,15 +62,8 @@ export abstract class AuditedEntityRepository<
           ...entityLikeObject,
         } as Partial<Entity>;
 
-        const id = generateUniqueUUID();
-        _entityLikeObject.id = id;
-
-        /*
-          instanceId will always be unique
-          because it reuses the id that will be used as primary key
-        */
-        _entityLikeObject.instanceId = id;
-
+        delete _entityLikeObject.id;
+        delete _entityLikeObject.instanceId;
         delete _entityLikeObject.deletedAt;
         delete _entityLikeObject.operationId;
         delete _entityLikeObject.requestPath;
@@ -78,10 +74,6 @@ export abstract class AuditedEntityRepository<
         const createdAt = new Date();
         _entityLikeObject.createdAt = createdAt;
         _entityLikeObject.updatedAt = createdAt;
-
-        const EntityClass = this.repository.target as ConcreteClass<
-          Partial<Entity>
-        >;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const _createdEntity = new EntityClass();
@@ -94,6 +86,15 @@ export abstract class AuditedEntityRepository<
         toSave.push(_createdEntity as DeepPartial<Entity>);
       }
 
+      await repository.save(toSave);
+
+      for (const _createdEntity of toSave) {
+        /*
+          instanceId will always be unique
+          because it reuses the primary key
+        */
+        _createdEntity.instanceId = _createdEntity.id;
+      }
       await repository.save(toSave);
 
       const createdEntities = toSave as Entity[];
