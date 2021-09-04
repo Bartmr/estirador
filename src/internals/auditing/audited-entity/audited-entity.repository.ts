@@ -21,8 +21,6 @@ export abstract class AuditedEntityRepository<
     entity.requestPath = auditContext.requestPath;
     entity.requestMethod = auditContext.requestMethod;
     entity.processId = auditContext.processId;
-
-    entity.deletedAt = new Date();
     entity.archivedByUserId = auditContext.authContext?.user.id;
   }
 
@@ -39,6 +37,7 @@ export abstract class AuditedEntityRepository<
       };
 
       this.assignArchiveAttributesToEntity(entityDataClone, auditContext);
+      entityDataClone.deletedAt = new Date();
 
       toArchive.push(entityDataClone);
     }
@@ -142,6 +141,8 @@ export abstract class AuditedEntityRepository<
       }
 
       await super.saveMany(entities, auditContext, { manager });
+
+      await super.removeMany(entities, auditContext, { manager });
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {

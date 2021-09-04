@@ -157,17 +157,17 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: Partial<{ manager?: EntityManager }>,
   ): Promise<void> {
-    const repository = options?.manager
-      ? options.manager.getRepository<Entity>(this.repository.target)
-      : this.repository;
+    const EntityClass = this.repository.target as Class;
 
     for (const entity of entities) {
-      const EntityClass = this.repository.target as Class;
-
       if (!(entity instanceof EntityClass)) {
         throw new Error();
       }
     }
+
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(EntityClass)
+      : this.repository;
 
     await repository.save(entities as unknown as DeepPartial<Entity>[]);
   }
@@ -185,17 +185,17 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: Partial<{ manager?: EntityManager }>,
   ): Promise<void> {
-    const repository = options?.manager
-      ? options.manager.getRepository<Entity>(this.repository.target)
-      : this.repository;
+    const EntityClass = this.repository.target as Class;
 
     for (const entity of entities) {
-      const EntityClass = this.repository.target as Class;
-
       if (!(entity instanceof EntityClass)) {
         throw new Error();
       }
     }
+
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(EntityClass)
+      : this.repository;
 
     if (this.repository.metadata.deleteDateColumn) {
       await repository.softRemove(entities as unknown as DeepPartial<Entity>[]);
@@ -253,13 +253,21 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: { manager?: EntityManager },
   ): Promise<void> {
+    const EntityClass = this.repository.target as Class;
+
+    for (const entity of entities) {
+      if (!(entity instanceof EntityClass)) {
+        throw new Error();
+      }
+    }
+
     const repository = options?.manager
-      ? options.manager.getRepository<Entity>(this.repository.target)
+      ? options.manager.getRepository<Entity>(EntityClass)
       : this.repository;
 
     await repository
       .createQueryBuilder()
-      .update(this.repository.target)
+      .update(EntityClass)
       .set(values)
       .whereEntity(entities)
       .returning('*')

@@ -157,5 +157,42 @@ describe('Audited Entity Repository', () => {
         JSON.stringify(entity.updatedAt),
       );
     });
+
+    it('Should persist archived entity attributes to active row when removing', async () => {
+      const repository = connection.getCustomRepository(TestEntityRepository);
+
+      const auditContextMock1 = createAuditContextTestMock();
+
+      const entity = await repository.create(
+        {
+          propA: new Date(),
+          propB: new Date(),
+          propC: 1,
+        },
+        auditContextMock1.auditContext,
+      );
+
+      const auditContextMock2 = createAuditContextTestMock();
+
+      await repository.remove(entity, auditContextMock2.auditContext);
+
+      const results = await repository.find({
+        where: { instanceId: entity.instanceId },
+        withDeleted: true,
+        skip: 0,
+      });
+
+      expect(results.rows.map((c) => c.toJSON())).toEqual([
+        {
+          ...entity,
+          ...auditContextMock1.persisted.auditContextArchivedEntityProps,
+        },
+
+        {
+          ...entity,
+          ...auditContextMock2.persisted.auditContextArchivedEntityProps,
+        },
+      ]);
+    });
   });
 });
