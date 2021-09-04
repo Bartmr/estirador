@@ -63,7 +63,7 @@ export abstract class AuditedEntityRepository<
       for (const entityLikeObject of entityLikeObjects) {
         const _entityLikeObject = {
           ...entityLikeObject,
-        } as Partial<Entity> & { [key: string]: unknown };
+        } as Partial<Entity>;
 
         delete _entityLikeObject.id;
         delete _entityLikeObject.instanceId;
@@ -80,12 +80,10 @@ export abstract class AuditedEntityRepository<
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const _createdEntity = new EntityClass();
-        for (const key of Object.keys(_entityLikeObject)) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          _createdEntity[key as keyof Partial<Entity>] = _entityLikeObject[
-            key
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ] as any;
+        for (const _k of Object.keys(_entityLikeObject)) {
+          const key = _k as keyof Partial<Entity>;
+
+          _createdEntity[key] = _entityLikeObject[key];
         }
 
         toSave.push(_createdEntity as DeepPartial<Entity>);

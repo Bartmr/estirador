@@ -130,21 +130,22 @@ export abstract class SimpleEntityRepository<
           : {
               ...entityLikeObject,
             }
-      ) as Partial<Entity> & { [key: string]: unknown };
+      ) as Partial<Entity>;
 
       delete _entityLikeObject.id;
 
       if (this.repository.metadata.createDateColumn) {
         delete _entityLikeObject[
-          this.repository.metadata.createDateColumn.propertyName
+          this.repository.metadata.createDateColumn.propertyName as keyof Entity
         ];
       }
 
       const entity = new EntityClass();
 
-      for (const key of Object.keys(_entityLikeObject)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-        entity[key as keyof Partial<Entity>] = _entityLikeObject[key] as any;
+      for (const _k of Object.keys(_entityLikeObject)) {
+        const key = _k as keyof Partial<Entity>;
+
+        entity[key] = _entityLikeObject[key];
       }
 
       toSave.push(entity as DeepPartial<Entity>);
