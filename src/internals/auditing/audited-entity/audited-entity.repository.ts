@@ -41,7 +41,10 @@ export abstract class AuditedEntityRepository<
       toArchive.push(entityDataClone);
     }
 
-    await super.createMany(toArchive, auditContext, { manager });
+    await super.createMany(toArchive, auditContext, {
+      manager,
+      _allowMutationsToEntityLikeObjects: true,
+    });
   }
 
   async createMany(
