@@ -65,14 +65,14 @@ export abstract class AuditedEntityRepository<
           ...entityLikeObject,
         } as Partial<Entity>;
 
-        delete _entityLikeObject.id;
-        delete _entityLikeObject.instanceId;
-        delete _entityLikeObject.deletedAt;
-        delete _entityLikeObject.operationId;
-        delete _entityLikeObject.requestPath;
-        delete _entityLikeObject.requestMethod;
-        delete _entityLikeObject.processId;
-        delete _entityLikeObject.archivedByUserId;
+        _entityLikeObject.id = undefined;
+        _entityLikeObject.instanceId = undefined;
+        _entityLikeObject.deletedAt = undefined;
+        _entityLikeObject.operationId = undefined;
+        _entityLikeObject.requestPath = undefined;
+        _entityLikeObject.requestMethod = undefined;
+        _entityLikeObject.processId = undefined;
+        _entityLikeObject.archivedByUserId = undefined;
 
         const createdAt = new Date();
         _entityLikeObject.createdAt = createdAt;
@@ -82,8 +82,14 @@ export abstract class AuditedEntityRepository<
         const _createdEntity = new EntityClass();
         for (const _k of Object.keys(_entityLikeObject)) {
           const key = _k as keyof Partial<Entity>;
+          const value = _entityLikeObject[key];
 
-          _createdEntity[key] = _entityLikeObject[key];
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (value === undefined) {
+            continue;
+          }
+
+          _createdEntity[key] = value;
         }
 
         toSave.push(_createdEntity as DeepPartial<Entity>);
