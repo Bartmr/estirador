@@ -97,15 +97,6 @@ export abstract class AuditedEntityRepository<
 
       await repository.save(toSave);
 
-      for (const _createdEntity of toSave) {
-        /*
-          instanceId will always be unique
-          because it reuses the primary key
-        */
-        _createdEntity.instanceId = _createdEntity.id;
-      }
-      await repository.save(toSave);
-
       const createdEntities = toSave as Entity[];
 
       await this.archiveChanges(createdEntities, auditContext, manager);
