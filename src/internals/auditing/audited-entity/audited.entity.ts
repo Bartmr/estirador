@@ -7,7 +7,9 @@ import { Column, DeleteDateColumn } from 'typeorm';
 */
 
 export abstract class AuditedEntity extends SimpleEntity {
-  @Column('uuid', { nullable: true })
+  @Column('text', {
+    default: () => "uuid_generate_v4()||'-'||extract(epoch from now())",
+  })
   instanceId!: string;
 
   @DeleteDateColumn()
