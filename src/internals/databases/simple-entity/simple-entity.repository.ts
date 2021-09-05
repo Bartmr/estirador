@@ -132,20 +132,26 @@ export abstract class SimpleEntityRepository<
             }
       ) as Partial<Entity>;
 
-      delete _entityLikeObject.id;
+      _entityLikeObject.id = undefined;
 
       if (this.repository.metadata.createDateColumn) {
-        delete _entityLikeObject[
+        _entityLikeObject[
           this.repository.metadata.createDateColumn.propertyName as keyof Entity
-        ];
+        ] = undefined;
       }
 
       const entity = new EntityClass();
 
       for (const _k of Object.keys(_entityLikeObject)) {
         const key = _k as keyof Partial<Entity>;
+        const value = _entityLikeObject[key];
 
-        entity[key] = _entityLikeObject[key];
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (value === undefined) {
+          continue;
+        }
+
+        entity[key] = value;
       }
 
       toSave.push(entity as DeepPartial<Entity>);
