@@ -10,7 +10,7 @@
     "module": "es2020",
     "moduleResolution": "node",
     "lib": ["dom", "es2020"],
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "isolatedModules": true,
     "baseUrl": ".",
     "strict": true,
