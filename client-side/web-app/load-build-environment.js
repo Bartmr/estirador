@@ -25,3 +25,6 @@ tsConfigPaths.register({
   baseUrl: './',
   paths: tsConfig.compilerOptions.paths,
 });
+
+// Validate environment variables
+require('./src/logic/app-internals/runtime/environment-variables');
