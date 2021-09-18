@@ -23,6 +23,9 @@ tsConfigPaths.register({
   paths: tsConfig.compilerOptions.paths,
 });
 
+// Validate environment variables
+require('./src/logic/app-internals/runtime/environment-variables');
+
 const { NEXT_CONFIG } = require('./src/next.config');
 
 module.exports = NEXT_CONFIG;
