@@ -105,10 +105,6 @@ tunnels:
 - Start your services
 - Share the Ngrok URLs with whoever asked to try your app
 
-### Commiting
-
-- Frontend apps load configurations depending on the build type they are running. If they are running a development build, they use configurations from `__config.debug`, else they use the ones from `__config.release`. Since the precommit hooks build all apps before continuing the commit, you can duplicate `__config.debug` on each frontend project and name it `__config.release`, since most configurations are build type agnostic.
-
 ### When developing
 
 - Read about **validations** here: <https://github.com/Bartmr/not-me>
