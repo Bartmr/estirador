@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { COMMON_CONFIG } from '@config/common-config';
+import { EnvironmentVariables } from '../runtime/environment-variables';
 import { RUNNING_IN_CLIENT } from '../runtime/running-in';
 
 const LOG_ENTRIES_LIMIT = 3;
@@ -9,7 +9,7 @@ class LoggerImpl {
   private loggedWarnings: { [key: string]: undefined | number } = {};
 
   logDebug(key: string, extraData?: unknown) {
-    if (COMMON_CONFIG.logDebug) {
+    if (EnvironmentVariables.LOG_DEBUG) {
       console.log('----- DEBUG: ' + key, '\nExtra data:', extraData);
     }
   }

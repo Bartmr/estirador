@@ -2,7 +2,6 @@
   "include": ["src", "type-declarations", "next-env.d.ts"],
   "compilerOptions": {
     "paths": {
-      "@config*": ["__config.debug*"],
       "@app/shared*": ["../../libs/shared/src*"],
       "typeorm": ["../../node_modules/typeorm/typeorm-model-shim.js"]
     },

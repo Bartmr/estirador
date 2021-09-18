@@ -6,9 +6,9 @@ node_modules
 .vscode
 package.json
 package-lock.json
+
 /client-side/*/.next
 /client-side/*/dist
-/client-side/*/.webpack-bundle-analyzer
 
 _graphql-generated_
 *._graphql-generated_.ts

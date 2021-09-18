@@ -1,8 +1,8 @@
+import { EnvironmentVariables } from '../../runtime/environment-variables';
 import {
   OutgoingHeaders,
   ServerSideJSONApiBase,
 } from '../server-side-json-api-base';
-import { MAIN_API_CONFIG } from '@config/main-api-config';
 
 class ServerSideMainJSONApiImpl extends ServerSideJSONApiBase {
   public apiUrl: string;
@@ -11,7 +11,7 @@ class ServerSideMainJSONApiImpl extends ServerSideJSONApiBase {
   constructor() {
     super();
 
-    this.apiUrl = MAIN_API_CONFIG.apiUrl;
+    this.apiUrl = EnvironmentVariables.MAIN_API_URL;
     this.getDefaultHeaders = () => ({});
   }
 }

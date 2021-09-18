@@ -12,7 +12,6 @@ import {
   StoreManagerProvider,
 } from 'src/logic/app-internals/store/store-manager';
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
-import { COMMON_CONFIG } from '@config/common-config';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
@@ -20,6 +19,7 @@ import { ErrorIcon } from '../ui-kit/components/icons/error-icon';
 import { IconSize } from '../ui-kit/components/icons/base/icon-types';
 import { useRemoteConfig } from '../../logic/app-internals/remote-config/use-remote-config';
 import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
+import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 
 const FatalErrorFrame = () => {
   return (
@@ -155,7 +155,7 @@ export const _RootFrameImpl = (props: {
 
   const Component = props.Component;
 
-  if (COMMON_CONFIG.disableErrorBoundaries) {
+  if (EnvironmentVariables.DISABLE_ERROR_BOUNDARIES) {
     return (
       <GiveContextToContents>
         <Component {...props.pageProps} />
