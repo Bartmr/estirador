@@ -1,10 +1,5 @@
 ## Development
 
-### Setup environment
-
-- Create a `.env.local` file in the `client-side/web-app` directory and fill it with the necessary environment variables.
-  - You can find out which environment variables are needed at `client-side/web-app/src/logic/app-internals/environment/environment-variables.schema`
-
 ### Development Tools:
 
 - **[SCSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-scss)**: helps locating functions and shows method calls information.
