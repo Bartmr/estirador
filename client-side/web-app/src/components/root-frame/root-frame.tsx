@@ -9,7 +9,7 @@ import '../../logic/app-internals/logging/logger';
 
 /*
   Validate environment variables,
-  if they haven't been validates before when initializing the logger
+  if they haven't been validated already when initializing the logger
 */
 import '../../logic/app-internals/runtime/environment-variables';
 
