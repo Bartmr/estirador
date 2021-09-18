@@ -1,6 +1,6 @@
-import { COMMON_CONFIG } from '@config/common-config';
 import { Link } from 'gatsby';
 import React, { ReactNode, SyntheticEvent } from 'react';
+import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 
 type Props = {
   children: ReactNode;
@@ -54,7 +54,7 @@ export function LinkAnchor(props: Props) {
     );
   } else if (props.href.includes('#')) {
     return (
-      <a href={COMMON_CONFIG.pathPrefix + props.href} {...commonProps}>
+      <a href={EnvironmentVariables.PATH_PREFIX + props.href} {...commonProps}>
         {props.children}
       </a>
     );

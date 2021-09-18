@@ -10,7 +10,5 @@ node_modules
 _graphql-generated_
 *._graphql-generated_.ts
 
-/__config*
-
 *.json
 *.js

@@ -6,6 +6,7 @@ node_modules
 .vscode
 package.json
 package-lock.json
+
 /client-side/*/build
 /client-side/*/dist
 /client-side/*/.cache

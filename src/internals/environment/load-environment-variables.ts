@@ -8,7 +8,7 @@ const NODE_ENV = process.env['NODE_ENV'];
 
 if (isValueFromEnum(NodeEnv, NODE_ENV)) {
   dotenv.config({
-    path: path.join(process.cwd(), `.${NODE_ENV}.env`),
+    path: path.join(process.cwd(), `.env.${NODE_ENV}`),
   });
 } else {
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

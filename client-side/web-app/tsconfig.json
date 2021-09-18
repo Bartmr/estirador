@@ -2,7 +2,6 @@
   "include": ["src", "type-declarations"],
   "compilerOptions": {
     "paths": {
-      "@config*": ["__config.debug*"],
       "@app/shared*": ["../../libs/shared/src*"]
     },
     "noEmit": true,
@@ -11,7 +10,7 @@
     "module": "es2020",
     "moduleResolution": "node",
     "lib": ["dom", "es2020"],
-    "jsx": "react-jsxdev",
+    "jsx": "react-jsx",
     "isolatedModules": true,
     "baseUrl": ".",
     "strict": true,

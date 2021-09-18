@@ -45,18 +45,14 @@ lerna-debug.log*
 # dotenv
 *.env
 .env.*
-!.development.env
-!.test.env
+!.env.development
+!.env.test
 
 # client-side
-/client-side/*/__config*
-!/client-side/*/__config.debug
-
 /client-side/*/.cache
 /client-side/*/public
 /client-side/*/dist
 /client-side/*/build
-
 /client-side/*/.webpack-bundle-analyzer
 
 _graphql-generated_
