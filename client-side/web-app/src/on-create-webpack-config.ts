@@ -38,8 +38,6 @@ export async function onCreateWebpackConfig({
       await exec(GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND);
     }
   } else if (EnvironmentVariables.IS_INTEGRITY_CHECK) {
-    await exec('rimraf _graphql-generated_ *._graphql-generated_.ts');
-
     await saveGraphQLSchemaToFile(store as unknown as GatsbyBuildTimeStore);
     await exec(GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND);
   }
