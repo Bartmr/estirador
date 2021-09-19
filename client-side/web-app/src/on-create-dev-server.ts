@@ -1,20 +1,12 @@
 /* eslint-disable no-console */
 import { spawn } from 'child_process';
-import { CreateDevServerArgs } from 'gatsby';
-
-import {
-  GatsbyBuildTimeStore,
-  GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND,
-  saveGraphQLSchemaToFile,
-} from './gatsby-build-utils';
+import { GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND } from './gatsby-build-utils';
 
 type Chunk = {
   toString: () => string;
 };
 
-export async function onCreateDevServer({ store }: CreateDevServerArgs) {
-  await saveGraphQLSchemaToFile(store as unknown as GatsbyBuildTimeStore);
-
+export async function onCreateDevServer() {
   const graphqlTypescriptGeneratorWatcherProcess = spawn(
     GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND + ' --watch',
     {
