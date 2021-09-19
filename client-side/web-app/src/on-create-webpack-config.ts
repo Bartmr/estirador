@@ -22,19 +22,10 @@ export async function onCreateWebpackConfig({
   store,
   actions,
 }: CreateWebpackConfigArgs) {
-  const generateGraphQLTypings = async () => {
-    try {
-      await exec('rimraf _graphql-generated_ *._graphql-generated_.ts');
-      await saveGraphQLSchemaToFile(store as unknown as GatsbyBuildTimeStore);
-      await exec(GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND);
-    } catch (err: unknown) {
-      console.error(err);
-      process.exit(1);
-    }
-  };
-
   // eslint-disable-next-line node/no-process-env
   if (process.env['NODE_ENV'] === 'development') {
+    await saveGraphQLSchemaToFile(store as unknown as GatsbyBuildTimeStore);
+
     const graphqlTypingsExist = await pathExists(
       '_graphql-generated_/typescript',
     );
@@ -44,10 +35,13 @@ export async function onCreateWebpackConfig({
         'Generating Typescript typings of GraphQL queries for the first time...',
       );
 
-      await generateGraphQLTypings();
+      await exec(GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND);
     }
   } else if (EnvironmentVariables.IS_INTEGRITY_CHECK) {
-    await generateGraphQLTypings();
+    await exec('rimraf _graphql-generated_ *._graphql-generated_.ts');
+
+    await saveGraphQLSchemaToFile(store as unknown as GatsbyBuildTimeStore);
+    await exec(GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND);
   }
 
   actions.setWebpackConfig({
