@@ -15,7 +15,7 @@
     "baseUrl": ".",
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
