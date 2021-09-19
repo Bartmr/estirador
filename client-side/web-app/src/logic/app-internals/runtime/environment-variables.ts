@@ -34,13 +34,13 @@ const schema = object({
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
-  HOST_URL: process.env['NEXT_PUBLIC_HOST_URL'],
-  PATH_PREFIX: process.env['NEXT_PUBLIC_PATH_PREFIX'],
-  CI: process.env['CI'],
-  IS_INTEGRITY_CHECK: process.env['IS_INTEGRITY_CHECK'],
-  DISABLE_ERROR_BOUNDARIES: process.env['NEXT_PUBLIC_DISABLE_ERROR_BOUNDARIES'],
-  LOG_DEBUG: process.env['NEXT_PUBLIC_LOG_DEBUG'],
-  MAIN_API_URL: process.env['NEXT_PUBLIC_MAIN_API_URL'],
+  HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,
+  PATH_PREFIX: process.env.NEXT_PUBLIC_PATH_PREFIX,
+  CI: process.env.CI,
+  IS_INTEGRITY_CHECK: process.env.IS_INTEGRITY_CHECK,
+  DISABLE_ERROR_BOUNDARIES: process.env.NEXT_PUBLIC_DISABLE_ERROR_BOUNDARIES,
+  LOG_DEBUG: process.env.NEXT_PUBLIC_LOG_DEBUG,
+  MAIN_API_URL: process.env.NEXT_PUBLIC_MAIN_API_URL,
 });
 
 if (environmentVariablesValidationResult.errors) {
