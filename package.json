@@ -43,7 +43,7 @@
     "test:all:cov": "jest --config ./test/jest-all.js --coverage",
     "test:all:cov:changed": "npm run test:all:cov -- --onlyChanged",
     "clean:api": "rimraf dist",
-    "build:api": "npm run clean:api && nest build",
+    "build:api": "npm run clean:api && nest build --path tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "typecheck:declaration-files": "tsc -p tsconfig.declaration-files.json --noEmit",
     "format": "prettier --write .",
