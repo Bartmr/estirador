@@ -63,7 +63,8 @@ export function notMeReactHookFormResolver<S extends Schema<FormValueBase>>(
     } else {
       return {
         values: validationResult.value,
-        errors: {},
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+        errors: {} as any,
       };
     }
   };
