@@ -37,11 +37,7 @@ To continue with the update write yes and press Enter.
 -----
 -----
 -----
------ BEFORE CONTINUING
-
-- CHECK IF THE UPDATE DIDN'T FAILED HALFWAY
-  - Confirm that new commits from the project boilerplate are in the project's git history by running 'git log'
-    - If no new commits from the project boilerplate are present, you can try running the update script again
+----- FURTHER INSTRUCTIONS
 
 - Review and pick the updates you want to add to the project
 
