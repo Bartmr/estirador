@@ -5,8 +5,7 @@ COPY ./client-side/web-app/src/ /usr/src/app/client-side/web-app/src/
 COPY ./libs/shared/ /usr/src/app/libs/shared/
 COPY ./package.json ./package-lock.json /usr/src/app/
 
-COPY ./client-side/web-app/.babelrc \
-./client-side/web-app/.nvmrc \
+COPY ./client-side/web-app/.nvmrc \
 ./client-side/web-app/load-build-environment.js \
 ./client-side/web-app/next.config.js \
 ./client-side/web-app/package.json \
