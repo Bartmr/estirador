@@ -12,6 +12,7 @@ type FormUtils<FormValue extends FormValueBase> = {
   getErrorTypesFromField: (path: FieldPath<FormValue>) => {
     [key: string]: ValidateResult;
   };
+  hasErrors: (path: FieldPath<FormValue>) => boolean;
 };
 
 export function useFormUtils<FormValue extends FormValueBase>(
@@ -31,6 +32,9 @@ export function useFormUtils<FormValue extends FormValueBase>(
       } else {
         return {};
       }
+    },
+    hasErrors: (path) => {
+      return Object.keys(formUtils.getErrorTypesFromField(path)).length > 0;
     },
   };
 
