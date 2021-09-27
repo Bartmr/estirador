@@ -9,7 +9,6 @@
   - There's an `.nvmrc` file in the root of the project, so you can call `nvm use` in the terminal.
   - If you want `nvm` to switch to the recommended version automatically when switching directories, [follow `nvm`'s instructions here](https://github.com/nvm-sh/nvm#deeper-shell-integration)
 - Run `npm run install:all`
-- (Optional) hook the `precommit` script in `package.json` to your Git pre-commit hook
 - Write down the project name and other details in `libs/shared/src/project-details.ts`
 - Change the names of the services in `infrastructure/docker-compose.yml` and `infrastructure/docker-compose.dev.yml`, so you don't end up using your other projects services that have the same name when you are using this project's _docker-compose_
   - Example: rename `postgres_estirador` to `postgres_my_project`

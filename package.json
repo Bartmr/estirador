@@ -57,7 +57,8 @@
     "reset-repository": "git clean -Xdf",
     "nest": "nest",
     "typeorm": "npm run ts-node ./node_modules/.bin/typeorm",
-    "ts-node": "ts-node --project tsconfig.build.json --transpile-only -r tsconfig-paths/register"
+    "ts-node": "ts-node --project tsconfig.build.json --transpile-only -r tsconfig-paths/register",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.18",
@@ -100,6 +101,7 @@
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-node": "^11.1.0",
+    "husky": "^7.0.2",
     "jest": "^27.0.6",
     "lint-staged": "^11.0.0",
     "npm-check-updates": "^11.7.1",
