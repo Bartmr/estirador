@@ -49,6 +49,7 @@ There's also a React component implementation of the `with-contrasting-colors` m
 - Inspect `package.json` for any more packages that are no longer needed, and uninstall them
 - Remove `gatsby-plugin-sass` from `gatsby-config`
 - Delete `src/components/ui-kit/global-styles` and any other _SCSS_ and _Sass_ files that are present in this project
+- Delete `src/components/ui-kit/components/icons`
 - Delete `src/components/ui-kit/core/coloring/with-contrasting-colors.tsx`
 - Fix any import errors that might arise
 - Install and setup UI library of choice
