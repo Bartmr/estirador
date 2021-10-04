@@ -29,6 +29,12 @@
 
 To update the project's boilerplate, just run `update-project-boilerplate.sh` and input the _Git_ repository URL of the boilerplate your project is based on. In this case `https://github.com/Bartmr/estirador.git`
 
+## Adding layers
+
+The core version of `estirador` can be enhanced with some pre-made layers that change its functionality and architecture (example: have `estirador` use `NextJS` instead of `Gatsby` ). These layers are placed on top of the default distribution's updates. To add a layer, you only have to run the update script like its described above, and instead of fetching updates from the `main` branch, you pick one of the layer branches listed here:
+
+- `layer/nextjs` - Replaces `Gatsby` with `NextJS`
+
 ## How to extend Estirador and create a similar updatable boilerplate for my company?
 
 - Just create a new repository following the instructions above on how to setup a new project, and do the changes you need to accommodate your company's requirements. That's it. It is now your company's own _Estirador_. Now when you create a project from it, remember to input your company's boilerplate _git_ repository URL instead of the official _Estirador_ URL. Also remember to keep your company's own boilerplate updated with _Estirador_'s by running the same update script in your company's boilerplate, but targeted to _Estirador_'s repository URL.
