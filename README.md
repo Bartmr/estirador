@@ -34,6 +34,7 @@ To update the project's boilerplate, just run `update-project-boilerplate.sh` an
 The core version of `estirador` can be enhanced with some pre-made layers that change its functionality and architecture (example: have `estirador` use `NextJS` instead of `Gatsby` ). These layers are placed on top of the default distribution's updates. To add a layer, you only have to run the update script like its described above, and instead of fetching updates from the `main` branch, you pick one of the layer branches listed here:
 
 - `layer/nextjs` - Replaces `Gatsby` with `NextJS`
+- `layer/gatsby-material-ui` - Adds `Material UI` for `Gatsby`
 
 > These layers receive updates once in a while, so don't forget to update them in the same way you added them
 
