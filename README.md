@@ -35,6 +35,8 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
 
 - `layer/nextjs` - Replaces `Gatsby` with `NextJS`
 
+> These layers receive updates once in a while, so don't forget to update them in the same way you added them
+
 ## How to extend Estirador and create a similar updatable boilerplate for my company?
 
 - Just create a new repository following the instructions above on how to setup a new project, and do the changes you need to accommodate your company's requirements. That's it. It is now your company's own _Estirador_. Now when you create a project from it, remember to input your company's boilerplate _git_ repository URL instead of the official _Estirador_ URL. Also remember to keep your company's own boilerplate updated with _Estirador_'s by running the same update script in your company's boilerplate, but targeted to _Estirador_'s repository URL.
