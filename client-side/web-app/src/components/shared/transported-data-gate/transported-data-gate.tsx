@@ -1,7 +1,9 @@
+import {
+  faExclamationCircle,
+  faSearch,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ReactNode } from 'react';
-import { IconSize } from 'src/components/ui-kit/components/icons/base/icon-types';
-import { ErrorIcon } from 'src/components/ui-kit/components/icons/error-icon';
-import { SearchIcon } from 'src/components/ui-kit/components/icons/search-icon';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import {
@@ -48,10 +50,10 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
   const spinnerPaddingClass =
     layout === TransportedDataGateLayout.Tape ? '' : 'p-3';
 
-  const iconSize =
-    layout === TransportedDataGateLayout.Tape ? undefined : IconSize.Thumbnail;
+  const iconSizeClassName =
+    layout === TransportedDataGateLayout.Tape ? '' : 'icon-thumbnail';
   const textClassName = `${
-    layout === TransportedDataGateLayout.Tape ? 'ml-3' : 'mt-3 h4'
+    layout === TransportedDataGateLayout.Tape ? 'ml-2' : 'mt-3 h4'
   }`;
 
   const gateContent = (() => {
@@ -111,7 +113,10 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       case TransportFailure.NotFound:
         return (
           <div className={flexClassName}>
-            <SearchIcon className={`text-primary`} size={iconSize} />
+            <FontAwesomeIcon
+              className={`text-primary ${iconSizeClassName}`}
+              icon={faSearch}
+            />
             <p
               className={`${textClassName} text-primary font-weight-bold mb-0`}
             >
@@ -122,7 +127,10 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       case TransportFailure.ConnectionFailure:
         return (
           <div className={flexClassName}>
-            <ErrorIcon className={`text-danger`} size={iconSize} />
+            <FontAwesomeIcon
+              className={`text-danger ${iconSizeClassName}`}
+              icon={faExclamationCircle}
+            />
             <p className={`${textClassName} text-danger mb-0`}>
               Connection Error
             </p>
@@ -131,7 +139,10 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       case TransportFailure.Forbidden:
         return (
           <div className={flexClassName}>
-            <ErrorIcon className={`text-danger`} size={iconSize} />
+            <FontAwesomeIcon
+              className={`text-danger ${iconSizeClassName}`}
+              icon={faExclamationCircle}
+            />
             <p className={`${textClassName} text-danger mb-0`}>
               You cannot access this content
             </p>
@@ -146,7 +157,10 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       case TransportFailure.UnexpectedResponse:
         return (
           <div className={flexClassName}>
-            <ErrorIcon className={`text-danger`} size={iconSize} />
+            <FontAwesomeIcon
+              className={`text-danger ${iconSizeClassName}`}
+              icon={faExclamationCircle}
+            />
             <p className={`text-danger ${textClassName} mb-0`}>
               An internal error occurred. Try again later.
             </p>

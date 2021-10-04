@@ -10,17 +10,20 @@ import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-import { ErrorIcon } from '../ui-kit/components/icons/error-icon';
-import { IconSize } from '../ui-kit/components/icons/base/icon-types';
 import { useRemoteConfig } from '../../logic/app-internals/remote-config/use-remote-config';
 import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FatalErrorFrame = () => {
   return (
     <div className="vh-100 bg-primary">
       <div className="h-75 d-flex flex-column justify-content-center align-items-center">
-        <ErrorIcon size={IconSize.Thumbnail} className="mb-4" />
+        <FontAwesomeIcon
+          className={`icon-thumbnail mb-4`}
+          icon={faExclamationCircle}
+        />
         <h2>Internal Error</h2>
         <p className="lead">
           An internal error occured. Please refresh the page and try again.
