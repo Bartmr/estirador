@@ -7,11 +7,8 @@ node_modules
 package.json
 package-lock.json
 
-/client-side/*/build
+/client-side/*/.next
 /client-side/*/dist
-/client-side/*/.cache
-/client-side/*/public
-/client-side/*/.webpack-bundle-analyzer
 
 _graphql-generated_
 *._graphql-generated_.ts

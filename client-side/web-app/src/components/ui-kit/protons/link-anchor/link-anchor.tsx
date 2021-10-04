@@ -1,4 +1,4 @@
-import { Link } from 'gatsby';
+import Link from 'next/link';
 import React, { ReactNode, SyntheticEvent } from 'react';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 
@@ -6,7 +6,6 @@ type Props = {
   children: ReactNode;
   href: string;
   className?: string;
-  activeClassName?: string;
   onClick?: (event: SyntheticEvent<HTMLAnchorElement>) => void;
   style?: React.CSSProperties;
   openExternalLinkInSameTab?: boolean;
@@ -60,13 +59,8 @@ export function LinkAnchor(props: Props) {
     );
   } else {
     return (
-      <Link
-        partiallyActive
-        activeClassName={props.activeClassName}
-        to={props.href}
-        {...commonProps}
-      >
-        {props.children}
+      <Link href={props.href} passHref>
+        <a {...commonProps}>{props.children}</a>
       </Link>
     );
   }

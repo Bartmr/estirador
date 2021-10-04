@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import * as styles from './header.module.scss';
+import styles from './header.module.scss';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { INDEX_ROUTE } from 'src/components/templates/index/index-routes';
 import { Nav } from 'react-bootstrap';

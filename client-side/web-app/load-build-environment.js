@@ -1,7 +1,4 @@
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.IS_INTEGRITY_CHECK === 'true'
-) {
+if (process.env.IS_INTEGRITY_CHECK === 'true') {
   require('dotenv').config({
     path: '.env.development',
   });

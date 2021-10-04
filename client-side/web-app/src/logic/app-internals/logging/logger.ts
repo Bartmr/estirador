@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { EnvironmentVariables } from '../runtime/environment-variables';
-import { RUNNING_IN_CLIENT, RUNNING_IN_SERVER } from '../runtime/running-in';
+import { RUNNING_IN_CLIENT } from '../runtime/running-in';
 
 const LOG_ENTRIES_LIMIT = 3;
 
@@ -59,11 +59,6 @@ class LoggerImpl {
 
     if (typeof extraData !== 'undefined') {
       console.error('Error extra data:', extraData);
-    }
-
-    // Stop building pages if one of them has an error
-    if (RUNNING_IN_SERVER) {
-      throw caughtValue;
     }
   }
 }

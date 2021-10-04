@@ -15,13 +15,14 @@ import {
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
 import { isTransportFailure } from 'src/logic/app-internals/transports/transported-data/is-transport-failure';
 import { INDEX_ROUTE } from '../index/index-routes';
-import { navigate } from 'gatsby';
+import { useRouter } from 'next/router';
 
 type LoginFormValue = { email: string; password: string };
 type UncompleteLoginFormValue = UncompletedForm<LoginFormValue, true>;
 
 function Content() {
   const apiSession = useMainApiSession();
+  const router = useRouter();
 
   const [submissionStatus, replaceSubmissionStatus] = useState<
     TransportedData<'wrong-credentials'>
@@ -50,7 +51,7 @@ function Content() {
       });
     } else {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      navigate(INDEX_ROUTE.getHref());
+      router.push(INDEX_ROUTE.getHref());
     }
   };
 

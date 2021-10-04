@@ -1,8 +1,9 @@
 {
-  "include": ["src", "type-declarations"],
+  "include": ["src", "type-declarations", "next-env.d.ts"],
   "compilerOptions": {
     "paths": {
-      "@app/shared*": ["../../libs/shared/src*"]
+      "@app/shared*": ["../../libs/shared/src*"],
+      "typeorm": ["../../node_modules/typeorm/typeorm-model-shim.js"]
     },
     "noEmit": true,
     "skipLibCheck": true,
@@ -22,6 +23,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "incremental": true,
-    "outDir": "./dist"
-  }
+    "outDir": "./dist",
+    "allowJs": true,
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules"]
 }

@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  postgres_estirador:
+  postgres_estirador-ecommerce-playground:
     image: postgres
     environment:
       - POSTGRES_DB=postgres
@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
-  postgres_test_estirador:
+  postgres_test_estirador-ecommerce-playground:
     image: postgres
     environment:
       - POSTGRES_DB=postgres_test
