@@ -39,3 +39,17 @@ There's also a React component implementation of the `with-contrasting-colors` m
 ### Useful snippets:
 
 - **// @refresh reset**: Sometimes you might want to force the state to be reset, and a component to be remounted. For example, this can be handy if you're tweaking an animation that only happens on mount. To do this, you can add this snippet anywhere in the file you're editing. This directive is local to the file, and instructs Fast Refresh to remount components defined in that file on every edit.
+
+### Recipes
+
+#### Replace Bootstrap and SASS with another UI library
+
+- `$ npm uninstall --save bootstrap react-bootstrap gatsby-plugin-sass` **`(node-sass or sass)`** `@fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome tinycolor2`
+- `$ npm uninstall --save-dev @types/tinycolor2`
+- Inspect `package.json` for any more packages that are no longer needed, and uninstall them
+- Remove `gatsby-plugin-sass` from `gatsby-config`
+- Delete `src/components/ui-kit/global-styles` and any other _SCSS_ and _Sass_ files that are present in this project
+- Delete `src/components/ui-kit/core/coloring/with-contrasting-colors.tsx`
+- Fix any import errors that might arise
+- Install and setup UI library of choice
+- Search for all files containing `className` and change their implementations in order to work with the UI library you chose

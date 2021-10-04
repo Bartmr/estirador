@@ -11,18 +11,17 @@
     @include with-contrasting-colors($navbar-bg-inverted);
   }
 
-  .navbar-nav {
-    .nav-link,
-    .navbar-text {
-      color: get-contrasting-color('body');
+  .navbar-brand,
+  .nav-link,
+  .navbar-text {
+    color: get-contrasting-color('body');
 
-      &:hover {
-        color: get-contrasting-color('body-hover');
-      }
+    &:hover {
+      color: get-contrasting-color('body-hover');
+    }
 
-      &:focus {
-        color: get-contrasting-color('body-hover');
-      }
+    &:focus {
+      color: get-contrasting-color('body-hover');
     }
   }
 
