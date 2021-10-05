@@ -11,14 +11,16 @@ import { generateUniqueUUID } from '@app/shared/internals/utils/uuid/generate-un
 import { ProcessContextManager } from './internals/process/process-context-manager';
 import { Connection } from 'typeorm';
 import { SettingsRepository } from './settings/typeorm/settings.repository';
+import { Settings } from './settings/typeorm/settings.entity';
 
 @Module({
   imports: [
+    LoggingModule.forRoot(LoggingServiceSingleton.getInstance()),
     TypeOrmModule.forRoot({
       ...DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
       autoLoadEntities: true,
     }),
-    LoggingModule.forRoot(LoggingServiceSingleton.getInstance()),
+    TypeOrmModule.forFeature([Settings]),
     AuthModule,
     RemoteConfigModule,
   ],
