@@ -53,6 +53,7 @@
     "integrity-check:web-app": "cd client-side/web-app && npm run integrity-check",
     "integrity-check:all": "concurrently \"npm run integrity-check:api\" \"npm run integrity-check:web-app\" -n \"api,web-app\"",
     "precommit": "lint-staged && npm run integrity-check:all",
+    "pre-merge-commit": "npm run install:all && npm run integrity-check:all",
     "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install",
     "reset-repository": "git clean -Xdf",
     "nest": "nest",
