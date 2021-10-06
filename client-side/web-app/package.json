@@ -63,7 +63,7 @@
     "build:profiling": "next build --profile",
     "develop": "next dev -p 8000",
     "debug": "NODE_OPTIONS='--inspect' next dev",
-    "serve": "next serve",
+    "serve": "next start",
     "typecheck": "tsc",
     "typecheck:declaration-files": "tsc -p tsconfig.declaration-files.json",
     "lint": "eslint --ext .ts,.tsx --max-warnings 0 .",
