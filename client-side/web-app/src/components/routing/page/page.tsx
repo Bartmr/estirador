@@ -22,7 +22,6 @@ export function Page(props: Props) {
   const { site } = useStaticQuery<GQLPageQuery>(graphql`
     query Page {
       site {
-        buildTime
         siteMetadata {
           title
         }
@@ -32,7 +31,6 @@ export function Page(props: Props) {
 
   const siteMetadata = site?.siteMetadata || throwError();
   const siteTitle = siteMetadata.title || throwError();
-  const siteBuildDate = site?.buildTime ?? throwError();
 
   const title = `${props.title} - ${siteTitle}`;
 
@@ -41,7 +39,6 @@ export function Page(props: Props) {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <span className="d-none">{`Build date: ${siteBuildDate}`}</span>
       <div className="min-vh-100 d-flex flex-column align-items-stretch">
         <Header menuHtmlId="page-header-menu" className="sticky-top" />
         <AuthenticatedRoute authenticationRules={props.authenticationRules}>
