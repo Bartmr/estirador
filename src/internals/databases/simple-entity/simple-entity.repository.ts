@@ -48,6 +48,9 @@ export interface FindOptions<Entity extends SimpleEntity>
   skip: number;
 }
 
+export type IncrementalUpdateChanges<Entity extends SimpleEntity> =
+  QueryDeepPartialEntity<Entity>;
+
 const FIND_LIMIT = 50;
 
 export abstract class SimpleEntityRepository<
@@ -253,7 +256,7 @@ export abstract class SimpleEntityRepository<
 
   async incrementalUpdate(
     entity: Entity,
-    values: QueryDeepPartialEntity<Entity>,
+    values: IncrementalUpdateChanges<Entity>,
     auditContext: AuditContext,
     options?: { manager?: EntityManager },
   ): Promise<void> {
@@ -267,7 +270,7 @@ export abstract class SimpleEntityRepository<
 
   async incrementalUpdateForMany(
     entities: Entity[],
-    values: QueryDeepPartialEntity<Entity>,
+    values: IncrementalUpdateChanges<Entity>,
     auditContext: AuditContext,
     options?: { manager?: EntityManager },
   ): Promise<void> {

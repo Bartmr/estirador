@@ -43,11 +43,11 @@ export async function createAndInitializeTestApp(args: {
 }): Promise<TestApp> {
   const moduleRef = await Test.createTestingModule({
     imports: [
+      LoggingModule.forRoot(loggingTestService),
       TypeOrmModule.forRoot({
         ...DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
         autoLoadEntities: true,
       }),
-      LoggingModule.forRoot(loggingTestService),
       AuthModule,
       ...args.imports,
     ],

@@ -9,11 +9,11 @@ import { RemoteConfigModule } from './remote-config/remote-config.module';
 
 @Module({
   imports: [
+    LoggingModule.forRoot(LoggingServiceSingleton.getInstance()),
     TypeOrmModule.forRoot({
       ...DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
       autoLoadEntities: true,
     }),
-    LoggingModule.forRoot(LoggingServiceSingleton.getInstance()),
     AuthModule,
     RemoteConfigModule,
   ],
