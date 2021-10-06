@@ -256,7 +256,7 @@ export abstract class SimpleEntityRepository<
 
   async incrementalUpdate(
     entity: Entity,
-    values: QueryDeepPartialEntity<Entity>,
+    values: IncrementalUpdateChanges<Entity>,
     auditContext: AuditContext,
     options?: { manager?: EntityManager },
   ): Promise<void> {
