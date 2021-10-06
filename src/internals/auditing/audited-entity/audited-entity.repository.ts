@@ -1,9 +1,11 @@
 import { AuditContext } from 'src/internals/auditing/audit-context';
-import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
+import {
+  IncrementalUpdateChanges,
+  SimpleEntityRepository,
+} from 'src/internals/databases/simple-entity/simple-entity.repository';
 import { DeepPartial, EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 import { ConcreteClass } from '@app/shared/internals/utils/types/classes-types';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,
@@ -155,7 +157,7 @@ export abstract class AuditedEntityRepository<
 
   async incrementalUpdateForMany(
     entities: Entity[],
-    values: QueryDeepPartialEntity<Entity>,
+    values: IncrementalUpdateChanges<Entity>,
     auditContext: AuditContext,
   ): Promise<void> {
     const run = async (manager: EntityManager) => {
