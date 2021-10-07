@@ -64,15 +64,10 @@ export abstract class ServerSideExternalJSONApiBase {
       validateStatus: () => true,
     });
 
-    const responseValidation = schema.validate(
-      {
-        status: response.status,
-        body: response.data as unknown,
-      },
-      {
-        abortEarly: true,
-      },
-    );
+    const responseValidation = schema.validate({
+      status: response.status,
+      body: response.data as unknown,
+    });
 
     if (responseValidation.errors) {
       const error = new Error();
