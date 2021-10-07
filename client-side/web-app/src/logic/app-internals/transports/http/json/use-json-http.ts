@@ -85,7 +85,6 @@ function makeJsonHttpRequest({
 
     const headersToAdd = {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
       ...headers,
     };
     const bodyToSend =
