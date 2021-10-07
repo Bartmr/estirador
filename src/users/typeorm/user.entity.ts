@@ -1,12 +1,12 @@
 import { getEnumValues } from '@app/shared/internals/utils/enums/get-enum-values';
 import { Role } from 'src/auth/roles/roles';
-import { AuditedEntity } from 'src/internals/auditing/audited-entity/audited.entity';
-import { Column, Entity } from 'typeorm';
+import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { Column, DeleteDateColumn, Entity } from 'typeorm';
 
 /**
  * BASE CLASS CREATED FOR TESTING!
  */
-export abstract class _UserBase extends AuditedEntity {
+export abstract class _UserBase extends SimpleEntity {
   @Column('text', { unique: true })
   email!: string;
 
@@ -25,9 +25,12 @@ export abstract class _UserBase extends AuditedEntity {
   })
   role!: Role;
 
+  @DeleteDateColumn()
+  deletedAt?: Date;
+
   toJSON() {
     return {
-      ...super.toJSON(),
+      ...this,
       passwordHash: undefined,
       passwordSalt: undefined,
     };

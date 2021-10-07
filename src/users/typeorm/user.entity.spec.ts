@@ -57,7 +57,6 @@ describe('User entity', () => {
 
     expect(user?.toJSON()).toEqual({
       ...testUser,
-      ...auditContextMock.persisted.auditContextEntityProps,
       passwordHash: undefined,
       passwordSalt: undefined,
     });
