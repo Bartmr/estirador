@@ -7,7 +7,7 @@ import { Column, Entity } from 'typeorm';
  * BASE CLASS CREATED FOR TESTING!
  */
 export abstract class _UserBase extends AuditedEntity {
-  @Column('text')
+  @Column('text', { unique: true })
   email!: string;
 
   @Column()

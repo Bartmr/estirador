@@ -8,6 +8,7 @@ import supertest from 'supertest';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { hashPassword } from 'src/users/hash-password';
+import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 
 export async function createAuthenticatedHttpAgent(
   app: TestApp,
@@ -21,7 +22,7 @@ export async function createAuthenticatedHttpAgent(
 
   const auditContextTestMock = createAuditContextTestMock();
 
-  const email = 'test@email.com';
+  const email = `${generateUniqueUUID()}@email.com`;
   const password = 'password123';
 
   const { passwordSalt, passwordHash } = await hashPassword(password);
