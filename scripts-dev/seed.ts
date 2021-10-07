@@ -9,9 +9,9 @@ import { ProcessContextManager } from 'src/internals/process/process-context-man
 import { ProcessType } from 'src/internals/process/process-context';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 import { UsersRepository } from 'src/users/users.repository';
-import bcrypt from 'bcrypt';
 import { Role } from 'src/auth/roles/roles';
 import { AuditContext } from '../src/internals/auditing/audit-context';
+import { hashPassword } from 'src/users/hash-password';
 
 async function seed() {
   if (NODE_ENV === NodeEnv.Development) {
@@ -49,9 +49,7 @@ async function seed() {
       authContext: undefined,
     };
 
-    const passwordSalt = await bcrypt.genSalt();
-
-    const passwordHash = await bcrypt.hash('password123', passwordSalt);
+    const { passwordSalt, passwordHash } = await hashPassword('password123');
 
     await repository.create(
       {
