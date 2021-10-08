@@ -45,11 +45,11 @@ lerna-debug.log*
 !.env.test
 
 # client-side
-/client-side/*/.cache
 /client-side/*/public
+/client-side/*/.cache
 /client-side/*/dist
-/client-side/*/build
 /client-side/*/.webpack-bundle-analyzer
+/client-side/*/coverage
 
 _graphql-generated_
 *._graphql-generated_.ts
