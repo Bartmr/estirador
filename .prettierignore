@@ -7,11 +7,16 @@ node_modules
 package.json
 package-lock.json
 
-/client-side/*/.next
+/client-side/*/build
 /client-side/*/dist
+/client-side/*/.next
+/client-side/*/.webpack-bundle-analyzer
+/client-side/*/coverage
 
 _graphql-generated_
 *._graphql-generated_.ts
+
+/infrastructure
 
 # Temporary files
 /_tmp

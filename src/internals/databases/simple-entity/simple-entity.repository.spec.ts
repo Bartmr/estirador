@@ -10,7 +10,7 @@ import { getDatabaseConnection } from '../../databases/spec/databases-test-utils
 import { SimpleEntity } from './simple.entity';
 import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 import { SimpleEntityRepository } from './simple-entity.repository';
-import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-test-audit-context';
+import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-audit-context-test-mock';
 
 const TEST_TABLE_NAME = 'simple_entity_spec';
 

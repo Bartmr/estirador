@@ -18,6 +18,7 @@ import { EmailService } from 'src/internals/email/email.service';
 import { SignupResult, UserSignupRequestDTO } from './users.dto';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { JobsConfigService } from 'src/internals/jobs/config/jobs-config.service';
+import { hashPassword } from './hash-password';
 
 @Injectable()
 export class UsersService
@@ -204,8 +205,7 @@ export class UsersService
         }
       }
 
-      const passwordSalt = await bcrypt.genSalt();
-      const passwordHash = await bcrypt.hash(data.password, passwordSalt);
+      const { passwordSalt, passwordHash } = await hashPassword(data.password);
 
       const dataWithoutPassword: PartialFields<
         UserSignupRequestDTO,

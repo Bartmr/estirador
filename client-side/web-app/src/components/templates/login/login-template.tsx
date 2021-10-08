@@ -7,7 +7,7 @@ import {
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { LOGIN_ROUTE } from './login-routes';
 import { useForm } from 'react-hook-form';
-import { UncompletedForm } from 'src/logic/app-internals/forms/uncompleted-form-types';
+import { UncompletedFormValue } from 'src/logic/app-internals/forms/uncompleted-form-types';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
@@ -18,7 +18,7 @@ import { INDEX_ROUTE } from '../index/index-routes';
 import { useRouter } from 'next/router';
 
 type LoginFormValue = { email: string; password: string };
-type UncompleteLoginFormValue = UncompletedForm<LoginFormValue, true>;
+type UncompleteLoginFormValue = UncompletedFormValue<LoginFormValue, true>;
 
 function Content() {
   const apiSession = useMainApiSession();

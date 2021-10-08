@@ -16,16 +16,10 @@ type FormField<T> =
   */
   | string;
 
-type _UncompletedForm<T, IsRootOfForm extends boolean = false> =
+export type UncompletedFormValue<T, IsRootOfForm extends boolean = false> =
   | (IsRootOfForm extends true ? never : undefined)
   | (T extends Array<unknown>
-      ? Array<_UncompletedForm<T[number]>>
+      ? Array<UncompletedFormValue<T[number]>>
       : T extends { [key: string]: unknown }
-      ? { [K in keyof T]: _UncompletedForm<T[K]> }
+      ? { [K in keyof T]: UncompletedFormValue<T[K]> }
       : FormField<T>);
-
-export type UncompletedForm<
-  T extends Array<unknown> | { [key: string]: unknown },
-  IsRootOfForm extends boolean = false,
-> = _UncompletedForm<T, IsRootOfForm>;
-export type UncompletedFormField<T> = FormField<T> | undefined;

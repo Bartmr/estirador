@@ -1,5 +1,5 @@
 import { Role } from 'src/auth/roles/roles';
-import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-test-audit-context';
+import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-audit-context-test-mock';
 import { getDatabaseConnection } from 'src/internals/databases/spec/databases-test-utils';
 import { Connection, Entity, EntityRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
@@ -57,7 +57,6 @@ describe('User entity', () => {
 
     expect(user?.toJSON()).toEqual({
       ...testUser,
-      ...auditContextMock.persisted.auditContextEntityProps,
       passwordHash: undefined,
       passwordSalt: undefined,
     });

@@ -22,7 +22,7 @@ export function LinkAnchor(props: Props) {
               props.onClick(e);
             }
           },
-          onKeyUp: (e: React.KeyboardEvent<HTMLAnchorElement>) => {
+          onKeyDown: (e: React.KeyboardEvent<HTMLAnchorElement>) => {
             if (e.code === 'Enter' && props.onClick) {
               props.onClick(e);
             }

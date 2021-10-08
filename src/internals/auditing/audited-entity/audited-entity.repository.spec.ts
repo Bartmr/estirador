@@ -2,7 +2,7 @@ import { Column, Connection, Entity, EntityRepository } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 import { getDatabaseConnection } from '../../databases/spec/databases-test-utils';
 import { AuditedEntityRepository } from './audited-entity.repository';
-import { createAuditContextTestMock } from '../spec/create-test-audit-context';
+import { createAuditContextTestMock } from '../spec/create-audit-context-test-mock';
 
 const TEST_TABLE_NAME = 'audited_entity_spec';
 

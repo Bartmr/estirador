@@ -44,10 +44,10 @@ async function bootstrap() {
     NODE_ENV === NodeEnv.Development &&
     clusterModeService.isWorkerThatCallsOtherRelatedSetups
   ) {
-    const { hotReloadDatabases } = await import(
+    const { hotReloadDatabases: hotReloadDatabasesImpl } = await import(
       './internals/databases/hot-reload-databases'
     );
-    hotReloadedDatabasesResult = await hotReloadDatabases();
+    hotReloadedDatabasesResult = await hotReloadDatabasesImpl();
   }
 
   /*

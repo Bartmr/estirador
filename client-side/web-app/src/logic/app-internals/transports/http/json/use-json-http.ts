@@ -8,16 +8,6 @@ import {
   JsonHttpResponseBase,
 } from './json-http-types';
 
-function setRequestHeaders(request: XMLHttpRequest, headers: OutgoingHeaders) {
-  Object.keys(headers).forEach((key) => {
-    const value = headers[key];
-
-    if (typeof value === 'string') {
-      request.setRequestHeader(key, value);
-    }
-  });
-}
-
 function logError({
   errorKey,
   error,
@@ -60,11 +50,11 @@ function logError({
   });
 }
 
-function makeJsonHttpRequest({
+async function makeJsonHttpRequest({
   method,
   url,
-  headers,
-  body,
+  headers: customHeaders,
+  body: uncategorizedBody,
   acceptableStatusCodes,
   withCredentials,
 }: {
@@ -76,105 +66,105 @@ function makeJsonHttpRequest({
   | { method: 'HEAD' | 'GET' | 'DELETE'; body?: undefined }
   | { method: 'POST' | 'PATCH' | 'PUT'; body: JsonHttpOutgoingBody }
 )) {
-  return new Promise<JsonHttpResponse<JsonHttpResponseBase>>((resolve) => {
-    const request = new XMLHttpRequest();
+  const headers: { [key: string]: string } = {
+    Accept: 'application/json',
+  };
 
-    if (typeof withCredentials === 'boolean') {
-      request.withCredentials = withCredentials;
+  let body: FormData | undefined | string;
+
+  if (uncategorizedBody instanceof FormData) {
+    body = uncategorizedBody;
+  } else if (typeof uncategorizedBody === 'undefined') {
+    body = undefined;
+  } else if (typeof uncategorizedBody === 'string') {
+    headers['Content-Type'] = 'text/plain';
+    body = uncategorizedBody;
+  } else {
+    headers['Content-Type'] = 'application/json';
+    body = JSON.stringify(uncategorizedBody);
+  }
+
+  for (const key of Object.keys(customHeaders)) {
+    const value = customHeaders[key];
+
+    if (typeof value === 'string') {
+      headers[key] = value;
     }
+  }
 
-    const headersToAdd = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      ...headers,
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      method,
+      headers,
+      credentials: withCredentials ? 'include' : undefined,
+      body,
+    });
+  } catch (err: unknown) {
+    return {
+      failure: TransportFailure.ConnectionFailure,
     };
-    const bodyToSend =
-      body instanceof FormData
-        ? body
-        : typeof body === 'undefined'
-        ? undefined
-        : typeof body === 'string'
-        ? body
-        : JSON.stringify(body);
+  }
 
-    request.onreadystatechange = () => {
-      if (request.readyState !== 4) {
-        return;
-      }
+  const responseText = await response.text();
 
-      let parsedBody;
-      try {
-        parsedBody =
-          request.responseText && method !== 'HEAD'
-            ? (JSON.parse(request.responseText) as JsonHttpResponseBase['body'])
-            : undefined;
-      } catch (error: unknown) {
-        logError({
-          errorKey: 'could-not-parse-json-http-response',
-          error,
-          url,
-          method,
-          status: request.status,
-          requestBody: body,
-          responseText: request.responseText,
-          withCredentials,
-        });
+  let parsedBody;
 
-        return resolve({
-          failure: TransportFailure.UnexpectedResponse,
-          status: request.status,
-        });
-      }
+  try {
+    parsedBody =
+      responseText && method !== 'HEAD'
+        ? (JSON.parse(responseText) as JsonHttpResponseBase['body'])
+        : undefined;
+  } catch (error: unknown) {
+    logError({
+      errorKey: 'could-not-parse-json-http-response',
+      error,
+      url,
+      method,
+      status: response.status,
+      requestBody: body,
+      responseText: responseText,
+      withCredentials,
+    });
 
-      if (!request.status) {
-        return resolve({
-          failure: TransportFailure.ConnectionFailure,
-        });
-      } else {
-        const logAndReturnAsUnexpected = () => {
-          logError({
-            errorKey: 'unexpected-json-http-response',
-            error: new Error(),
-            url,
-            method,
-            status: request.status,
-            requestBody: body,
-            responseText: request.responseText,
-            withCredentials,
-          });
-
-          return {
-            failure: TransportFailure.UnexpectedResponse,
-            status: request.status,
-          } as const;
-        };
-
-        if (acceptableStatusCodes.includes(request.status)) {
-          return resolve({
-            response: {
-              status: request.status,
-              body: parsedBody,
-            },
-            logAndReturnAsUnexpected,
-          });
-        } else {
-          const unexpectedResponseFailure = logAndReturnAsUnexpected();
-
-          return resolve(unexpectedResponseFailure);
-        }
-      }
+    return {
+      failure: TransportFailure.UnexpectedResponse,
+      status: response.status,
     };
+  }
 
-    request.open(method, url);
+  const logAndReturnAsUnexpected = () => {
+    logError({
+      errorKey: 'unexpected-json-http-response',
+      error: new Error(),
+      url,
+      method,
+      status: response.status,
+      requestBody: body,
+      responseText: responseText,
+      withCredentials,
+    });
 
-    setRequestHeaders(request, headersToAdd);
+    return {
+      failure: TransportFailure.UnexpectedResponse,
+      status: response.status,
+    } as const;
+  };
 
-    if (method === 'GET' || method === 'HEAD' || method === 'DELETE') {
-      request.send();
-    } else {
-      request.send(bodyToSend);
-    }
-  });
+  if (acceptableStatusCodes.includes(response.status)) {
+    return {
+      response: {
+        status: response.status,
+        body: parsedBody,
+      },
+      logAndReturnAsUnexpected,
+    };
+  } else {
+    const unexpectedResponseFailure = logAndReturnAsUnexpected();
+
+    return unexpectedResponseFailure;
+  }
 }
 
 class JSONHttp {

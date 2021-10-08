@@ -1,9 +1,8 @@
 node_modules
 
-.git
-
-/.next
+/build
 /dist
+/.next
 
 _graphql-generated_
 *._graphql-generated_.ts
