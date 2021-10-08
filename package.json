@@ -10,9 +10,7 @@
   },
   "scripts": {
     "install:all": "npm install -g concurrently && concurrently \"npm install\" \"npm run install:web-app\" -n \"install,install:web-app\"",
-    "install:all:ci": "npm ci && npm run install:web-app:ci",
     "install:web-app": "cd client-side/web-app && npm install",
-    "install:web-app:ci": "cd client-side/web-app && npm ci",
     "seed": "npm run ts-node ./scripts-dev/seed.ts",
     "tear-down-databases": "npm run ts-node ./scripts-dev/tear-down-databases.ts",
     "start:dev": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr.config.js --path tsconfig.build.json",

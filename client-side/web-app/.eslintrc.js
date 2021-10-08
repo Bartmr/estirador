@@ -92,6 +92,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-unnecessary-condition': 'error',
     '@typescript-eslint/unbound-method': 'error',
+    '@typescript-eslint/no-shadow': 'error',
     'no-console': 'error',
     'no-debugger': 'error',
     'react-hooks/rules-of-hooks': 'error',

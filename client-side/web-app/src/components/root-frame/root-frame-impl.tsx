@@ -92,16 +92,16 @@ const GiveContextToContents = (props: { children: ReactNode }) => {
       module.hot?.data as ModuleHotData | undefined
     )?.storeManager;
 
-    const storeManager =
+    const storeManagerForCurrentRuntime =
       storeManagerFromPreviousRuntime || createStoreManager();
 
     if (module.hot && RUNNING_IN_CLIENT) {
       module.hot.dispose((data: ModuleHotData) => {
-        data.storeManager = storeManager;
+        data.storeManager = storeManagerForCurrentRuntime;
       });
     }
 
-    return storeManager;
+    return storeManagerForCurrentRuntime;
   });
 
   return (

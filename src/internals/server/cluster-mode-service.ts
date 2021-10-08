@@ -164,9 +164,9 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
           );
 
           for (const workerId in cluster.workers) {
-            const worker = cluster.workers[workerId] || throwError();
+            const currentWorker = cluster.workers[workerId] || throwError();
 
-            worker.process.kill('SIGTERM');
+            currentWorker.process.kill('SIGTERM');
           }
 
           this.whenWorkerFailsBeforeStartHandler();
