@@ -12,9 +12,12 @@ package-lock.json
 /client-side/*/.cache
 /client-side/*/public
 /client-side/*/.webpack-bundle-analyzer
+/client-side/*/coverage
 
 _graphql-generated_
 *._graphql-generated_.ts
+
+/infrastructure
 
 # Temporary files
 /_tmp
