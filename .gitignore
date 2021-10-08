@@ -47,6 +47,7 @@ lerna-debug.log*
 # client-side
 /client-side/*/.next
 /client-side/*/dist
+/client-side/*/coverage
 
 _graphql-generated_
 *._graphql-generated_.ts

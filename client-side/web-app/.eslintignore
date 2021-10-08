@@ -1,8 +1,9 @@
 node_modules
 
-/build
-/dist
 /.next
+/dist
+/.webpack-bundle-analyzer
+/coverage
 
 _graphql-generated_
 *._graphql-generated_.ts
