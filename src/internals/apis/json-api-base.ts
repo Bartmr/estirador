@@ -54,13 +54,20 @@ export abstract class JSONApiBase {
     const url = `${this.apiUrl}${path}${
       queryParams ? `?${querystring.encode(queryParams)}` : ''
     }`;
+
     const response = await axios({
       method,
       url,
-      headers: {
+      headers: Object.entries({
         ...this.getDefaultHeaders(),
         ...headers,
-      },
+      }).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+        if (typeof value === 'string') {
+          acc[key] = value;
+        }
+
+        return acc;
+      }, {}),
       data: body,
       validateStatus: () => true,
     });

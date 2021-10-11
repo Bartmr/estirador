@@ -82,9 +82,7 @@ class LoggingServiceImpl extends LoggingService {
     extraData?: unknown,
   ) {
     const caughtValueIsInstanceOfError = caughtValue instanceof Error;
-    const error = caughtValueIsInstanceOfError
-      ? (caughtValue as Error)
-      : new Error();
+    const error = caughtValueIsInstanceOfError ? caughtValue : new Error();
 
     const clusterModeService = ClusterModeServiceSingleton.getInstance();
 

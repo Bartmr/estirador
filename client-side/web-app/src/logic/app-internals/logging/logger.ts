@@ -37,9 +37,7 @@ class LoggerImpl {
     extraData?: unknown,
   ) {
     const caughtValueIsInstanceOfError = caughtValue instanceof Error;
-    const error = caughtValueIsInstanceOfError
-      ? (caughtValue as Error)
-      : new Error();
+    const error = caughtValueIsInstanceOfError ? caughtValue : new Error();
 
     const numberOfTimesLogged = this.loggedErrors[errorKey] || 0;
 

@@ -1,5 +1,5 @@
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
-import cluster from 'cluster';
+import cluster, { Worker } from 'cluster';
 import os from 'os';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
 import { throwError } from '../utils/throw-error';
@@ -16,7 +16,7 @@ const totalCPUs = os.cpus().length;
 type ForkedWorkerEntry = {
   listening?: boolean;
   isWorkerThatCallsJobs: boolean;
-  worker: cluster.Worker;
+  worker: Worker;
 };
 
 const forkedWorkersMap = new Map<number, ForkedWorkerEntry>();
@@ -46,10 +46,10 @@ class ClusterModeService {
 
   private onMessageListener:
     | undefined
-    | ((worker: cluster.Worker, message: unknown) => void);
+    | ((worker: Worker, message: unknown) => void);
   private onExitListener:
     | undefined
-    | ((worker: cluster.Worker, code: number, signal: string) => void);
+    | ((worker: Worker, code: number, signal: string) => void);
   private whenWorkerFailsBeforeStartHandler!: WhenWorkerFailsBeforeStartHandler;
 
   private loggingService: LoggingService;
@@ -61,7 +61,9 @@ class ClusterModeService {
     this.isWorkerThatCallsOtherRelatedSetups =
       cluster.isMaster || !EnvironmentVariablesService.variables.FORK_WORKERS;
 
-    this.workerId = cluster.isMaster ? 'master' : `${cluster.worker.id}`;
+    this.workerId = cluster.isMaster
+      ? 'master'
+      : `${(cluster.worker || throwError()).id}`;
 
     this.isForkedWorker =
       EnvironmentVariablesService.variables.FORK_WORKERS && cluster.isWorker;
@@ -124,7 +126,7 @@ class ClusterModeService {
       }
     };
 
-    this.onExitListener = (worker: cluster.Worker) => {
+    this.onExitListener = (worker: Worker) => {
       const workerEntry = forkedWorkersMap.get(worker.id) || throwError();
       const isWorkerThatCallsJobs = workerEntry.isWorkerThatCallsJobs;
 
@@ -193,7 +195,7 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
     }
 
     if (this.isForkedWorker) {
-      cluster.worker.send(WORKER_IS_LISTENING_KEY);
+      (cluster.worker || throwError()).send(WORKER_IS_LISTENING_KEY);
     }
   }
 
@@ -210,7 +212,7 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
     const hangingWorkersTimeout = setTimeout(() => {
       process.exitCode = 1;
 
-      const hangingWorkersIds = Object.keys(cluster.workers);
+      const hangingWorkersIds = Object.keys(cluster.workers || throwError());
 
       if (hangingWorkersIds.length > 0) {
         this.loggingService._onlyLogErrorToConsole(
@@ -220,6 +222,10 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
         );
 
         for (const hangingWorkerId of hangingWorkersIds) {
+          if (!cluster.workers) {
+            throw new Error();
+          }
+
           const hangingWorker =
             cluster.workers[hangingWorkerId] || throwError();
 
@@ -236,7 +242,9 @@ The worker will not be restarted in order to avoid an endless loop of failed lau
       this.loggingService._onlyLogErrorToConsole(
         'cluster-mode-service:master-still-hangs',
         new Error(),
-        { stillHangingWorkersIds: Object.keys(cluster.workers) },
+        {
+          stillHangingWorkersIds: Object.keys(cluster.workers || throwError()),
+        },
       );
 
       process.exit();
@@ -304,7 +312,7 @@ export const ClusterModeServiceSingleton = {
     }
 
     if (
-      (cluster.isMaster ||
+      (cluster.isPrimary ||
         !EnvironmentVariablesService.variables.FORK_WORKERS) &&
       /*
         Running Node as a child process (like Webpack with Hot Reload does)
