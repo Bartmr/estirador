@@ -56,10 +56,16 @@ export abstract class ServerSideExternalJSONApiBase {
     const response = await axios({
       method,
       url,
-      headers: {
+      headers: Object.entries({
         ...this.getDefaultHeaders(),
         ...headers,
-      },
+      }).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+        if (typeof value === 'string') {
+          acc[key] = value;
+        }
+
+        return acc;
+      }, {}),
       data: body,
       validateStatus: () => true,
     });

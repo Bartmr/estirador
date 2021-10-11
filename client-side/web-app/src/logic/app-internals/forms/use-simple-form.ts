@@ -20,6 +20,7 @@ type FieldUtils<FormValue extends FormValueBase> = {
   ) => void;
   hasErrors: (name: keyof FormValue) => boolean;
   getErrors: (name: keyof FormValue) => { [key: string]: string };
+  isDirty: (name: keyof FormValue) => boolean;
 };
 
 export type SimpleForm<FormValue extends FormValueBase> = {
@@ -45,13 +46,18 @@ export function useSimpleForm<
   >(args.defaultValues || ({} as UncompletedSimpleFormValue<FormValue>));
   /*
    */
-  const [visibleErrors, replaceVisibleErrors] = useState<
-    { [K in keyof FormValue]?: { [key: string]: string } }
-  >({});
+  const [visibleErrors, replaceVisibleErrors] = useState<{
+    [K in keyof FormValue]?: { [key: string]: string };
+  }>({});
   /*
    */
   const [totalErrors, replaceTotalErrors] = useState<{
     [key: string]: AnyErrorMessagesTree;
+  }>({});
+  /*
+   */
+  const [dirtyFields, replaceDirtyFields] = useState<{
+    [K in keyof FormValue]?: boolean;
   }>({});
   /*
    */
@@ -64,43 +70,47 @@ export function useSimpleForm<
     hasErrors: (name) => !!visibleErrors[name],
     getErrors: (name) => visibleErrors[name] || {},
     setValue: (name, value) => {
-      replaceValues((oldValues) => {
-        const newValues = { ...oldValues, [name]: value };
+      if (!dirtyFields[name]) {
+        replaceDirtyFields((oldDirtyFields) => ({
+          ...oldDirtyFields,
+          [name]: true,
+        }));
+      }
 
-        const validationResult = args.schema.validate(newValues);
+      const validationResult = args.schema.validate(value);
 
-        if (validationResult.errors) {
-          const messagesTree = validationResult.messagesTree;
+      if (validationResult.errors) {
+        const messagesTree = validationResult.messagesTree;
 
-          const formMessagesTree = messagesTree[0];
+        const formMessagesTree = messagesTree[0];
 
-          if (typeof formMessagesTree === 'object') {
-            replaceTotalErrors(formMessagesTree);
+        if (typeof formMessagesTree === 'object') {
+          replaceTotalErrors(formMessagesTree);
 
-            const fieldErrors = formMessagesTree[name as string];
+          const fieldErrors = formMessagesTree[name as string];
 
-            if (fieldErrors) {
-              replaceVisibleErrors((e) => ({
-                ...e,
-                [name]: fieldErrors
-                  .filter((c): c is string => typeof c === 'string')
-                  .reduce<{ [key: string]: string }>((acc, fieldError) => {
-                    acc[fieldError] = fieldError;
+          if (fieldErrors) {
+            replaceVisibleErrors((e) => ({
+              ...e,
+              [name]: fieldErrors
+                .filter((c): c is string => typeof c === 'string')
+                .reduce<{ [key: string]: string }>((acc, fieldError) => {
+                  acc[fieldError] = fieldError;
 
-                    return acc;
-                  }, {}),
-              }));
-            }
-          } else {
-            throw new Error(
-              "Cannot have form errors coming from the form root object. Only it's fields.",
-            );
+                  return acc;
+                }, {}),
+            }));
           }
+        } else {
+          throw new Error(
+            "Cannot have form errors coming from the form root object. Only it's fields.",
+          );
         }
+      }
 
-        return newValues;
-      });
+      replaceValues((oldValues) => ({ ...oldValues, [name]: value }));
     },
+    isDirty: (name) => !!dirtyFields[name],
   };
 
   return {
@@ -125,9 +135,9 @@ export function useSimpleForm<
           replaceTotalErrors(formMessagesTree);
 
           replaceVisibleErrors(
-            Object.keys(formMessagesTree).reduce<
-              { [K in keyof FormValue]?: { [key: string]: string } }
-            >((formErrors, _key) => {
+            Object.keys(formMessagesTree).reduce<{
+              [K in keyof FormValue]?: { [key: string]: string };
+            }>((formErrors, _key) => {
               const key = _key as keyof FormValue;
 
               const fieldMesssagesTree = formMessagesTree[key as string];

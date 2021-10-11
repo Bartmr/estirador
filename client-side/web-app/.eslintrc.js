@@ -80,12 +80,6 @@ module.exports = {
       'error',
       { allowNumber: true, allowNullish: false },
     ],
-    '@typescript-eslint/no-implicit-any-catch': [
-      'error',
-      {
-        allowExplicitAny: false,
-      },
-    ],
     '@typescript-eslint/no-floating-promises': [
       'error',
       { ignoreVoid: false, ignoreIIFE: true },

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
@@ -14,7 +15,6 @@ export function notMeReactHookFormResolver<S extends Schema<FormValueBase>>(
     const validationResult = schema.validate(data);
 
     const parseMessagesTreeObject = (obj: ErrorMessagesTreeObject) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const errors: FieldErrors<any> = {};
 
       for (const key of Object.keys(obj)) {
