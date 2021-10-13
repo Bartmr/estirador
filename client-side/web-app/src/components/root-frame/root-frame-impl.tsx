@@ -6,7 +6,6 @@ import {
   createStoreManager,
   StoreManagerProvider,
 } from 'src/logic/app-internals/store/store-manager';
-import { useRemoteConfig } from '../../logic/app-internals/remote-config/use-remote-config';
 import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
@@ -58,8 +57,6 @@ class ErrorBoundary extends React.Component<
 }
 
 const ContentsFrame = (props: { children: ReactNode }) => {
-  useRemoteConfig();
-
   return <>{props.children}</>;
 };
 
