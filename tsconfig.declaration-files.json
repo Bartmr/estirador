@@ -10,6 +10,7 @@
   ],
   "compilerOptions": {
     "skipLibCheck": false,
-    "tsBuildInfoFile": "./dist/declaration-files.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/declaration-files.tsbuildinfo",
+    "baseUrl": "./"
   }
 }

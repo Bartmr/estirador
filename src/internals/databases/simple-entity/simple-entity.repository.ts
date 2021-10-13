@@ -1,7 +1,7 @@
 import {
   Class,
   ConcreteClass,
-} from '@app/shared/internals/utils/types/classes-types';
+} from 'libs/shared/src/internals/utils/types/classes-types';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import {
   AbstractRepository,

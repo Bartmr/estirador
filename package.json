@@ -144,10 +144,7 @@
     "moduleDirectories": [
       "node_modules",
       "<rootDir>"
-    ],
-    "moduleNameMapper": {
-      "@app/shared/(.*)": "<rootDir>/libs/shared/src/$1"
-    }
+    ]
   },
   "lint-staged": {
     "*.{js,jsx,json,ts,tsx,scss,sass,css,md}": "prettier --write"

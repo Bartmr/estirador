@@ -5,7 +5,7 @@ import { LoggerService } from '@nestjs/common';
 import { NODE_ENV } from './internals/environment/node-env.constants';
 import { NodeEnv } from './internals/environment/node-env.types';
 import { EnvironmentVariablesService } from './internals/environment/environment-variables.service';
-import { PROJECT_NAME } from '@app/shared/project-details';
+import { PROJECT_NAME } from 'libs/shared/src/project-details';
 import cookieParser from 'cookie-parser';
 
 if (NODE_ENV === NodeEnv.Test) {

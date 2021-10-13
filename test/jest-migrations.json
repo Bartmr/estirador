@@ -23,8 +23,5 @@
       "tsconfig": "tsconfig.test.json"
     }
   },
-  "moduleDirectories": ["node_modules", "<rootDir>"],
-  "moduleNameMapper": {
-    "@app/shared/(.*)": "<rootDir>/libs/shared/src/$1"
-  }
+  "moduleDirectories": ["node_modules", "<rootDir>"]
 }
