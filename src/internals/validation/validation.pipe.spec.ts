@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Schema } from 'not-me/lib/schemas/schema';
-import { ValidationSchema } from '@app/shared/internals/validation/validation-schema.decorator';
+import { ValidationSchema } from 'libs/shared/src/internals/validation/validation-schema.decorator';
 import { AppValidationPipe } from './validation.pipe';
 
 const schema: Schema<DTO> = object({

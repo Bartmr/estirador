@@ -5,7 +5,7 @@ import {
 } from 'src/internals/databases/simple-entity/simple-entity.repository';
 import { DeepPartial, EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
-import { ConcreteClass } from '@app/shared/internals/utils/types/classes-types';
+import { ConcreteClass } from 'libs/shared/src/internals/utils/types/classes-types';
 
 export abstract class AuditedEntityRepository<
   Entity extends AuditedEntity,

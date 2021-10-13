@@ -1,5 +1,5 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
-import { Class } from '@app/shared/internals/utils/types/classes-types';
+import { throwError } from 'libs/shared/src/internals/utils/throw-error';
+import { Class } from 'libs/shared/src/internals/utils/types/classes-types';
 
 export function EnforceParameterDecoratorTypesafety(
   parameterClass: Class,

@@ -3,7 +3,7 @@ import {
   JSONData,
   JSONPrimitive,
   SerializableJSONData,
-} from '@app/shared/internals/transports/json-types';
+} from 'libs/shared/src/internals/transports/json-types';
 import axios from 'axios';
 import querystring from 'querystring';
 import { LoggingService } from '../logging/logging.service';

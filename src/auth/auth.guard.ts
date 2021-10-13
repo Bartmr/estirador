@@ -1,4 +1,4 @@
-import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
+import { uuid } from 'libs/shared/src/internals/validation/schemas/uuid.schema';
 import {
   CanActivate,
   ExecutionContext,

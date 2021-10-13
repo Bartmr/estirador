@@ -9,7 +9,7 @@ import { throwError } from 'not-me/lib/utils/throw-error';
 import {
   SupportedValidationSchema,
   VALIDATION_SCHEMA_KEY,
-} from '@app/shared/internals/validation/validation-schema.decorator';
+} from 'libs/shared/src/internals/validation/validation-schema.decorator';
 
 @Injectable()
 export class AppValidationPipe implements PipeTransform<unknown> {

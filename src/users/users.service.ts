@@ -10,7 +10,7 @@ import { SignupVerificationToken } from './signup-verification-tokens/typeorm/si
 import { User } from './typeorm/user.entity';
 import { UsersRepository } from './users.repository';
 import bcrypt from 'bcrypt';
-import { PartialFields } from '@app/shared/internals/utils/types/partial-types';
+import { PartialFields } from 'libs/shared/src/internals/utils/types/partial-types';
 import { Role } from 'src/auth/roles/roles';
 import { SignupVerificationTokensRepository } from './signup-verification-tokens/signup-verifications-token.repository';
 import { USERS_SIGNUP_VERIFICATION_TTL } from './users.constants';

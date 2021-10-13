@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { isValueFromEnum } from '@app/shared/internals/utils/enums/is-value-from-enum';
+import { isValueFromEnum } from 'libs/shared/src/internals/utils/enums/is-value-from-enum';
 import { NodeEnv } from './node-env.types';
 
 // eslint-disable-next-line node/no-process-env

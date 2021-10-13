@@ -1,4 +1,4 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from 'libs/shared/src/internals/utils/throw-error';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';

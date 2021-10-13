@@ -12,15 +12,11 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@app/shared*": ["libs/shared/src*"]
-    }
+    "forceConsistentCasingInFileNames": true
   }
 }

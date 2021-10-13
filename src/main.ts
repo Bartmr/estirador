@@ -9,7 +9,7 @@ import { LoggingServiceSingleton } from './internals/logging/logging.service.sin
 import { NODE_ENV } from './internals/environment/node-env.constants';
 import { NodeEnv } from './internals/environment/node-env.types';
 import type { hotReloadDatabases } from './internals/databases/hot-reload-databases';
-import { UnwrapPromise } from '@app/shared/internals/utils/types/promise-types';
+import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
 import { ProcessType } from './internals/process/process-context';
 import { ProcessContextManager } from './internals/process/process-context-manager';
 import { generateRandomUUID } from './internals/utils/generate-random-uuid';
