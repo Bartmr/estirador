@@ -27,9 +27,6 @@ export abstract class AuditedEntity extends SimpleEntity {
   @Column('text', { nullable: true })
   processId?: string | null;
 
-  @Column('uuid', { nullable: true })
-  archivedByUserId?: string | null;
-
   // Set in AuditedEntityRepository. No need for @CreatedAtColumn()
   @Column('timestamp')
   createdAt!: Date;
@@ -44,7 +41,6 @@ export abstract class AuditedEntity extends SimpleEntity {
       requestPath: undefined,
       requestMethod: undefined,
       processId: undefined,
-      archivedByUserId: undefined,
     };
   }
 }

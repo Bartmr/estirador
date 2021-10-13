@@ -6,10 +6,6 @@ import {
   createStoreManager,
   StoreManagerProvider,
 } from 'src/logic/app-internals/store/store-manager';
-import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { useRemoteConfig } from '../../logic/app-internals/remote-config/use-remote-config';
 import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
@@ -62,21 +58,6 @@ class ErrorBoundary extends React.Component<
 }
 
 const ContentsFrame = (props: { children: ReactNode }) => {
-  const mainApiSession = useMainApiSession();
-
-  const mainApiSessionStatus = useStoreSelector(
-    { mainApi: mainApiReducer },
-    (s) => s.mainApi.session.status,
-  );
-
-  useEffect(() => {
-    (async () => {
-      if (mainApiSessionStatus === TransportedDataStatus.NotInitialized) {
-        await mainApiSession.restoreSession();
-      }
-    })();
-  }, [mainApiSessionStatus]);
-
   useRemoteConfig();
 
   return <>{props.children}</>;
