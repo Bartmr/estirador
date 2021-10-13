@@ -8,6 +8,10 @@ import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';
 import { ProcessType } from 'src/internals/process/process-context';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { UsersRepository } from 'src/users/users.repository';
+import { Role } from 'src/auth/roles/roles';
+import { AuditContext } from '../src/internals/auditing/audit-context';
+import { hashPassword } from 'src/users/hash-password';
 
 async function seed() {
   if (NODE_ENV === NodeEnv.Development) {
@@ -29,6 +33,34 @@ async function seed() {
     await tearDownDatabases([defaultDBConnection]);
 
     await defaultDBConnection.runMigrations();
+
+    const repository = defaultDBConnection.getCustomRepository(UsersRepository);
+
+    const processContext = ProcessContextManager.getContext();
+
+    const operationId = generateRandomUUID();
+    const processId = processContext.id;
+
+    const auditContext: AuditContext = {
+      operationId,
+      processId,
+      requestPath: undefined,
+      requestMethod: undefined,
+      authContext: undefined,
+    };
+
+    const { passwordSalt, passwordHash } = await hashPassword('password123');
+
+    await repository.create(
+      {
+        email: `end-user@email.com`,
+        role: Role.EndUser,
+        passwordHash,
+        passwordSalt,
+        isVerified: true,
+      },
+      auditContext,
+    );
 
     await Promise.all([defaultDBConnection.close()]);
   } else {

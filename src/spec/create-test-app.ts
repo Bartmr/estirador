@@ -1,6 +1,7 @@
 import { LoggerService, ModuleMetadata } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from 'src/auth/auth.module';
 import { CROSS_CUTTING_PROVIDERS } from 'src/cross-cutting-providers';
 import { DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS } from 'src/internals/databases/default-database-typeorm-connection-options';
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';
@@ -47,6 +48,7 @@ export async function createAndInitializeTestApp(args: {
         ...DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
         autoLoadEntities: true,
       }),
+      AuthModule,
       ...args.imports,
     ],
     providers: CROSS_CUTTING_PROVIDERS,

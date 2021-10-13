@@ -7,5 +7,6 @@ export function attachAuditContext(request: AppServerRequest) {
     operationId: generateUniqueUUID(),
     requestPath: request.path,
     requestMethod: request.method,
+    authContext: request.authContext,
   });
 }

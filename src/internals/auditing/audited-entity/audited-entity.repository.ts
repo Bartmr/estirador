@@ -22,6 +22,7 @@ export abstract class AuditedEntityRepository<
     entity.requestPath = auditContext.requestPath;
     entity.requestMethod = auditContext.requestMethod;
     entity.processId = auditContext.processId;
+    entity.archivedByUserId = auditContext.authContext?.user.id;
   }
 
   private async archiveChanges(
@@ -73,6 +74,7 @@ export abstract class AuditedEntityRepository<
         _entityLikeObject.requestPath = undefined;
         _entityLikeObject.requestMethod = undefined;
         _entityLikeObject.processId = undefined;
+        _entityLikeObject.archivedByUserId = undefined;
 
         const createdAt = new Date();
         _entityLikeObject.createdAt = createdAt;
