@@ -49,6 +49,10 @@ export function WithContrastingColors<
       color: dominantBackgroundColor,
     });
 
-    return <As {..._htmlElementProps}>{children}</As>;
+    return (
+      <As {..._htmlElementProps} className={className}>
+        {children}
+      </As>
+    );
   }
 }
