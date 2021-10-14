@@ -3,7 +3,7 @@ import { Logger } from 'src/logic/app-internals/logging/logger';
 import tinycolor from 'tinycolor2';
 
 type Props<AsHTMLElement extends keyof JSX.IntrinsicElements> = {
-  asHTMLElement: keyof AsHTMLElement;
+  asHTMLElement: AsHTMLElement;
   dominantBackgroundColor: string;
   children?: ReactNode;
   className?: string;
