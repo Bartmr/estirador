@@ -31,5 +31,9 @@
     }
   }
 
+  /*
+    Spot style conflicts early,
+    by always having 'color' set even when the contrasting colors haven't changed
+  */
   color: get-contrasting-color('body');
 }

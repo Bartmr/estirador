@@ -1,5 +1,21 @@
 @import 'src/components/ui-kit/global-styles/variables';
 
+/*
+  KEEP THESE CONTRASTING COLORS IMPORTS ON TOP,
+  RIGHT AFTER VARIABLES
+
+  These modifiers change the color of the text,
+  in order to have text contrasting with the background automatically,
+  in case the component itself hasn't set it already.
+
+  To avoid style conflicts, we must keep this import on top,
+  so the component's styles can be declared below these modifiers in the final CSS,
+  overriding the default colors from these modifiers
+*/
+@import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
+@import 'src/components/ui-kit/global-styles/additional-modifiers/contrasting-colors-modifiers';
+/* --- */
+
 $headings-margin-bottom: $spacer;
 $headings-font-weight: 700;
 
@@ -56,10 +72,27 @@ $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 
 @import 'node_modules/bootstrap/scss/bootstrap';
 
-@import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
+/* --- */
+
 @import 'src/components/ui-kit/global-styles/additional-mixins/inverted-color-scheme-mixins';
 
+/* --- */
+
 @import 'src/components/ui-kit/global-styles/root';
+
+/* --- */
+
+@import 'src/components/ui-kit/global-styles/additional-components/icon';
+
+/* --- */
+
+@import 'src/components/ui-kit/global-styles/additional-modifiers/text-modifiers';
+@import 'src/components/ui-kit/global-styles/additional-modifiers/card-modifiers';
+@import 'src/components/ui-kit/global-styles/additional-modifiers/spinners-modifiers';
+@import 'src/components/ui-kit/global-styles/additional-modifiers/navbar-modifiers';
+@import 'src/components/ui-kit/global-styles/additional-modifiers/selectable-modifiers';
+
+/* --- */
 
 @import 'src/components/ui-kit/global-styles/reboot';
 @import 'src/components/ui-kit/global-styles/type';
@@ -73,16 +106,6 @@ $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 @import 'src/components/ui-kit/global-styles/custom-forms';
 @import 'src/components/ui-kit/global-styles/utilities/background';
 @import 'src/components/ui-kit/global-styles/utilities/text';
-
-@import 'src/components/ui-kit/global-styles/additional-components/icon';
-
-@import 'src/components/ui-kit/global-styles/additional-modifiers/text-modifiers';
-@import 'src/components/ui-kit/global-styles/additional-modifiers/card-modifiers';
-@import 'src/components/ui-kit/global-styles/additional-modifiers/spinners-modifiers';
-@import 'src/components/ui-kit/global-styles/additional-modifiers/navbar-modifiers';
-@import 'src/components/ui-kit/global-styles/additional-modifiers/selectable-modifiers';
-@import 'src/components/ui-kit/global-styles/additional-modifiers/contrasting-colors-modifiers';
-
 @import 'src/components/ui-kit/global-styles/additional-utilities/background-utilities';
 @import 'src/components/ui-kit/global-styles/additional-utilities/text-utilities';
 @import 'src/components/ui-kit/global-styles/additional-utilities/link-utilities';

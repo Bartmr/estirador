@@ -45,8 +45,8 @@ export function WithContrastingColors<
       {..._htmlElementProps}
       className={`${className || ''} ${
         isColorDark(dominantBackgroundColor)
-          ? 'attach-light-contrasting-colors'
-          : 'attach-dark-contrasting-colors'
+          ? 'with-light-contrasting-colors'
+          : 'with-dark-contrasting-colors'
       }`}
     >
       {children}
