@@ -1,11 +1,16 @@
-import React, { FunctionComponent, ReactNode } from 'react';
+import React, { FunctionComponent } from 'react';
 import { AuthenticatedRouteRules } from './authenticated-route-types';
+import { RouteComponentProps } from '@reach/router';
 
-type Props = {
-  children: () => ReactNode;
-  authenticationRules: AuthenticatedRouteRules | null;
-};
+interface Props extends RouteComponentProps {
+  component: React.JSXElementConstructor<RouteComponentProps>;
+  authenticationRules: AuthenticatedRouteRules;
+}
 
-export const AuthenticatedRoute: FunctionComponent<Props> = (props) => {
-  return <>{props.children()}</>;
+export const AuthenticatedRoute: FunctionComponent<Props> = ({
+  authenticationRules: _authenticationRules,
+  component: Component,
+  ...rest
+}) => {
+  return <Component {...rest} />;
 };

@@ -8,7 +8,7 @@ import { NOT_FOUND_ROUTE } from './not-found-routes';
 type Props = RouteComponentProps;
 
 export const NotFoundTemplate = (_: Props) => (
-  <Layout title={NOT_FOUND_ROUTE.label} authenticationRules={null}>
+  <Layout title={NOT_FOUND_ROUTE.label}>
     {() => {
       return (
         <TransportedDataGate
