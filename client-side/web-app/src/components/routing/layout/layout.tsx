@@ -7,7 +7,7 @@ import { throwError } from 'src/logic/app-internals/utils/throw-error';
 import { AuthenticatedRouteRules } from '../authenticated-route/authenticated-route-types';
 import { Header } from './header/header';
 import { AuthenticatedRoute } from '../authenticated-route/authenticated-route';
-import { GQLPageQuery } from './page._graphql-generated_';
+import { GQLLayoutQuery } from './layout._graphql-generated_';
 
 type Props = {
   children: () => ReactNode;
@@ -18,9 +18,9 @@ type Props = {
   authenticationRules: AuthenticatedRouteRules | null;
 };
 
-export function Page(props: Props) {
-  const { site } = useStaticQuery<GQLPageQuery>(graphql`
-    query Page {
+export function Layout(props: Props) {
+  const { site } = useStaticQuery<GQLLayoutQuery>(graphql`
+    query Layout {
       site {
         siteMetadata {
           title
