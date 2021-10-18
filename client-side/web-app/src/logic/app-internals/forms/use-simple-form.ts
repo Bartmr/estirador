@@ -46,9 +46,9 @@ export function useSimpleForm<
   >(args.defaultValues || ({} as UncompletedSimpleFormValue<FormValue>));
   /*
    */
-  const [visibleErrors, replaceVisibleErrors] = useState<
-    { [K in keyof FormValue]?: { [key: string]: string } }
-  >({});
+  const [visibleErrors, replaceVisibleErrors] = useState<{
+    [K in keyof FormValue]?: { [key: string]: string };
+  }>({});
   /*
    */
   const [totalErrors, replaceTotalErrors] = useState<{
@@ -56,9 +56,9 @@ export function useSimpleForm<
   }>({});
   /*
    */
-  const [dirtyFields, replaceDirtyFields] = useState<
-    { [K in keyof FormValue]?: boolean }
-  >({});
+  const [dirtyFields, replaceDirtyFields] = useState<{
+    [K in keyof FormValue]?: boolean;
+  }>({});
   /*
    */
   const [finalValueWasRequested, replaceFinalValueWasRequested] =
@@ -135,9 +135,9 @@ export function useSimpleForm<
           replaceTotalErrors(formMessagesTree);
 
           replaceVisibleErrors(
-            Object.keys(formMessagesTree).reduce<
-              { [K in keyof FormValue]?: { [key: string]: string } }
-            >((formErrors, _key) => {
+            Object.keys(formMessagesTree).reduce<{
+              [K in keyof FormValue]?: { [key: string]: string };
+            }>((formErrors, _key) => {
               const key = _key as keyof FormValue;
 
               const fieldMesssagesTree = formMessagesTree[key as string];

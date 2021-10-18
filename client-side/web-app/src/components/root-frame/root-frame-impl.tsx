@@ -10,7 +10,6 @@ import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-import { useRemoteConfig } from '../../logic/app-internals/remote-config/use-remote-config';
 import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
@@ -76,8 +75,6 @@ const ContentsFrame = (props: { children: ReactNode }) => {
       }
     })();
   }, [mainApiSessionStatus]);
-
-  useRemoteConfig();
 
   return <>{props.children}</>;
 };

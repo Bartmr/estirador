@@ -57,11 +57,14 @@ class StoreManager {
 
       const reducer = reducersMapToLoad[key];
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!reducer) return;
       else if (reducer === this.reducersMap[key]) return;
 
       thereAreChangesToMerge = true;
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       changes[key] = reducer as any;
     }

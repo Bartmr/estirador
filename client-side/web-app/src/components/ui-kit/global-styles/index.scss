@@ -1,5 +1,21 @@
 @import 'src/components/ui-kit/global-styles/variables';
 
+/*
+  KEEP THESE CONTRASTING COLORS IMPORTS ON TOP,
+  RIGHT AFTER VARIABLES
+
+  These modifiers change the color of the text,
+  in order to have text contrasting with the background automatically,
+  in case the component itself hasn't set it already.
+
+  To avoid style conflicts, we must keep this import on top,
+  so the component's styles can be declared below these modifiers in the final CSS,
+  overriding the default colors from these modifiers
+*/
+@import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
+@import 'src/components/ui-kit/global-styles/additional-modifiers/contrasting-colors-modifiers';
+/* --- */
+
 $headings-margin-bottom: $spacer;
 $headings-font-weight: 700;
 
@@ -25,24 +41,44 @@ $spinner-border-width-lg: 0.3em;
 $navbar-bg: $body-bg;
 $navbar-bg-inverted: $body-bg-inverted;
 
-$navbar-dark-toggler-icon: none;
-
-$navbar-dark-toggler-icon-bg: $navbar-dark-toggler-icon;
-$navbar-light-toggler-icon-bg: $navbar-dark-toggler-icon;
-
-$navbar-dark-toggler-border-color: $border-color;
-$navbar-light-toggler-border-color: $border-color;
+$navbar-padding-y: map-get($spacers, 2);
+$navbar-toggler-padding-y: map-get($spacers, 2);
+$navbar-toggler-padding-x: map-get($spacers, 3);
 
 $navbar-dark-color: get-contrasting-color('body');
+$navbar-dark-hover-color: get-contrasting-color('body-hover');
+$navbar-dark-active-color: get-contrasting-color('body-hover');
+$navbar-dark-disabled-color: set-contrasting-color-alpha(
+  'body',
+  $text-muted-opacity
+);
+$navbar-dark-toggler-icon-bg: none;
+$navbar-dark-toggler-border-color: $border-color;
+
 $navbar-light-color: get-contrasting-color('body');
+$navbar-light-hover-color: get-contrasting-color('body-hover');
+$navbar-light-active-color: get-contrasting-color('body-hover');
+$navbar-light-disabled-color: set-contrasting-color-alpha(
+  'body',
+  $text-muted-opacity
+);
+$navbar-light-toggler-icon-bg: none;
+$navbar-light-toggler-border-color: $border-color;
+
+$navbar-light-brand-color: get-contrasting-color('body');
+$navbar-light-brand-hover-color: get-contrasting-color('body-hover');
+$navbar-dark-brand-color: get-contrasting-color('body');
+$navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 
 @import 'node_modules/bootstrap/scss/bootstrap';
 
-@import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
+/* --- */
+
 @import 'src/components/ui-kit/global-styles/additional-mixins/inverted-color-scheme-mixins';
 
-@import 'src/components/ui-kit/global-styles/root';
+/* --- */
 
+@import 'src/components/ui-kit/global-styles/root';
 @import 'src/components/ui-kit/global-styles/reboot';
 @import 'src/components/ui-kit/global-styles/type';
 @import 'src/components/ui-kit/global-styles/grid';
@@ -53,16 +89,21 @@ $navbar-light-color: get-contrasting-color('body');
 @import 'src/components/ui-kit/global-styles/progress';
 @import 'src/components/ui-kit/global-styles/forms';
 @import 'src/components/ui-kit/global-styles/custom-forms';
-@import 'src/components/ui-kit/global-styles/utilities/background';
-@import 'src/components/ui-kit/global-styles/utilities/text';
 
 @import 'src/components/ui-kit/global-styles/additional-components/icon';
+
+/* --- */
 
 @import 'src/components/ui-kit/global-styles/additional-modifiers/text-modifiers';
 @import 'src/components/ui-kit/global-styles/additional-modifiers/card-modifiers';
 @import 'src/components/ui-kit/global-styles/additional-modifiers/spinners-modifiers';
 @import 'src/components/ui-kit/global-styles/additional-modifiers/navbar-modifiers';
 @import 'src/components/ui-kit/global-styles/additional-modifiers/selectable-modifiers';
+
+/* --- */
+
+@import 'src/components/ui-kit/global-styles/utilities/background';
+@import 'src/components/ui-kit/global-styles/utilities/text';
 
 @import 'src/components/ui-kit/global-styles/additional-utilities/background-utilities';
 @import 'src/components/ui-kit/global-styles/additional-utilities/text-utilities';

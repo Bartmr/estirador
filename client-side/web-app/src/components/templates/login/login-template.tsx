@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AuthenticatedRouteAccess } from 'src/components/routing/authenticated-route/authenticated-route-types';
-import { Page } from 'src/components/routing/page/page';
+import { Layout } from 'src/components/routing/layout/layout';
 import {
   TransportedData,
   TransportedDataStatus,
@@ -16,6 +16,7 @@ import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use
 import { isTransportFailure } from 'src/logic/app-internals/transports/transported-data/is-transport-failure';
 import { INDEX_ROUTE } from '../index/index-routes';
 import { navigate } from 'gatsby';
+import { AuthenticatedRoute } from 'src/components/routing/authenticated-route/authenticated-route';
 
 type LoginFormValue = { email: string; password: string };
 type UncompleteLoginFormValue = UncompletedFormValue<LoginFormValue, true>;
@@ -101,15 +102,17 @@ function Content() {
 
 export function LoginTemplate() {
   return (
-    <Page
-      title={LOGIN_ROUTE.label}
-      authenticationRules={{
-        mainApiSession: { access: AuthenticatedRouteAccess.Block },
-      }}
-    >
+    <Layout title={LOGIN_ROUTE.label}>
       {() => {
-        return <Content />;
+        return (
+          <AuthenticatedRoute
+            authenticationRules={{
+              mainApiSession: { access: AuthenticatedRouteAccess.Block },
+            }}
+            component={Content}
+          />
+        );
       }}
-    </Page>
+    </Layout>
   );
 }
