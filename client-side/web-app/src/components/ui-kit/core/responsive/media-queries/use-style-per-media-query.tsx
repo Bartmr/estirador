@@ -1,8 +1,8 @@
 import { camelCaseToCSSPropertyName } from '../../utils/camel-case-to-css-property-name';
 
-function styleToCSSString(
-  style: { [K in keyof React.CSSProperties]: React.CSSProperties[K] },
-) {
+function styleToCSSString(style: {
+  [K in keyof React.CSSProperties]: React.CSSProperties[K];
+}) {
   return Object.entries<string | undefined | number>(style)
     .map(([k, v]) => {
       if (typeof v === 'undefined') {

@@ -9,8 +9,6 @@ export type PartialFields<
   T,
   PartialFieldKeys extends keyof T,
 > = OmitWithTypesafeKeys<T, PartialFieldKeys> &
-  Partial<
-    {
-      [PK in PartialFieldKeys]: T[PK];
-    }
-  >;
+  Partial<{
+    [PK in PartialFieldKeys]: T[PK];
+  }>;

@@ -20,11 +20,9 @@ export type Store = ReduxStore<StoreState, StoreAction>;
 export type StoreDispatch<
   ReducerKey extends keyof FullyLoadedStoreReducersMap,
 > = Dispatch<
-  ActionFromReducersMapObject<
-    {
-      [K in ReducerKey]: FullyLoadedStoreReducersMap[K];
-    }
-  >
+  ActionFromReducersMapObject<{
+    [K in ReducerKey]: FullyLoadedStoreReducersMap[K];
+  }>
 >;
 
 export type StoreGetState<StateKey extends keyof FullyLoadedStoreState> =
