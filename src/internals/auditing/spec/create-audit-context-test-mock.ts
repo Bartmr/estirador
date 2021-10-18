@@ -13,7 +13,6 @@ export function createAuditContextTestMock() {
     processId,
     requestPath: undefined,
     requestMethod: undefined,
-    authContext: undefined,
   };
 
   const auditContextEntityProps = {

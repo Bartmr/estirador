@@ -2,30 +2,10 @@
 .navbar.navbar-light,
 .navbar.navbar-dark {
   background-color: $navbar-bg;
-
   @include with-contrasting-colors($navbar-bg);
 
   @include on-inverted-color-scheme {
     background-color: $navbar-bg-inverted;
-
     @include with-contrasting-colors($navbar-bg-inverted);
-  }
-
-  .navbar-brand,
-  .nav-link,
-  .navbar-text {
-    color: get-contrasting-color('body');
-
-    &:hover {
-      color: get-contrasting-color('body-hover');
-    }
-
-    &:focus {
-      color: get-contrasting-color('body-hover');
-    }
-  }
-
-  .navbar-toggler {
-    padding: map-get($map: $spacers, $key: 2) map-get($map: $spacers, $key: 3);
   }
 }

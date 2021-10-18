@@ -9,8 +9,6 @@ export type RequiredFields<
   T,
   RequiredFieldKeys extends keyof T,
 > = OmitWithTypesafeKeys<T, RequiredFieldKeys> &
-  Required<
-    {
-      [RK in RequiredFieldKeys]: T[RK];
-    }
-  >;
+  Required<{
+    [RK in RequiredFieldKeys]: T[RK];
+  }>;

@@ -5,7 +5,6 @@ import {
 } from 'redux';
 import { devToolsEnhancer } from 'redux-devtools-extension/developmentOnly';
 import { Store, StoreAction, StoreState } from './store-types';
-import { MAIN_API_SESSION_LOGOUT } from '../apis/main/session/main-api-session-actions';
 import { StoreReducersMap } from './store-reducers-map';
 import { createContext, ReactNode, useContext } from 'react';
 import { throwError } from '../utils/throw-error';
@@ -35,13 +34,7 @@ class StoreManager {
   combineInternalReducersMap() {
     const combinedReducer = combineReducers(this.reducersMap) as RootReducer;
 
-    const rootReducer: RootReducer = (stateArg, action) => {
-      let state = stateArg;
-
-      if (action.type === MAIN_API_SESSION_LOGOUT) {
-        state = undefined;
-      }
-
+    const rootReducer: RootReducer = (state, action) => {
       return combinedReducer(state, action);
     };
 
@@ -57,11 +50,14 @@ class StoreManager {
 
       const reducer = reducersMapToLoad[key];
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!reducer) return;
       else if (reducer === this.reducersMap[key]) return;
 
       thereAreChangesToMerge = true;
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       changes[key] = reducer as any;
     }

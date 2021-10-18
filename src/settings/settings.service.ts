@@ -31,7 +31,6 @@ export class SettingsService {
       operationId: generateUniqueUUID(),
       requestPath: undefined,
       requestMethod: undefined,
-      authContext: undefined,
       processId: ProcessContextManager.getContext().id,
     };
 

@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "declaration": false,
-    "outDir": "../../dist/libs/shared"
+    "outDir": "../../dist/libs/shared/src"
   },
   "include": ["src", "../../type-declarations"]
 }
