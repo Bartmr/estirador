@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import {
   AuthenticatedRouteRules,
   AuthenticatedRouteAccess,
@@ -18,11 +18,11 @@ interface Props extends RouteComponentProps {
   authenticationRules: AuthenticatedRouteRules;
 }
 
-export const AuthenticatedRoute: FunctionComponent<Props> = ({
+export const AuthenticatedRoute = ({
   authenticationRules,
   component: Component,
   ...rest
-}) => {
+}: Props) => {
   const sessionWrapper = useStoreSelector(
     { mainApi: mainApiReducer },
     (state) => state.mainApi.session,
