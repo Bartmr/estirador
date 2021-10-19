@@ -16,7 +16,7 @@ import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use
 import { isTransportFailure } from 'src/logic/app-internals/transports/transported-data/is-transport-failure';
 import { INDEX_ROUTE } from '../index/index-routes';
 import { navigate } from 'gatsby';
-import { AuthenticatedRoute } from 'src/components/routing/authenticated-route/authenticated-route';
+import { AuthenticatedFrame } from 'src/components/routing/authenticated-route/authenticated-frame';
 
 type LoginFormValue = { email: string; password: string };
 type UncompleteLoginFormValue = UncompletedFormValue<LoginFormValue, true>;
@@ -105,12 +105,13 @@ export function LoginTemplate() {
     <Layout title={LOGIN_ROUTE.label}>
       {() => {
         return (
-          <AuthenticatedRoute
+          <AuthenticatedFrame
             authenticationRules={{
               mainApiSession: { access: AuthenticatedRouteAccess.Block },
             }}
-            component={Content}
-          />
+          >
+            {() => <Content />}
+          </AuthenticatedFrame>
         );
       }}
     </Layout>
