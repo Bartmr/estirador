@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { DatesContextProvider } from 'src/logic/app-internals/i18n/dates/dates-context';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { Provider } from 'react-redux';
 import {
@@ -88,13 +87,11 @@ const GiveContextToContents = (props: { children: ReactNode }) => {
   });
 
   return (
-    <DatesContextProvider>
-      <StoreManagerProvider storeManager={storeManager}>
-        <Provider store={storeManager.store}>
-          <ContentsFrame>{props.children}</ContentsFrame>
-        </Provider>
-      </StoreManagerProvider>
-    </DatesContextProvider>
+    <StoreManagerProvider storeManager={storeManager}>
+      <Provider store={storeManager.store}>
+        <ContentsFrame>{props.children}</ContentsFrame>
+      </Provider>
+    </StoreManagerProvider>
   );
 };
 
