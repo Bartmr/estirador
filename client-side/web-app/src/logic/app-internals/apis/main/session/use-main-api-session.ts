@@ -32,7 +32,7 @@ class MainApiSession {
       return res.failure;
     } else {
       if (res.response.status === 404) {
-        return 'wrong-credentials';
+        return 'wrong-credentials' as const;
       } else {
         this.localStorage.setItem(
           MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,

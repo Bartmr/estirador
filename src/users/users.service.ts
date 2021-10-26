@@ -131,6 +131,7 @@ export class UsersService
     });
   }
 
+  // TODO: review email copy
   async sendVerificationLinkEmail(to: string, verificationLink: string) {
     await this.emailService.sendEmail({
       to,
