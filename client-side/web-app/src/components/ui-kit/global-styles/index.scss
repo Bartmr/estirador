@@ -89,6 +89,7 @@ $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 @import 'src/components/ui-kit/global-styles/progress';
 @import 'src/components/ui-kit/global-styles/forms';
 @import 'src/components/ui-kit/global-styles/custom-forms';
+@import 'src/components/ui-kit/global-styles/badge';
 
 @import 'src/components/ui-kit/global-styles/additional-components/icon';
 
@@ -114,5 +115,4 @@ $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 @import 'src/components/ui-kit/global-styles/additional-utilities/user-select-utilities';
 @import 'src/components/ui-kit/global-styles/additional-utilities/opacity-utilities';
 @import 'src/components/ui-kit/global-styles/additional-utilities/z-index-utilities';
-@import 'src/components/ui-kit/global-styles/additional-utilities/overflow-utilities';
 @import 'src/components/ui-kit/global-styles/additional-utilities/size-utilities';
