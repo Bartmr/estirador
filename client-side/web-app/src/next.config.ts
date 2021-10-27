@@ -3,7 +3,9 @@ import './logic/app-internals/runtime/environment-variables';
 
 import path from 'path';
 
-export const NEXT_CONFIG = () => {
+import { NextConfig } from 'next';
+
+export const NEXT_CONFIG = (): NextConfig => {
   return {
     webpack: (config: {
       resolve: {
