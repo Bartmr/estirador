@@ -9,32 +9,20 @@ import {
   Controller,
   Get,
   HttpCode,
+  InternalServerErrorException,
   NotFoundException,
   Post,
   Request,
   Response,
 } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
-import { NODE_ENV } from 'src/internals/environment/node-env.constants';
-import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { AppServerResponse } from 'src/internals/server/types/app-server-response-types';
-import { UsersService } from 'src/users/users.service';
-import { Connection } from 'typeorm';
 import { AuthContext } from './auth-context';
 import { WithOptionalAuthContext } from './auth-context.decorator';
-import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { PublicRoute } from './public-route.decorator';
-import { AuthTokensService } from './tokens/auth-tokens.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private tokensService: AuthTokensService,
-    @InjectConnection() private connection: Connection,
-    private usersService: UsersService,
-  ) {}
-
   @HttpCode(201)
   @PublicRoute()
   @Post()
@@ -54,32 +42,25 @@ export class AuthController {
       throw new BadRequestException();
     }
 
-    const matchResult = await this.usersService.doCredentialsMatch(
-      this.connection.manager,
-      body.email,
-      body.password,
-    );
+    // TODO: implement
+    throw new InternalServerErrorException();
 
-    if (matchResult.result === 'dont-match') {
-      throw new NotFoundException();
-    } else {
-      const token = await this.tokensService.createAuthToken(
-        this.connection.manager,
-        matchResult.user,
-      );
-
-      response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpsOnlyKey, {
-        expires: token.expires,
-        httpOnly: true,
-        secure: NODE_ENV === NodeEnv.Production,
-        domain: hostname,
-      });
-
-      return {
-        authTokenId: token.id,
-        session: { userId: matchResult.user.id },
-      };
-    }
+    // const token = await this.tokensService.createAuthToken(
+    //   this.connection.manager,
+    //   matchResult.user,
+    // );
+    //
+    // response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpsOnlyKey, {
+    //   expires: token.expires,
+    //   httpOnly: true,
+    //   secure: NODE_ENV === NodeEnv.Production,
+    //   domain: hostname,
+    // });
+    //
+    // return {
+    //   authTokenId: token.id,
+    //   session: { userId: matchResult.user.id },
+    // };
   }
 
   @Get()

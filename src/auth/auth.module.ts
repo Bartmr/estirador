@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthTokensService } from './tokens/auth-tokens.service';
@@ -10,11 +9,7 @@ import { AuthToken } from './tokens/typeorm/auth-token.entity';
 import { User } from 'src/users/typeorm/user.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([AuthToken, User]),
-    JobsConfigModule,
-    UsersModule,
-  ],
+  imports: [TypeOrmModule.forFeature([AuthToken, User]), JobsConfigModule],
   providers: [
     {
       provide: APP_GUARD,

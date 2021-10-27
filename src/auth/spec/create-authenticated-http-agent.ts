@@ -1,52 +1,27 @@
-import { createAuditContextTestMock } from 'src/internals/auditing/spec/create-audit-context-test-mock';
-import { getDatabaseConnection } from 'src/internals/databases/spec/databases-test-utils';
 import { TestApp } from 'src/spec/test-app-types';
-import { User } from 'src/users/typeorm/user.entity';
-import { UsersRepository } from 'src/users/users.repository';
-import { Role } from '../roles/roles';
 import supertest from 'supertest';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { hashPassword } from 'src/users/hash-password';
-import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 
-export async function createAuthenticatedHttpAgent(
-  app: TestApp,
-  newUserOptions?: {
-    role?: Role;
-  },
-) {
-  const connection = await getDatabaseConnection([User]);
+export async function createAuthenticatedHttpAgent() {
+  // app: TestApp,
+  // newUserOptions?: {
+  //   role?: Role;
+  // },
 
-  const userRepository = connection.getCustomRepository(UsersRepository);
+  // TODO: implement
+  throw new Error('Not implemented');
 
-  const auditContextTestMock = createAuditContextTestMock();
+  // const agentValues = await createAuthenticatedHttpAgentForExistingUser(app, {
+  //   email,
+  //   password,
+  // });
 
-  const email = `${generateUniqueUUID()}@email.com`;
-  const password = 'password123';
-
-  const { passwordSalt, passwordHash } = await hashPassword(password);
-
-  const newUser = await userRepository.create(
-    {
-      email,
-      passwordSalt,
-      passwordHash,
-      role: newUserOptions?.role || Role.EndUser,
-    },
-    auditContextTestMock.auditContext,
-  );
-
-  const agentValues = await createAuthenticatedHttpAgentForExistingUser(app, {
-    email,
-    password,
-  });
-
-  return {
-    ...agentValues,
-    auditContextTestMock,
-    newUser,
-  };
+  // return {
+  //   ...agentValues,
+  //   auditContextTestMock,
+  //   newUser,
+  // };
 }
 
 export async function createAuthenticatedHttpAgentForExistingUser(
