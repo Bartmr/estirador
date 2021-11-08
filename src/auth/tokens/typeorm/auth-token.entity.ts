@@ -7,7 +7,7 @@ export class AuthToken {
   id!: string;
 
   @Column('uuid')
-  httpsOnlyKey!: string;
+  httpOnlyKey!: string;
 
   @ManyToOne(() => User, { eager: true })
   user!: User;

@@ -67,7 +67,11 @@ export class AuthTokensService
   ): Promise<User> {
     const authToken = await this.findToken(authTokenId);
 
-    if (!authToken || authToken.httpsOnlyKey !== httpOnlyAuthTokenKey) {
+    if (!authToken) {
+      throw new UnauthorizedException();
+    }
+
+    if (authToken.httpOnlyKey !== httpOnlyAuthTokenKey) {
       throw new UnauthorizedException();
     }
 

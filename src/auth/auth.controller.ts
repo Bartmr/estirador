@@ -50,7 +50,7 @@ export class AuthController {
     //   matchResult.user,
     // );
     //
-    // response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpsOnlyKey, {
+    // response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpOnlyKey, {
     //   expires: token.expires,
     //   httpOnly: true,
     //   secure: NODE_ENV === NodeEnv.Production,

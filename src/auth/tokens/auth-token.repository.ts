@@ -27,7 +27,7 @@ export class AuthTokensRepository extends AbstractRepository<AuthToken> {
 
     const token = new AuthToken();
 
-    token.httpsOnlyKey = generateRandomUUID();
+    token.httpOnlyKey = generateRandomUUID();
 
     token.user = user;
 
