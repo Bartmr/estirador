@@ -7,7 +7,7 @@ if (
   });
 }
 
-const tsConfigFileName = 'tsconfig.json';
+const tsConfigFileName = 'tsconfig.typecheck.json';
 
 require('ts-node').register({
   transpileOnly: true,
@@ -18,12 +18,12 @@ require('ts-node').register({
   },
 });
 
-const tsConfig = require(`./${tsConfigFileName}`);
+const tsConfigForTypecheck = require(`./tsconfig.json`);
 const tsConfigPaths = require('tsconfig-paths');
 
 tsConfigPaths.register({
   baseUrl: './',
-  paths: tsConfig.compilerOptions.paths,
+  paths: tsConfigForTypecheck.compilerOptions.paths,
 });
 
 // Validate environment variables

@@ -6,12 +6,13 @@ COPY ./libs/shared/ /usr/src/app/libs/shared/
 COPY ./package.json ./package-lock.json /usr/src/app/
 
 COPY ./client-side/web-app/.babelrc \
-./client-side/web-app/.nvmrc \
-./client-side/web-app/load-build-environment.js \
-./client-side/web-app/gatsby-*.js \
-./client-side/web-app/package.json \
-./client-side/web-app/package-lock.json \
-./client-side/web-app/tsconfig.json /usr/src/app/client-side/web-app/
+  ./client-side/web-app/.nvmrc \
+  ./client-side/web-app/load-build-environment.js \
+  ./client-side/web-app/gatsby-*.js \
+  ./client-side/web-app/package.json \
+  ./client-side/web-app/package-lock.json \
+  ./client-side/web-app/tsconfig.json \
+  ./client-side/web-app/tsconfig.typecheck.json /usr/src/app/client-side/web-app/
 
 WORKDIR /usr/src/app
 
