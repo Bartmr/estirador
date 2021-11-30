@@ -36,7 +36,6 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
 - `layer-auth` - Adds authentication and authorization to your project
 - `layer-nextjs` - Replaces `Gatsby` with `NextJS`
 - `layer-gatsby-material-ui` - Adds `Material UI` for `Gatsby`
-- `layer-remote-config` - Adds remote config, for A/B tests and dynamic product settings
 
 > These layers receive updates once in a while, so don't forget to update them in the same way you added them
 

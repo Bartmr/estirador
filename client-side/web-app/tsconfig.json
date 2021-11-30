@@ -1,5 +1,10 @@
 {
-  "include": ["src", "type-declarations", "next-env.d.ts"],
+  "include": [
+    "src",
+    "type-declarations",
+    "next-env.d.ts",
+    "../../libs/shared/src"
+  ],
   "compilerOptions": {
     "paths": {
       "@app/shared*": ["../../libs/shared/src*"],

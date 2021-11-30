@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.typecheck.json",
   "include": ["type-declarations/**/*.d.ts", "src/**/*.d.ts"],
   "compilerOptions": {
     "skipLibCheck": false,
