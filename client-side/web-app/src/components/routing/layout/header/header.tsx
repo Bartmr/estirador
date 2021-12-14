@@ -56,7 +56,10 @@ export function Header(props: Props) {
             >
               <FontAwesomeIcon icon={faBars} />
             </Navbar.Toggle>
-            <LinkAnchor className="navbar-brand" href={INDEX_ROUTE.getHref()}>
+            <LinkAnchor
+              className="navbar-brand me-0 me-lg-3"
+              href={INDEX_ROUTE.getHref()}
+            >
               <span className="badge bg-primary">
                 <span className="h5">{PROJECT_NAME}</span>
               </span>
