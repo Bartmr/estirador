@@ -6,9 +6,6 @@ const hostUrl = EnvironmentVariables.HOST_URL;
 const pathPrefix = EnvironmentVariables.PATH_PREFIX;
 
 export const GATSBY_CONFIG = {
-  flags: {
-    DEV_SSR: true,
-  },
   ...(pathPrefix ? { pathPrefix } : {}),
   siteMetadata: {
     siteUrl: hostUrl,
@@ -78,4 +75,5 @@ export const GATSBY_CONFIG = {
       },
     },
   ],
+  jsxRuntime: 'automatic',
 };

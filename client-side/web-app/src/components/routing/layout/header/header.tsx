@@ -43,30 +43,30 @@ export function Header(props: Props) {
     <>
       <header className={`border-bottom ${props.className}`}>
         <Navbar collapseOnSelect expand="lg" expanded={expanded}>
-          <Navbar.Toggle
-            onClick={() => {
-              if (expanded) {
-                collapseMenu();
-              } else {
-                expandMenu();
-              }
-            }}
-            aria-controls={props.menuHtmlId}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </Navbar.Toggle>
-          <LinkAnchor className="navbar-brand" href={INDEX_ROUTE.getHref()}>
-            <span className="badge badge-primary">
-              <span className="h5">{PROJECT_NAME}</span>
-            </span>
-          </LinkAnchor>
-          <Navbar.Collapse id={props.menuHtmlId}>
-            <div className="container">
+          <div className="container">
+            <Navbar.Toggle
+              onClick={() => {
+                if (expanded) {
+                  collapseMenu();
+                } else {
+                  expandMenu();
+                }
+              }}
+              aria-controls={props.menuHtmlId}
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </Navbar.Toggle>
+            <LinkAnchor className="navbar-brand" href={INDEX_ROUTE.getHref()}>
+              <span className="badge bg-primary">
+                <span className="h5">{PROJECT_NAME}</span>
+              </span>
+            </LinkAnchor>
+            <Navbar.Collapse id={props.menuHtmlId}>
               <Nav>
                 <li className="nav-item"></li>
               </Nav>
-            </div>
-          </Navbar.Collapse>
+            </Navbar.Collapse>
+          </div>
         </Navbar>
       </header>
       {expanded ? (

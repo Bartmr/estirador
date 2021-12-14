@@ -149,12 +149,12 @@ $dark-contrasting-colors: (
 
 $light-contrasting-colors: (
   default: $light,
-  primary: change-color($primary, $lightness: 80%),
-  secondary: change-color($secondary, $lightness: 80%),
-  success: change-color($success, $lightness: 80%),
-  info: change-color($info, $lightness: 80%),
-  warning: change-color($warning, $lightness: 80%),
-  danger: change-color($danger, $lightness: 80%),
+  primary: change-color($primary, $lightness: 60%),
+  secondary: change-color($secondary, $lightness: 60%),
+  success: change-color($success, $lightness: 60%),
+  info: change-color($info, $lightness: 60%),
+  warning: change-color($warning, $lightness: 60%),
+  danger: change-color($danger, $lightness: 60%),
   light: $light,
   lightest: $lightest,
   dark: $dark,
@@ -178,8 +178,6 @@ $light-contrasting-colors: (
 --- End of CSS Custom Properties initial values and functions
 ---
 */
-
-$body-color: get-contrasting-color('body');
 
 $hovered-bg: set-contrasting-color-alpha('body', 0.15);
 $selected-bg: set-contrasting-color-alpha('body', 0.3);

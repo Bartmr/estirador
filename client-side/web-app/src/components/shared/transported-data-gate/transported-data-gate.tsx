@@ -53,7 +53,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
   const iconSizeClassName =
     layout === TransportedDataGateLayout.Tape ? '' : 'icon-thumbnail';
   const textClassName = `${
-    layout === TransportedDataGateLayout.Tape ? 'ml-2' : 'mt-3 h4'
+    layout === TransportedDataGateLayout.Tape ? 'ms-2' : 'mt-3 h4'
   }`;
 
   const gateContent = (() => {
