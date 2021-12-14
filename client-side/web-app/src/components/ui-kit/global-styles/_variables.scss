@@ -29,37 +29,33 @@ $default-inverted: null;
 }
 
 $theme-colors: (
-  (
-    'default': $default,
-    'primary': $primary,
-    'secondary': $secondary,
-    'success': $success,
-    'info': $info,
-    'warning': $warning,
-    'danger': $danger,
-    'light': $light,
-    'lightest': $lightest,
-    'dark': $dark,
-    'darkest': $darkest,
-    'body': $body-bg,
-  )
+  'default': $default,
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'lightest': $lightest,
+  'dark': $dark,
+  'darkest': $darkest,
+  'body': $body-bg,
 );
 
 $inverted-theme-colors: (
-  (
-    'default': $default-inverted,
-    'primary': $primary,
-    'secondary': $secondary,
-    'success': $success,
-    'info': $info,
-    'warning': $warning,
-    'danger': $danger,
-    'lightest': $lightest,
-    'light': $light,
-    'dark': $dark,
-    'darkest': $darkest,
-    'body': $body-bg-inverted,
-  )
+  'default': $default-inverted,
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'lightest': $lightest,
+  'light': $light,
+  'dark': $dark,
+  'darkest': $darkest,
+  'body': $body-bg-inverted,
 );
 
 @function get-theme-color($color-name) {
@@ -196,15 +192,15 @@ $spacers: (
   9: $spacer * 10,
 );
 
-$grid-gutter-width: $spacer;
+/*
+  node_modules/bootstrap/scss/mixins/_grid.scss sets default vertical gutters to 0,
+  and default horizontal gutters to this variable
 
-$grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-);
+  In order to avoid different horizontal and vertical gutters,
+  gutter size should be zero if not specified
+*/
+$grid-gutter-width: 0;
+$container-padding-x: $spacer;
 
 $font-1: 'Open Sans', sans-serif;
 
