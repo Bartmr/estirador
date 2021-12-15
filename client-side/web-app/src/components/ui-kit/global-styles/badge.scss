@@ -1,5 +1,0 @@
-@each $color, $value in $theme-colors {
-  .badge.badge-#{$color} {
-    @include with-contrasting-colors($value);
-  }
-}

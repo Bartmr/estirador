@@ -2,7 +2,7 @@
   border-top: $stripe-width-lg solid $primary !important;
 }
 
-.stripe-right {
+.stripe-end {
   border-right: $stripe-width-lg solid $primary !important;
 }
 
@@ -10,7 +10,7 @@
   border-bottom: $stripe-width-lg solid $primary !important;
 }
 
-.stripe-left {
+.stripe-start {
   border-left: $stripe-width-lg solid $primary !important;
 }
 
@@ -19,7 +19,7 @@
     border-top-color: $value !important;
   }
 
-  .stripe-right.stripe-right-#{$color} {
+  .stripe-end.stripe-end-#{$color} {
     border-right-color: $value !important;
   }
 
@@ -27,7 +27,7 @@
     border-bottom-color: $value !important;
   }
 
-  .stripe-left.stripe-left-#{$color} {
+  .stripe-start.stripe-start-#{$color} {
     border-left-color: $value !important;
   }
 }

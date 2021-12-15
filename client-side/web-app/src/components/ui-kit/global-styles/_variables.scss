@@ -29,37 +29,33 @@ $default-inverted: null;
 }
 
 $theme-colors: (
-  (
-    'default': $default,
-    'primary': $primary,
-    'secondary': $secondary,
-    'success': $success,
-    'info': $info,
-    'warning': $warning,
-    'danger': $danger,
-    'light': $light,
-    'lightest': $lightest,
-    'dark': $dark,
-    'darkest': $darkest,
-    'body': $body-bg,
-  )
+  'default': $default,
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'lightest': $lightest,
+  'dark': $dark,
+  'darkest': $darkest,
+  'body': $body-bg,
 );
 
 $inverted-theme-colors: (
-  (
-    'default': $default-inverted,
-    'primary': $primary,
-    'secondary': $secondary,
-    'success': $success,
-    'info': $info,
-    'warning': $warning,
-    'danger': $danger,
-    'lightest': $lightest,
-    'light': $light,
-    'dark': $dark,
-    'darkest': $darkest,
-    'body': $body-bg-inverted,
-  )
+  'default': $default-inverted,
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'lightest': $lightest,
+  'light': $light,
+  'dark': $dark,
+  'darkest': $darkest,
+  'body': $body-bg-inverted,
 );
 
 @function get-theme-color($color-name) {
@@ -149,12 +145,12 @@ $dark-contrasting-colors: (
 
 $light-contrasting-colors: (
   default: $light,
-  primary: change-color($primary, $lightness: 80%),
-  secondary: change-color($secondary, $lightness: 80%),
-  success: change-color($success, $lightness: 80%),
-  info: change-color($info, $lightness: 80%),
-  warning: change-color($warning, $lightness: 80%),
-  danger: change-color($danger, $lightness: 80%),
+  primary: change-color($primary, $lightness: 60%),
+  secondary: change-color($secondary, $lightness: 60%),
+  success: change-color($success, $lightness: 60%),
+  info: change-color($info, $lightness: 60%),
+  warning: change-color($warning, $lightness: 60%),
+  danger: change-color($danger, $lightness: 60%),
   light: $light,
   lightest: $lightest,
   dark: $dark,
@@ -179,8 +175,6 @@ $light-contrasting-colors: (
 ---
 */
 
-$body-color: get-contrasting-color('body');
-
 $hovered-bg: set-contrasting-color-alpha('body', 0.15);
 $selected-bg: set-contrasting-color-alpha('body', 0.3);
 
@@ -198,15 +192,24 @@ $spacers: (
   9: $spacer * 10,
 );
 
-$grid-gutter-width: $spacer;
-
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,
   md: 768px,
   lg: 992px,
   xl: 1200px,
+  xxl: 1400px,
 );
+
+/*
+  node_modules/bootstrap/scss/mixins/_grid.scss sets default vertical gutters to 0,
+  and default horizontal gutters to this variable
+
+  In order to avoid different horizontal and vertical gutters,
+  gutter size should be zero if not specified
+*/
+$grid-gutter-width: 0;
+$container-padding-x: $spacer;
 
 $font-1: 'Open Sans', sans-serif;
 
@@ -246,13 +249,13 @@ $box-shadow-sm: #{$box-shadow-sm-dimensions} set-contrasting-color-alpha('darkes
 $box-shadow: #{$box-shadow-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-opacity);
 $box-shadow-lg: #{$box-shadow-lg-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-lg-opacity);
 
-$text-shadow-sm-dimensions: 0 0.05rem 0.15rem;
-$text-shadow-sm-opacity: 0.5;
+$text-shadow-sm-dimensions: 0 0.05rem 0.2rem;
+$text-shadow-sm-opacity: 1;
 
-$text-shadow-dimensions: 0 0.1rem 0.3rem;
-$text-shadow-opacity: 0.8;
+$text-shadow-dimensions: 0 0.1rem 0.5rem;
+$text-shadow-opacity: 1;
 
-$text-shadow-lg-dimensions: 0 0.5rem 1.5rem;
+$text-shadow-lg-dimensions: 0 0.5rem 1rem;
 $text-shadow-lg-opacity: 1;
 
 // Copied from node_modules/bootstrap/scss/_variables.scss
