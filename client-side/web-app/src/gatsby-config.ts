@@ -75,5 +75,4 @@ export const GATSBY_CONFIG = {
       },
     },
   ],
-  jsxRuntime: 'automatic',
 };
