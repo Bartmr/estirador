@@ -57,6 +57,13 @@ $navbar-light-brand-hover-color: get-contrasting-color('body-hover');
 $navbar-dark-brand-color: get-contrasting-color('body');
 $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 
+$input-btn-focus-color-opacity: 0.25;
+$input-btn-focus-color: set-contrasting-color-alpha(
+  'primary',
+  $input-btn-focus-color-opacity
+);
+$input-focus-border-color: get-contrasting-color('primary');
+
 @import 'node_modules/bootstrap/scss/bootstrap';
 
 /* --- */
