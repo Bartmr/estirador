@@ -7,6 +7,17 @@
 }
 
 .form-control {
+  @include with-contrasting-colors($input-bg);
+
+  &:focus {
+    @include with-contrasting-colors($input-bg);
+  }
+
+  &:disabled {
+    @include with-contrasting-colors($form-select-disabled-bg);
+    color: set-contrasting-color-alpha('body', $text-muted-opacity);
+  }
+
   @include form-validation-state-selector('valid') {
     border-color: get-contrasting-color('success');
 
@@ -29,6 +40,17 @@
 }
 
 .form-select {
+  @include with-contrasting-colors($form-select-bg);
+
+  &:focus {
+    @include with-contrasting-colors($input-bg);
+  }
+
+  &:disabled {
+    @include with-contrasting-colors($form-select-disabled-bg);
+    color: set-contrasting-color-alpha('body', $text-muted-opacity);
+  }
+
   @include form-validation-state-selector('valid') {
     border-color: get-contrasting-color('success');
 
