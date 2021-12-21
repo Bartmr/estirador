@@ -14,6 +14,7 @@ export type JsonHttpResponse<R extends JsonHttpResponseBase> = Readonly<
         status: number;
       };
       response: Readonly<R>;
+      headers: Headers;
     }
   | {
       failure: Exclude<TransportFailure, TransportFailure.UnexpectedResponse>;
