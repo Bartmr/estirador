@@ -48,6 +48,11 @@ export interface FindOptions<Entity extends SimpleEntity>
   skip: number;
 }
 
+export interface CountOptions<Entity extends SimpleEntity>
+  extends FindOptionsBase<Entity> {
+  where?: Where<Entity>;
+}
+
 export type IncrementalUpdateChanges<Entity extends SimpleEntity> =
   QueryDeepPartialEntity<Entity>;
 
@@ -92,6 +97,19 @@ export abstract class SimpleEntityRepository<
       rows: results[0],
       total: results[1],
     };
+  }
+
+  async count(
+    query: CountOptions<Entity>,
+    options?: Partial<{ manager: EntityManager }>,
+  ): Promise<number> {
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    const results = await repository.count(query);
+
+    return results;
   }
 
   async create(
