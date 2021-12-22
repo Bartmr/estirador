@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import { throwError } from 'src/logic/app-internals/utils/throw-error';
 import { Header } from './header/header';
 import { GQLLayoutQuery } from './layout._graphql-generated_';
+import SSRProvider from 'react-bootstrap/SSRProvider';
 
 type Props = {
   children: () => ReactNode;
@@ -32,7 +33,7 @@ export function Layout(props: Props) {
   const title = `${props.title} - ${siteTitle}`;
 
   return (
-    <>
+    <SSRProvider>
       <Helmet>
         <title>{title}</title>
       </Helmet>
@@ -47,6 +48,6 @@ export function Layout(props: Props) {
         </main>
         {/* Footer goes here */}
       </div>
-    </>
+    </SSRProvider>
   );
 }

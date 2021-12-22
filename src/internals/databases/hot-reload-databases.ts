@@ -3,6 +3,9 @@ import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';
 import { HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS } from './databases-constants';
 import { MigrationExecutor, ConnectionManager, Connection } from 'typeorm';
+import { ConnectionMetadataBuilder } from 'typeorm/connection/ConnectionMetadataBuilder';
+import { ObjectUtils } from 'typeorm/util/ObjectUtils';
+import { throwError } from 'libs/shared/src/internals/utils/throw-error';
 
 type ModuleHotData = {
   connections?: Connection[];
@@ -19,16 +22,43 @@ export async function hotReloadDatabases(): Promise<Connection[]> {
 
   const connectionManager = new ConnectionManager();
 
+  let connections: Connection[];
+
   const moduleHotData = module.hot?.data as ModuleHotData | undefined;
 
-  const connections =
-    moduleHotData?.connections ||
-    (await Promise.all(
+  if (moduleHotData?.connections) {
+    const previousConnections = moduleHotData.connections;
+
+    const toRestore: Connection[] = [];
+
+    for (let i = 0; i < previousConnections.length; i++) {
+      const connection = previousConnections[i] || throwError();
+      const ormConfig = TYPEORM_ORMCONFIG_WITH_MIGRATIONS[i] || throwError();
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      connection.migrations = ormConfig.migrations;
+
+      const connectionMetadataBuilder = new ConnectionMetadataBuilder(
+        connection,
+      );
+      const migrations = connectionMetadataBuilder.buildMigrations(
+        ormConfig.migrations || [],
+      );
+      ObjectUtils.assign(connection, { migrations: migrations });
+
+      toRestore.push(connection);
+    }
+
+    connections = toRestore;
+  } else {
+    connections = await Promise.all(
       TYPEORM_ORMCONFIG_WITH_MIGRATIONS.map(async (cOptions) => {
         const connection = connectionManager.create(cOptions);
         return connection.connect();
       }),
-    ));
+    );
+  }
 
   if (module.hot) {
     module.hot.dispose((data: ModuleHotData) => {

@@ -13,17 +13,25 @@ import {
 import { SimpleEntity } from './simple.entity';
 import { throwError } from 'src/internals/utils/throw-error';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
 
 type AnyEntity = {
   id: number | string;
 };
 
 type WhereObject<Entity extends SimpleEntity> = {
-  [K in keyof Entity]?: Entity[K] extends AnyEntity | AnyEntity[]
-    ? undefined
-    : Entity[K] extends Promise<AnyEntity> | Promise<AnyEntity[]>
-    ? undefined
-    : Entity[K] | FindOperator<Entity[K]>;
+  // Eager relations
+  [K in keyof Entity]?: Entity[K] extends AnyEntity
+    ? Entity[K] | Entity[K]['id']
+    : Entity[K] extends AnyEntity[]
+    ? Entity[K][number] | Entity[K][number]['id']
+    : // Lazy relations
+    Entity[K] extends Promise<AnyEntity>
+    ? UnwrapPromise<Entity[K]> | UnwrapPromise<Entity[K]>['id']
+    : Entity[K] extends Promise<AnyEntity[]>
+    ? UnwrapPromise<Entity[K]>[number] | UnwrapPromise<Entity[K]>[number]['id']
+    : // Columns
+      Entity[K] | FindOperator<Entity[K]>;
 };
 
 export type Where<Entity extends SimpleEntity> =
@@ -46,6 +54,11 @@ export interface FindOptions<Entity extends SimpleEntity>
   extends FindOptionsBase<Entity> {
   where?: Where<Entity>;
   skip: number;
+}
+
+export interface CountOptions<Entity extends SimpleEntity>
+  extends FindOptionsBase<Entity> {
+  where?: Where<Entity>;
 }
 
 export type IncrementalUpdateChanges<Entity extends SimpleEntity> =
@@ -92,6 +105,19 @@ export abstract class SimpleEntityRepository<
       rows: results[0],
       total: results[1],
     };
+  }
+
+  async count(
+    query: CountOptions<Entity>,
+    options?: Partial<{ manager: EntityManager }>,
+  ): Promise<number> {
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    const results = await repository.count(query);
+
+    return results;
   }
 
   async create(

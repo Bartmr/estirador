@@ -16,19 +16,6 @@
 @import 'src/components/ui-kit/global-styles/additional-modifiers/contrasting-colors-modifiers';
 /* --- */
 
-$headings-margin-bottom: $spacer;
-$headings-font-weight: 700;
-
-$h1-font-size: $font-size-base * 2.5;
-$h2-font-size: $font-size-base * 2;
-$h3-font-size: $font-size-base * 1.75;
-$h4-font-size: $font-size-base * 1.5;
-
-$display1-size: $h1-font-size;
-$display2-size: $h2-font-size;
-$display3-size: $h3-font-size;
-$display4-size: $h4-font-size;
-
 $stripe-width-lg: 0.5rem;
 
 $hr-border-width: 1px;
@@ -70,6 +57,13 @@ $navbar-light-brand-hover-color: get-contrasting-color('body-hover');
 $navbar-dark-brand-color: get-contrasting-color('body');
 $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 
+$input-btn-focus-color-opacity: 0.25;
+$input-btn-focus-color: set-contrasting-color-alpha(
+  'primary',
+  $input-btn-focus-color-opacity
+);
+$input-focus-border-color: get-contrasting-color('primary');
+
 @import 'node_modules/bootstrap/scss/bootstrap';
 
 /* --- */
@@ -81,15 +75,12 @@ $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 @import 'src/components/ui-kit/global-styles/root';
 @import 'src/components/ui-kit/global-styles/reboot';
 @import 'src/components/ui-kit/global-styles/type';
-@import 'src/components/ui-kit/global-styles/grid';
 @import 'src/components/ui-kit/global-styles/buttons';
 @import 'src/components/ui-kit/global-styles/card';
 @import 'src/components/ui-kit/global-styles/nav';
 @import 'src/components/ui-kit/global-styles/navbar';
 @import 'src/components/ui-kit/global-styles/progress';
 @import 'src/components/ui-kit/global-styles/forms';
-@import 'src/components/ui-kit/global-styles/custom-forms';
-@import 'src/components/ui-kit/global-styles/badge';
 
 @import 'src/components/ui-kit/global-styles/additional-components/icon';
 

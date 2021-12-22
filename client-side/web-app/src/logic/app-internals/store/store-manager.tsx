@@ -65,8 +65,7 @@ class StoreManager {
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-      changes[key] = reducer as any;
+      changes[key] = reducer;
     }
 
     if (thereAreChangesToMerge) {

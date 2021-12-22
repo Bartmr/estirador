@@ -2,11 +2,11 @@
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
-    &.icon#{$infix}-inherit {
+    .icon#{$infix}-inherit {
       font-size: inherit !important;
     }
 
-    &.icon#{$infix}-thumbnail {
+    .icon#{$infix}-thumbnail {
       font-size: 3rem !important;
     }
   }

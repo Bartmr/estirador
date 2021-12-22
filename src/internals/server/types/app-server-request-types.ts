@@ -6,6 +6,3 @@ export type AppServerRequest = Request & {
   authContext?: AuthContext;
   auditContext?: AuditContext;
 };
-
-export type AppServerUploadedMulterFile = Express.Multer.File;
-export type AppServerUploadedMulterFiles = Array<Express.Multer.File>;

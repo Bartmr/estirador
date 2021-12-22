@@ -1,5 +1,5 @@
 {
-  "include": ["src", "type-declarations"],
+  "include": ["src", "type-declarations", "../../libs/shared/src"],
   "compilerOptions": {
     "paths": {
       "@app/shared*": ["../../libs/shared/src*"]

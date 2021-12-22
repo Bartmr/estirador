@@ -67,7 +67,7 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
     "glob": "^7.2.0",
-    "not-me": "^4.3.3",
+    "not-me": "^4.3.5",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -145,6 +145,6 @@
     ]
   },
   "lint-staged": {
-    "*.{js,jsx,json,ts,tsx,scss,sass,css,md}": "prettier --write"
+    "*.{js,jsx,json,ts,tsx,scss,sass,css,md,yml,yaml}": "prettier --write"
   }
 }
