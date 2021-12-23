@@ -7,6 +7,10 @@ import { EmailService } from './email.service';
 import express from 'express';
 import path from 'path';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../local-temporary-files/local-temporary-files-path';
+import fs from 'fs';
+import { promisify } from 'util';
+
+const mkdir = promisify(fs.mkdir);
 
 export const USE_DEV_EMAIL =
   NODE_ENV === NodeEnv.Development || NODE_ENV === NodeEnv.Test;
@@ -21,8 +25,12 @@ export const USE_DEV_EMAIL =
   exports: [EmailService],
 })
 export class EmailModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  async configure(consumer: MiddlewareConsumer) {
     if (USE_DEV_EMAIL) {
+      await mkdir(path.join(LOCAL_TEMPORARY_FILES_PATH, 'dev-email'), {
+        recursive: true,
+      });
+
       consumer
         .apply(
           express.static(path.join(LOCAL_TEMPORARY_FILES_PATH, 'dev-email')),
