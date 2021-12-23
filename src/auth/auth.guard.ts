@@ -71,7 +71,7 @@ export class AuthGuard implements CanActivate {
       const authTokenKey = authTokenKeyValidation.value;
 
       const user = await this.tokensService.validateAuthToken(
-        authTokenId.replace('Bearer ', ''),
+        authTokenId,
         authTokenKey,
       );
 
