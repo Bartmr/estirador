@@ -19,10 +19,14 @@ import {
   RolePermissionType,
 } from './roles/roles.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
+import { string } from 'not-me/lib/schemas/string/string-schema';
+import { isUUID } from 'src/internals/utils/is-uuid';
 
-const authTokenIdSchema = uuid('Invalid token');
+const authTokenIdSchema = string()
+  .transform((s) => (s ? s.replace('Bearer ', '') : s))
+  .test((s) => (s == undefined || isUUID(s) ? null : 'Must be an UUID'));
 
-const authTokenKeySchema = uuid('Invalid token').required();
+const authTokenKeySchema = uuid().required();
 
 @Injectable()
 export class AuthGuard implements CanActivate {
