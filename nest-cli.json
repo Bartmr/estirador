@@ -14,13 +14,6 @@
   },
   "compilerOptions": {
     "webpack": false,
-    "plugins": [
-      {
-        "name": "@nestjs/swagger",
-        "options": {
-          "introspectComments": true
-        }
-      }
-    ]
+    "plugins": ["@nestjs/swagger"]
   }
 }
