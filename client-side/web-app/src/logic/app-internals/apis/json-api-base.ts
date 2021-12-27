@@ -98,7 +98,11 @@ export abstract class JSONApiBase {
       return res;
     } else if (!originallyAcceptableStatusCodes.includes(res.response.status)) {
       if (res.response.status === 404) {
-        return { failure: TransportFailure.NotFound };
+        if (res.headers.get('X-Resource-Not-Found') === 'true') {
+          return { failure: TransportFailure.NotFound };
+        } else {
+          return res.logAndReturnAsUnexpected();
+        }
       } else if (res.response.status === 403) {
         return { failure: TransportFailure.Forbidden };
       } else if (this.onInvalidAuthToken && res.response.status === 401) {

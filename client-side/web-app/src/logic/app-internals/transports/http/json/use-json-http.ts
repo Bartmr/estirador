@@ -1,3 +1,4 @@
+import { JSONData } from '@app/shared/internals/transports/json-types';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { TransportFailure } from '../../transported-data/transport-failures';
 import { OutgoingHeaders } from '../http-types';
@@ -65,7 +66,7 @@ async function makeJsonHttpRequest({
 } & (
   | { method: 'HEAD' | 'GET' | 'DELETE'; body?: undefined }
   | { method: 'POST' | 'PATCH' | 'PUT'; body: JsonHttpOutgoingBody }
-)) {
+)): Promise<JsonHttpResponse<{ status: number; body: JSONData | undefined }>> {
   const headers: { [key: string]: string } = {
     Accept: 'application/json',
   };
@@ -159,6 +160,7 @@ async function makeJsonHttpRequest({
         body: parsedBody,
       },
       logAndReturnAsUnexpected,
+      headers: response.headers,
     };
   } else {
     const unexpectedResponseFailure = logAndReturnAsUnexpected();

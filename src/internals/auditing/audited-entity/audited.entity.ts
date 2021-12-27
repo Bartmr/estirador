@@ -15,7 +15,7 @@ export abstract class AuditedEntity extends SimpleEntity {
   @DeleteDateColumn()
   deletedAt?: Date;
 
-  @Column('uuid', { nullable: true })
+  @Column('text', { nullable: true })
   operationId?: string | null;
 
   @Column('text', { nullable: true })

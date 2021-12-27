@@ -9,6 +9,7 @@ import { AppServerRequest } from '../server/types/app-server-request-types';
 import { LoggingService } from '../logging/logging.service';
 import { AppServerResponse } from '../server/types/app-server-response-types';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
+import { ResourceNotFoundException } from '../server/resource-not-found.exception';
 
 const LOG_REQUEST_CONTENTS_ON_ERROR =
   EnvironmentVariablesService.variables.LOG_REQUEST_CONTENTS_ON_ERROR;
@@ -51,6 +52,10 @@ export class AllExceptionsFilter implements ExceptionFilter<unknown> {
               : undefined,
           },
         });
+
+        if (exception instanceof ResourceNotFoundException) {
+          response.set('X-Resource-Not-Found', 'true');
+        }
       }
 
       response.status(statusCode).json(exception.getResponse());
