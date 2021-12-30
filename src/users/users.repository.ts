@@ -5,7 +5,10 @@ import { User } from './typeorm/user.entity';
 /**
  * BASE CLASS CREATED FOR TESTING!
  */
-export abstract class _UsersRepositoryBase extends SimpleEntityRepository<User> {}
+export abstract class _UsersRepositoryBase extends SimpleEntityRepository<
+  User,
+  'deletedAt'
+> {}
 
 @EntityRepository(User)
 export class UsersRepository extends _UsersRepositoryBase {}
