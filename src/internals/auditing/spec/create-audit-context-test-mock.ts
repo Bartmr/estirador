@@ -11,8 +11,8 @@ export function createAuditContextTestMock() {
   const auditContext: AuditContext = {
     operationId,
     processId,
-    requestPath: undefined,
-    requestMethod: undefined,
+    requestPath: null,
+    requestMethod: null,
   };
 
   const auditContextEntityProps = {

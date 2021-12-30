@@ -2,14 +2,14 @@ import { ProcessContextManager } from '../process/process-context-manager';
 
 export class AuditContext {
   public operationId: string;
-  public requestPath: string | undefined;
-  public requestMethod: string | undefined;
+  public requestPath: string | null;
+  public requestMethod: string | null;
   public processId: string;
 
   constructor(params: {
     operationId: string;
-    requestPath: string | undefined;
-    requestMethod: string | undefined;
+    requestPath: string | null;
+    requestMethod: string | null;
   }) {
     this.operationId = params.operationId;
     this.requestPath = params.requestPath;

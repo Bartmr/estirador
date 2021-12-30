@@ -29,8 +29,8 @@ export class SettingsService {
   async initializeSettings() {
     const auditContext: AuditContext = {
       operationId: generateUniqueUUID(),
-      requestPath: undefined,
-      requestMethod: undefined,
+      requestPath: null,
+      requestMethod: null,
       processId: ProcessContextManager.getContext().id,
     };
 
