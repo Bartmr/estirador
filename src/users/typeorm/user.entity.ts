@@ -6,7 +6,7 @@ import { Column, DeleteDateColumn, Entity } from 'typeorm';
 @Entity()
 export class User extends SimpleEntity {
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt!: Date | null;
 
   @Column({
     type: 'enum',

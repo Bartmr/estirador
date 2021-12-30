@@ -13,19 +13,19 @@ export abstract class AuditedEntity extends SimpleEntity {
   instanceId!: string;
 
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt!: Date | null;
 
   @Column('text', { nullable: true })
-  operationId?: string | null;
+  operationId!: string | null;
 
   @Column('text', { nullable: true })
-  requestPath?: string | null;
+  requestPath!: string | null;
 
   @Column('text', { nullable: true })
-  requestMethod?: string | null;
+  requestMethod!: string | null;
 
   @Column('text', { nullable: true })
-  processId?: string | null;
+  processId!: string | null;
 
   @Column('uuid', { nullable: true })
   archivedByUserId?: string | null;

@@ -99,7 +99,7 @@ export abstract class AuditedEntityRepository<
 
       await repository.save(toSave);
 
-      const createdEntities = toSave as Entity[];
+      const createdEntities = toSave as unknown as Entity[];
 
       await this.archiveChanges(createdEntities, auditContext, manager);
 
