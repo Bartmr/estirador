@@ -22,7 +22,7 @@ export abstract class AuditedEntityRepository<
     entity.requestPath = auditContext.requestPath;
     entity.requestMethod = auditContext.requestMethod;
     entity.processId = auditContext.processId;
-    entity.archivedByUserId = auditContext.authContext?.user.id;
+    entity.archivedByUserId = auditContext.authContext?.user.id || null;
   }
 
   private async archiveChanges(

@@ -7,7 +7,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { attachAuditContext } from 'src/internals/auditing/attach-audit-context';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { AuthContext } from './auth-context';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
@@ -21,6 +20,8 @@ import {
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { isUUID } from 'src/internals/utils/is-uuid';
+import { AuditContext } from 'src/internals/auditing/audit-context';
+import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 
 const authTokenIdSchema = string()
   .transform((s) => (s ? s.replace('Bearer ', '') : s))
@@ -35,15 +36,22 @@ export class AuthGuard implements CanActivate {
     private tokensService: AuthTokensService,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<true> {
+  async canActivate(context: ExecutionContext) {
+    const request: AppServerRequest = context
+      .switchToHttp()
+      .getRequest<AppServerRequest>();
+
+    request.auditContext = new AuditContext({
+      operationId: generateUniqueUUID(),
+      requestPath: request.path,
+      requestMethod: request.method,
+      authContext: null,
+    });
+
     const isPublic = this.reflector.get<boolean | undefined>(
       PUBLIC_ROUTE_METADATA_KEY,
       context.getHandler(),
     );
-
-    const request: AppServerRequest = context
-      .switchToHttp()
-      .getRequest<AppServerRequest>();
 
     const authTokenIdValidationResult = authTokenIdSchema.validate(
       request.header('authorization'),
@@ -75,10 +83,10 @@ export class AuthGuard implements CanActivate {
         authTokenKey,
       );
 
-      request.authContext = new AuthContext({ user });
+      const authContext = new AuthContext({ user });
+      request.authContext = authContext;
+      request.auditContext.authContext = authContext;
     }
-
-    attachAuditContext(request);
 
     if (isPublic) {
       return true;

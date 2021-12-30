@@ -28,7 +28,7 @@ export abstract class AuditedEntity extends SimpleEntity {
   processId!: string | null;
 
   @Column('uuid', { nullable: true })
-  archivedByUserId?: string | null;
+  archivedByUserId!: string | null;
 
   // Set in AuditedEntityRepository. No need for @CreatedAtColumn()
   @Column('timestamp')
