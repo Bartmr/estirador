@@ -9,6 +9,7 @@ import { LoggingModule } from 'src/internals/logging/logging.module';
 import { createLoggingTestService } from './logging-test-service';
 import { TestApp } from './test-app-types';
 import cookieParser from 'cookie-parser';
+import { AuthModule } from 'src/auth/auth.module';
 
 if (NODE_ENV !== NodeEnv.Test) {
   throw new Error();
@@ -47,6 +48,7 @@ export async function createAndInitializeTestApp(args: {
         ...DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
         autoLoadEntities: true,
       }),
+      AuthModule,
       ...args.imports,
     ],
     providers: CROSS_CUTTING_PROVIDERS,
