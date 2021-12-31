@@ -10,7 +10,10 @@ import { Reflector } from '@nestjs/core';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { AuthContext } from './auth-context';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
-import { PUBLIC_ROUTE_METADATA_KEY } from './public-route.decorator';
+import {
+  PublicRouteMetadata,
+  PUBLIC_ROUTE_METADATA_KEY,
+} from './public-route.decorator';
 import { ROLES_LEVELS } from './roles/roles';
 import {
   ROUTE_ROLES_METADATA_KEY,
@@ -48,7 +51,7 @@ export class AuthGuard implements CanActivate {
       authContext: null,
     });
 
-    const isPublic = this.reflector.get<boolean | undefined>(
+    const isPublic = this.reflector.get<PublicRouteMetadata | undefined>(
       PUBLIC_ROUTE_METADATA_KEY,
       context.getHandler(),
     );

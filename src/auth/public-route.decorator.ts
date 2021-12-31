@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
 
-export type PublicRouteMetadata = undefined | boolean;
+export type PublicRouteMetadata = boolean;
 
 export const PUBLIC_ROUTE_METADATA_KEY = 'publicRoute';
 
