@@ -8,7 +8,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    LoggingModule.forRoot(LoggingServiceSingleton.getInstance()),
+    LoggingModule.forRoot(() => LoggingServiceSingleton.getInstance()),
     TypeOrmModule.forRoot({
       ...DEFAULT_DB_TYPEORM_CONN_OPTS,
       autoLoadEntities: true,
