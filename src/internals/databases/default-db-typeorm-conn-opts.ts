@@ -21,4 +21,5 @@ export const DEFAULT_DB_TYPEORM_CONN_OPTS: ConnectionOptions = {
     into the API runtime when not needed (specially important in production).
   */
   migrationsRun: false,
+  installExtensions: false,
 };
