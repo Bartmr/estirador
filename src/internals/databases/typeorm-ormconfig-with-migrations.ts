@@ -1,9 +1,9 @@
 import { ConnectionOptions } from 'typeorm';
 import { ALL_MIGRATIONS } from './all-migrations';
-import { DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS as defaultDatabaseOptions } from './default-database-typeorm-connection-options';
+import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './default-db-typeorm-conn-opts';
 
-export const DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS = {
-  ...defaultDatabaseOptions,
+export const DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS = {
+  ...DEFAULT_DB_TYPEORM_CONN_OPTS,
   migrations: ALL_MIGRATIONS,
   cli: {
     migrationsDir: 'src/internals/databases/migrations',
@@ -11,5 +11,5 @@ export const DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS = {
 };
 
 export const TYPEORM_ORMCONFIG_WITH_MIGRATIONS: ConnectionOptions[] = [
-  DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
+  DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS,
 ];
