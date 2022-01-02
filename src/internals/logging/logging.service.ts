@@ -14,14 +14,4 @@ export abstract class LoggingService {
     caughtValue: unknown,
     extraData?: unknown,
   ): void;
-
-  abstract _onlyLogErrorToConsole(
-    key: string,
-    /*
-        In Javascript, any value type can be thrown,
-        so we don't know if a caught value is actually an Error instance.
-    */
-    caughtValue: unknown,
-    extraData?: unknown,
-  ): void;
 }

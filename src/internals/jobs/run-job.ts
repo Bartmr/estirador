@@ -9,17 +9,21 @@ import { generateRandomUUID } from '../utils/generate-random-uuid';
 type Dependencies = {
   loggingService: LoggingService;
 };
-
 type JobFunction = (dependencies: Dependencies) => Promise<void>;
 
+/*
+  TODO
+  logging and error handling
+*/
+
 export function prepareJob(
-  jobName: string,
+  jobId: string,
   jobFunction: JobFunction,
   dependencies: Dependencies,
 ): () => Promise<void> {
   ProcessContextManager.setContext({
     type: ProcessType.Job,
-    name: jobName,
+    name: jobId,
     workerId: generateRandomUUID(),
   });
 
@@ -30,20 +34,15 @@ export function prepareJob(
       await jobFunction({
         loggingService,
       });
-    } catch (err: unknown) {
-      const killTimeout = setTimeout(() => {
-        loggingService._onlyLogErrorToConsole(
-          'job-did-not-shutdown-correctly',
-          new Error(),
-        );
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(`${jobId}:try-catch:console`, err);
+      dependencies.loggingService.logError(`${jobId}:try-catch`, err);
 
+      const timeout = setTimeout(() => {
         process.exit(1);
-      }, 20000);
-      killTimeout.unref();
-
-      loggingService.logError('run-job', err);
-
-      throw err;
+      }, 30000);
+      timeout.unref();
     }
   };
 }
