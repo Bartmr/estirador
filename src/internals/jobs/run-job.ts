@@ -12,7 +12,7 @@ import { generateRandomUUID } from '../utils/generate-random-uuid';
 if (NODE_ENV === NodeEnv.Test) {
   throw new Error(
     `Test the job function without wrapping it in prepareJob() or even importing this file.
-Place the job function into a new file and test it by importing said new file`,
+Place the job function into a new file, and test it by importing said new file`,
   );
 }
 

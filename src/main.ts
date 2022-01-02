@@ -59,10 +59,7 @@ async function bootstrap() {
       process.removeListener('SIGUSR2', shutdownHandler);
     }
 
-    loggingService.logInfo(
-      'worker-started-shutting-down',
-      'Worker started shutting down',
-    );
+    loggingService.logInfo('shutting-down', 'Shutting down');
 
     if (args.isHotReload) {
       args.data.closingPromise = app.close();
