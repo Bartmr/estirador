@@ -1,6 +1,6 @@
 import { ConnectionOptions } from 'typeorm';
-import { DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS } from './default-database-typeorm-connection-options';
+import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './default-db-typeorm-conn-opts';
 
 export const TYPEORM_ORMCONFIG: ConnectionOptions[] = [
-  DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
+  DEFAULT_DB_TYPEORM_CONN_OPTS,
 ];

@@ -3,7 +3,7 @@ import { EnvironmentVariablesService } from '../environment/environment-variable
 import { ALL_SUBSCRIBERS } from './all-subscribers';
 import { LOG_DATABASES } from './databases-constants';
 
-export const DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS: ConnectionOptions = {
+export const DEFAULT_DB_TYPEORM_CONN_OPTS: ConnectionOptions = {
   type: 'postgres' as const,
   host: EnvironmentVariablesService.variables.DATABASE_HOST,
   port: EnvironmentVariablesService.variables.DATABASE_PORT,
