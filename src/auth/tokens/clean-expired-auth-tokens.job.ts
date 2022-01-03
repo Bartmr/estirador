@@ -6,7 +6,7 @@ import { AuthTokensRepository } from './auth-token.repository';
 
 /*
   TODO
-  setup as chron job
+  setup as cron job
 */
 
 const job = prepareJob('clean-expired-auth-tokens', async () => {
