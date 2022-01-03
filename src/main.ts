@@ -50,31 +50,30 @@ async function bootstrap() {
 
   const app = await createApp();
 
-  const shutdown = async (
-    args: { isHotReload: false } | { isHotReload: true; data: ModuleHotData },
-  ) => {
+  const shutdown = async () => {
+    const timeout = setTimeout(() => {
+      // eslint-disable-next-line no-console
+      console.error(`server:hanging-process`);
+      process.exit(1);
+    }, 30000);
+    timeout.unref();
+
     process.removeListener('SIGTERM', shutdownHandler);
     process.removeListener('SIGINT', shutdownHandler);
     if (listenToSIGUSR2) {
       process.removeListener('SIGUSR2', shutdownHandler);
     }
 
-    loggingService.logInfo('shutting-down', 'Shutting down');
+    await app.close();
 
-    if (args.isHotReload) {
-      args.data.closingPromise = app.close();
-    } else {
-      await app.close();
-
-      if (hotReloadedDatabasesResult) {
-        await Promise.all(hotReloadedDatabasesResult.map((c) => c.close()));
-      }
+    if (hotReloadedDatabasesResult) {
+      await Promise.all(hotReloadedDatabasesResult.map((c) => c.close()));
     }
   };
 
   const shutdownHandler = () => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    shutdown({ isHotReload: false });
+    shutdown();
   };
 
   process.on('SIGTERM', shutdownHandler);
@@ -86,8 +85,15 @@ async function bootstrap() {
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose((data: ModuleHotData) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      shutdown({ isHotReload: true, data });
+      process.removeListener('SIGTERM', shutdownHandler);
+      process.removeListener('SIGINT', shutdownHandler);
+      if (listenToSIGUSR2) {
+        process.removeListener('SIGUSR2', shutdownHandler);
+      }
+
+      loggingService.logInfo('shutting-down', 'Shutting down');
+
+      data.closingPromise = app.close();
     });
   }
 
