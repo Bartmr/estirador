@@ -1,6 +1,5 @@
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from 'src/internals/databases/default-db-typeorm-conn-opts';
-import { prepareJob } from 'src/internals/jobs/run-job';
-import { createConnection } from 'typeorm';
+import { ConnectionManager } from 'typeorm';
 import { AUTH_MODULE_ENTITIES } from '../auth-module-entities';
 import { AuthTokensRepository } from './auth-token.repository';
 
@@ -9,17 +8,19 @@ import { AuthTokensRepository } from './auth-token.repository';
   setup as cron job
 */
 
-const job = prepareJob('clean-expired-auth-tokens', async () => {
-  const connection = await createConnection({
+export async function cleanExpiredAuthTokens() {
+  const connectionManager = new ConnectionManager();
+
+  const connection = connectionManager.create({
     ...DEFAULT_DB_TYPEORM_CONN_OPTS,
     entities: AUTH_MODULE_ENTITIES,
   });
+
+  await connection.connect();
 
   const tokensRepository = connection.getCustomRepository(AuthTokensRepository);
 
   await tokensRepository.deleteExpired();
 
   await connection.close();
-});
-
-job();
+}
