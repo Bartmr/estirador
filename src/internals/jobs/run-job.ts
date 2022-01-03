@@ -21,29 +21,24 @@ type Dependencies = {
 };
 type JobFunction = (dependencies: Dependencies) => Promise<void>;
 
-/*
-  TODO
-  logging and error handling
-*/
-
 export function prepareJob(
   jobId: string,
   jobFunction: JobFunction,
 ): () => void {
-  ProcessContextManager.setContext({
-    type: ProcessType.Job,
-    name: jobId,
-    workerId: generateRandomUUID(),
-  });
-
   const runAsync = async (): Promise<void> => {
     let loggingService: LoggingService;
 
     try {
+      ProcessContextManager.setContext({
+        type: ProcessType.Job,
+        name: jobId,
+        workerId: generateRandomUUID(),
+      });
+
       loggingService = LoggingServiceSingleton.makeInstance();
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.error(`${jobId}:setup-dependencies:console`, err);
+      console.error(`${jobId}:setup`, err);
       process.exit(1);
     }
 
@@ -52,15 +47,15 @@ export function prepareJob(
         loggingService,
       });
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(`${jobId}:try-catch:console`, err);
-      loggingService.logError(`${jobId}:try-catch`, err);
-
-      const timeout = setTimeout(() => {
-        process.exit(1);
-      }, 30000);
-      timeout.unref();
+      loggingService.logError(`${jobId}:run`, err);
     }
+
+    const timeout = setTimeout(() => {
+      // eslint-disable-next-line no-console
+      console.error(`${jobId}:hanging-process`);
+      process.exit(1);
+    }, 30000);
+    timeout.unref();
   };
 
   const run = () => {
