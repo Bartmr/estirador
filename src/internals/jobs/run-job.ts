@@ -22,7 +22,7 @@ type Dependencies = {
 type JobFunction = (dependencies: Dependencies) => Promise<void>;
 
 export function prepareJob(
-  jobId: string,
+  jobName: string,
   jobFunction: JobFunction,
 ): () => void {
   const runAsync = async (): Promise<void> => {
@@ -31,14 +31,14 @@ export function prepareJob(
     try {
       ProcessContextManager.setContext({
         type: ProcessType.Job,
-        name: jobId,
+        name: jobName,
         workerId: generateRandomUUID(),
       });
 
       loggingService = LoggingServiceSingleton.makeInstance();
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.error(`${jobId}:setup`, err);
+      console.error(`${jobName}:setup`, err);
       process.exit(1);
     }
 
@@ -47,12 +47,12 @@ export function prepareJob(
         loggingService,
       });
     } catch (err) {
-      loggingService.logError(`${jobId}:run`, err);
+      loggingService.logError(`${jobName}:run`, err);
     }
 
     const timeout = setTimeout(() => {
       // eslint-disable-next-line no-console
-      console.error(`${jobId}:hanging-process`);
+      console.error(`${jobName}:hanging-process`);
       process.exit(1);
     }, 30000);
     timeout.unref();
