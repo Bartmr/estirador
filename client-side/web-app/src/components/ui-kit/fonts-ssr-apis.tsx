@@ -2,12 +2,12 @@ import { PreRenderHTMLArgs } from 'gatsby';
 import React from 'react';
 
 export const attachFontsProviders = ({
-  getPostBodyComponents,
-  replacePostBodyComponents,
+  getHeadComponents,
+  replaceHeadComponents,
 }: PreRenderHTMLArgs) => {
-  const elements = getPostBodyComponents();
+  const elements = getHeadComponents();
 
-  replacePostBodyComponents([
+  replaceHeadComponents([
     ...elements,
     <link
       key={'fonts-googleapis-preconnect'}

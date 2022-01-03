@@ -10,10 +10,17 @@ export function onPreRenderHTML(args: PreRenderHTMLArgs) {
   >;
 
   args.replaceHeadComponents(
-    sortBy(headComponents, (c) => {
-      return c.type === 'style' || c.type === 'script' || c.type === 'noscript'
-        ? 1
-        : 0;
-    }),
+    sortBy(
+      sortBy(headComponents, (c) => {
+        return c.type === 'link' ? 1 : 0;
+      }),
+      (c) => {
+        return c.type === 'style' ||
+          c.type === 'script' ||
+          c.type === 'noscript'
+          ? 1
+          : 0;
+      },
+    ),
   );
 }
