@@ -10,17 +10,14 @@ export function onPreRenderHTML(args: PreRenderHTMLArgs) {
   >;
 
   args.replaceHeadComponents(
-    sortBy(
-      sortBy(headComponents, (c) => {
-        return c.type === 'link' ? 1 : 0;
-      }),
-      (c) => {
-        return c.type === 'style' ||
-          c.type === 'script' ||
-          c.type === 'noscript'
-          ? 1
-          : 0;
-      },
-    ),
+    sortBy(headComponents, (c) => {
+      if (c.type === 'style' || c.type === 'script' || c.type === 'noscript') {
+        return 2;
+      } else if (c.type === 'link') {
+        return 1;
+      } else {
+        return 0;
+      }
+    }),
   );
 }
