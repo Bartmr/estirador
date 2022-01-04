@@ -178,6 +178,8 @@ $light-contrasting-colors: (
 $hovered-bg: set-contrasting-color-alpha('body', 0.15);
 $selected-bg: set-contrasting-color-alpha('body', 0.3);
 
+$component-active-bg: $primary;
+
 $spacer: 1rem;
 $spacers: (
   0: 0,

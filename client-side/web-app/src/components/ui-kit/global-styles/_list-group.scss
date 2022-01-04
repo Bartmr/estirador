@@ -1,0 +1,15 @@
+.list-group {
+  @include on-inverted-color-scheme {
+    background-color: $list-group-bg-inverted;
+
+    @include with-contrasting-colors($list-group-bg-inverted);
+  }
+}
+
+.list-group-item {
+  @include on-inverted-color-scheme {
+    background-color: $list-group-bg-inverted;
+
+    @include with-contrasting-colors($list-group-bg-inverted);
+  }
+}
