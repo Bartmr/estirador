@@ -1,14 +1,3 @@
-const packageRestrictionRuleConfig = [
-  'error',
-  [
-    {
-      name: 'uuid',
-      message:
-        'Please use the generate-random-uuid and generate-unique-uuid modules in src/internals/utils to generate the best uuid for your needs.',
-    },
-  ],
-];
-
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -80,7 +69,5 @@ module.exports = {
     'no-console': 'error',
     'no-debugger': 'error',
     'node/no-process-env': 'error',
-    'node/no-restricted-import': packageRestrictionRuleConfig,
-    'node/no-restricted-require': packageRestrictionRuleConfig,
   },
 };

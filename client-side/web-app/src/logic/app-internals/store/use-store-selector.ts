@@ -1,3 +1,4 @@
+// eslint-disable-next-line node/no-restricted-import
 import { useSelector } from 'react-redux';
 import { StateFromReducersMapObject } from 'redux';
 import { FullyLoadedStoreReducersMap } from './store-types';
