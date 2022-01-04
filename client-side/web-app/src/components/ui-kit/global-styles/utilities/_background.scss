@@ -44,3 +44,7 @@
     }
   }
 }
+
+.bg-transparent {
+  @include inherit-contrasting-colors;
+}

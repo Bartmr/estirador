@@ -37,3 +37,17 @@
   */
   color: get-contrasting-color('body');
 }
+
+@mixin inherit-contrasting-colors {
+  @each $color-name in $contrasting-colors-names {
+    $color: get-contrasting-color-css-custom-property($color-name);
+    $h: get-contrasting-color-css-custom-property($color-name, h);
+    $s: get-contrasting-color-css-custom-property($color-name, s);
+    $l: get-contrasting-color-css-custom-property($color-name, l);
+
+    #{$h}: inherit;
+    #{$s}: inherit;
+    #{$l}: inherit;
+    #{$color}: inherit;
+  }
+}
