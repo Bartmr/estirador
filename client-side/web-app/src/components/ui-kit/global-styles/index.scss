@@ -113,6 +113,13 @@ $list-group-item-color-scale-inverted: null;
   $list-group-item-color-scale-inverted: 40%;
 }
 
+$toast-background-color-inverted: $body-bg-inverted;
+$toast-color: get-contrasting-color('body');
+$toast-border-color: set-contrasting-color-alpha(body, 0.2);
+
+$toast-header-background-color-inverted: $body-bg-inverted;
+$toast-header-border-color: set-contrasting-color-alpha(body, 0.1);
+
 @import 'node_modules/bootstrap/scss/bootstrap';
 
 /* --- */
@@ -131,6 +138,7 @@ $list-group-item-color-scale-inverted: null;
 @import 'src/components/ui-kit/global-styles/progress';
 @import 'src/components/ui-kit/global-styles/forms';
 @import 'src/components/ui-kit/global-styles/list-group';
+@import 'src/components/ui-kit/global-styles/toasts';
 
 @import 'src/components/ui-kit/global-styles/additional-components/icon';
 

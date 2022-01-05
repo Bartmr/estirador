@@ -40,7 +40,6 @@ $theme-colors: (
   'lightest': $lightest,
   'dark': $dark,
   'darkest': $darkest,
-  'body': $body-bg,
 );
 
 $inverted-theme-colors: (
@@ -55,7 +54,6 @@ $inverted-theme-colors: (
   'light': $light,
   'dark': $dark,
   'darkest': $darkest,
-  'body': $body-bg-inverted,
 );
 
 @function get-theme-color($color-name) {
@@ -84,7 +82,7 @@ $inverted-theme-colors: (
 ---
 */
 
-$contrasting-colors-names: ();
+$contrasting-colors-names: ('body', 'body-hover');
 
 @each $color-name in map-keys($theme-colors) {
   $contrasting-colors-names: join(
