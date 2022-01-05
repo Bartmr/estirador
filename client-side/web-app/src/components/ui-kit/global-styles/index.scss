@@ -93,6 +93,26 @@ $list-group-action-hover-color: get-contrasting-color('body');
 $list-group-action-active-color: $component-active-color;
 $list-group-action-active-bg: $component-active-bg;
 
+$list-group-item-bg-scale: null;
+$list-group-item-color-scale: null;
+@if (is-color-dark($list-group-bg)) {
+  $list-group-item-bg-scale: 80%;
+  $list-group-item-color-scale: -40%;
+} @else {
+  $list-group-item-bg-scale: -80%;
+  $list-group-item-color-scale: 40%;
+}
+
+$list-group-item-bg-scale-inverted: null;
+$list-group-item-color-scale-inverted: null;
+@if ($inverted-is-dark-mode) {
+  $list-group-item-bg-scale-inverted: 80%;
+  $list-group-item-color-scale-inverted: -40%;
+} @else {
+  $list-group-item-bg-scale-inverted: -80%;
+  $list-group-item-color-scale-inverted: 40%;
+}
+
 @import 'node_modules/bootstrap/scss/bootstrap';
 
 /* --- */
