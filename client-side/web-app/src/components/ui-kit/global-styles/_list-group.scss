@@ -1,0 +1,9 @@
+.list-group-item {
+  @include with-contrasting-colors($list-group-bg);
+
+  @include on-inverted-color-scheme {
+    background-color: $list-group-bg-inverted;
+
+    @include with-contrasting-colors($list-group-bg-inverted);
+  }
+}

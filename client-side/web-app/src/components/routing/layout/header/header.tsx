@@ -14,6 +14,10 @@ type Props = {
   className: string;
 };
 
+/*
+  TODO: add menu items
+*/
+
 export function Header(props: Props) {
   const [expanded, replaceExpanded] = useState<boolean>(false);
 
@@ -65,9 +69,7 @@ export function Header(props: Props) {
               </span>
             </LinkAnchor>
             <Navbar.Collapse id={props.menuHtmlId}>
-              <Nav>
-                <li className="nav-item"></li>
-              </Nav>
+              <Nav></Nav>
             </Navbar.Collapse>
           </div>
         </Navbar>

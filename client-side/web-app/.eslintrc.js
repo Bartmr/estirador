@@ -4,7 +4,12 @@ const packageRestrictionRuleConfig = [
     {
       name: '@hookform/devtools',
       message:
-        'It should only be used during development, or else it will end up in the production bundle',
+        'It should only be imported when developing, or else it will end up in the production bundle',
+    },
+    {
+      name: 'react-redux',
+      message:
+        'Use the utilities in src/logic/app-internals/store instead. They are built with lazy-loading and type-safety in mind',
     },
   ],
 ];
@@ -134,20 +139,6 @@ module.exports = {
       plugin:jsx-a11y/strict has label-has-associated-control enabled instead.
     */
     'jsx-a11y/label-has-for': 'off',
-    //
-    'no-restricted-globals': [
-      'error',
-      {
-        name: 'localStorage',
-        message:
-          'Use the local storage instance returned by the useLocalStorage hook at client-side/web-app/src/logic/app-internals/transports/use-local-storage',
-      },
-      {
-        name: 'sessionStorage',
-        message:
-          'Use the session storage instance returned by the useSessionStorage hook at client-side/web-app/src/logic/app-internals/transports/use-session-storage',
-      },
-    ],
     'node/no-restricted-import': packageRestrictionRuleConfig,
     'node/no-restricted-require': packageRestrictionRuleConfig,
   },

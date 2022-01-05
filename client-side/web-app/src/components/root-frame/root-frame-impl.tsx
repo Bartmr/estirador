@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Logger } from 'src/logic/app-internals/logging/logger';
+// eslint-disable-next-line node/no-restricted-import
 import { Provider } from 'react-redux';
 import {
   createStoreManager,

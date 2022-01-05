@@ -6,8 +6,8 @@ import { LoginResponse, MainApiSessionData } from './main-api-session-types';
 import { useMainJSONApi } from '../use-main-json-api';
 import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { LoginRequestDTO } from '@app/shared/auth/auth.dto';
-import { ToJSON } from '@app/shared/internals/transports/json-type-converters';
 import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './main-api-session-constants';
+import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 
 class MainApiSession {
   constructor(
@@ -20,7 +20,7 @@ class MainApiSession {
     const res = await this.mainApi.post<
       { status: 201; body: LoginResponse } | { status: 404; body: undefined },
       undefined,
-      ToJSON<LoginRequestDTO>
+      ToIndexedType<LoginRequestDTO>
     >({
       path: '/auth',
       query: undefined,
