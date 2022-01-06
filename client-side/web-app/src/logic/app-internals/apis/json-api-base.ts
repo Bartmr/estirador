@@ -1,7 +1,6 @@
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { OutgoingHeaders } from '../transports/http/http-types';
 import {
-  JsonHttpHEADResponse,
   JsonHttpOutgoingBody,
   JsonHttpResponse,
   JsonHttpResponseBase,
@@ -190,13 +189,14 @@ export abstract class JSONApiBase {
     });
   }
   head<
+    Response extends { status: number; body: undefined } = never,
     QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
-    acceptableStatusCodes: number[];
-  }): Promise<JsonHttpHEADResponse> {
-    return this.doRequest<{ status: number; body: undefined }>({
+    acceptableStatusCodes: readonly Response['status'][];
+  }): Promise<JsonHttpResponse<Response>> {
+    return this.doRequest({
       method: 'head',
       ...params,
     });
