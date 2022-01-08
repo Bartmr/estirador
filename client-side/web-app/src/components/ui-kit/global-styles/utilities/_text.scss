@@ -1,4 +1,11 @@
-@each $color, $value in $theme-colors {
+$colors: join(
+  $theme-colors,
+  (
+    'body': $body-bg,
+  )
+);
+
+@each $color, $value in $colors {
   .text-#{$color} {
     color: get-contrasting-color($color) !important;
   }
