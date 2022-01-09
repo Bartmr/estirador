@@ -5,7 +5,9 @@
     .icon#{$infix}-inherit {
       font-size: inherit !important;
     }
-
+    .icon#{$infix}-badge {
+      font-size: 2rem !important;
+    }
     .icon#{$infix}-thumbnail {
       font-size: 3rem !important;
     }

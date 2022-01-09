@@ -15,8 +15,9 @@ import {
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 
 export enum TransportedDataGateLayout {
-  Tape = 't',
-  Default = 'd',
+  Tape = 'tape',
+  Default = 'default',
+  Small = 'small',
 }
 
 type Props<T extends TransportedData<unknown>> = {
@@ -30,7 +31,7 @@ type Props<T extends TransportedData<unknown>> = {
 export function TransportedDataGate<T extends TransportedData<unknown>>({
   children,
   dataWrapper,
-  layout,
+  layout = TransportedDataGateLayout.Default,
   className,
   loadingMessage,
 }: Props<T>) {
@@ -41,13 +42,22 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
   }`;
 
   const spinnerSizeClass =
-    layout === TransportedDataGateLayout.Tape ? '' : 'spinner-lg';
+    layout === TransportedDataGateLayout.Tape
+      ? 'spinner-sm spinner-lg-md'
+      : layout === TransportedDataGateLayout.Small
+      ? dataWrapper.status === TransportedDataStatus.Refreshing
+        ? 'spinner-sm'
+        : ''
+      : 'spinner-lg';
 
   const iconSizeClassName =
-    layout === TransportedDataGateLayout.Tape ? '' : 'icon-thumbnail';
-  const textClassName = `${
-    layout === TransportedDataGateLayout.Tape ? 'ms-2' : 'mt-3 h4'
-  }`;
+    layout === TransportedDataGateLayout.Tape ? '' : 'icon-badge';
+  const textClassName =
+    layout === TransportedDataGateLayout.Tape
+      ? 'ms-2'
+      : layout === TransportedDataGateLayout.Small
+      ? 'small mt-2 text-center'
+      : 'mt-3 text-center';
 
   let gateStatusUI: ReactNode;
 
@@ -72,10 +82,19 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
   } else if (dataWrapper.status === TransportedDataStatus.Refreshing) {
     gateStatusUI = (
       <div
+        className={`${
+          layout === TransportedDataGateLayout.Small ? 'drop-shadow-sm' : ''
+        }`}
         style={
           layout === TransportedDataGateLayout.Tape
             ? {
                 marginRight: 'var(--spacer-2)',
+              }
+            : layout === TransportedDataGateLayout.Small
+            ? {
+                zIndex: 1,
+                padding: 'var(--spacer-2)',
+                position: 'absolute',
               }
             : {
                 zIndex: 1,
@@ -98,9 +117,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
     gateStatusUI = (
       <div className={flexClassName}>
         <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faSearch} />
-        <p className={`${textClassName} font-weight-bold mb-0`}>
-          404 Not Found
-        </p>
+        <p className={`${textClassName} font-weight-bold mb-0`}>Not Found</p>
       </div>
     );
   } else if (dataWrapper.status === TransportFailure.ConnectionFailure) {
@@ -111,7 +128,10 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
           icon={faWifi}
         />
         <p className={`${textClassName} text-danger mb-0`}>
-          No Internet. Check your connection and try again.
+          No Internet
+          {layout === TransportedDataGateLayout.Default
+            ? '. Check your connection and try again.'
+            : null}
         </p>
       </div>
     );
@@ -120,7 +140,9 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       <div className={flexClassName}>
         <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faLock} />
         <p className={`${textClassName} mb-0`}>
-          You are not allowed to access this content
+          {layout === TransportedDataGateLayout.Default
+            ? 'You are not allowed to access this content'
+            : 'Not Allowed'}
         </p>
       </div>
     );
@@ -139,7 +161,9 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
           icon={faExclamationCircle}
         />
         <p className={`text-danger ${textClassName} mb-0`}>
-          An internal error occurred. Try again later.
+          {layout === TransportedDataGateLayout.Default
+            ? 'An unexpected error occurred. Try again later.'
+            : 'Unexpected Error'}
         </p>
       </div>
     );
