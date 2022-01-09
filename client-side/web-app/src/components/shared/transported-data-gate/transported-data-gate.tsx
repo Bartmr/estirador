@@ -41,7 +41,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
   }`;
 
   const spinnerSizeClass =
-    layout === TransportedDataGateLayout.Tape ? 'spinner-sm' : 'spinner-lg';
+    layout === TransportedDataGateLayout.Tape ? '' : 'spinner-lg';
 
   const iconSizeClassName =
     layout === TransportedDataGateLayout.Tape ? '' : 'icon-thumbnail';
@@ -57,7 +57,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
     gateStatusUI = (
       <div className={flexClassName}>
         <div
-          className={`${spinnerSizeClass} spinner-border text-primary`}
+          className={`d-block ${spinnerSizeClass} spinner-border text-primary`}
           role="status"
         >
           <span className="visually-hidden">Loading...</span>
@@ -85,7 +85,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
         }
       >
         <div
-          className={`${spinnerSizeClass} spinner-border text-primary`}
+          className={`d-block ${spinnerSizeClass} spinner-border text-primary`}
           role="status"
         >
           <span className="visually-hidden">Loading...</span>
