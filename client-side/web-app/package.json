@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "author": "",
   "engines": {
-    "node": "14"
+    "node": "16"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

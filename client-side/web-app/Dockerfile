@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:16-buster
 
 COPY ./client-side/web-app/src/ /usr/src/app/client-side/web-app/src/
 

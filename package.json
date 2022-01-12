@@ -5,7 +5,7 @@
   "author": "",
   "private": true,
   "engines": {
-    "node": "14"
+    "node": "16"
   },
   "scripts": {
     "install:all": "npm install -g concurrently && concurrently \"npm install\" \"npm run install:web-app\" -n \"install,install:web-app\"",

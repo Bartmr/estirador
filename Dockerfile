@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:16-alpine
 
 COPY ./libs/ /usr/src/app/libs/
 COPY ./src/ /usr/src/app/src/
