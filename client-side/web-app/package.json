@@ -87,7 +87,6 @@
     "lint": "eslint --ext .ts,.tsx --max-warnings 0 .",
     "lint:fix": "eslint --ext .ts,.tsx --max-warnings 0 --fix .",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
-    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint",
-    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install"
+    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint"
   }
 }
