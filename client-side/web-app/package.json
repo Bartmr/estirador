@@ -34,8 +34,7 @@
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
     "sass": "^1.45.1",
-    "tinycolor2": "^1.4.2",
-    "uuid": "^8.3.2"
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",
@@ -51,7 +50,6 @@
     "@types/react-helmet": "^6.1.5",
     "@types/react-redux": "^7.1.21",
     "@types/tinycolor2": "^1.4.3",
-    "@types/uuid": "^8.3.3",
     "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
