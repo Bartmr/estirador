@@ -1,1 +1,1 @@
-export type OutgoingHeaders = { [key: string]: string | undefined };
+export type UnparsedRequestHeaders = { [key: string]: string | undefined };

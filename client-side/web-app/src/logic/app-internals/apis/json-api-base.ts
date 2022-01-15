@@ -1,5 +1,5 @@
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
-import { OutgoingHeaders } from '../transports/http/http-types';
+import { UnparsedRequestHeaders } from '../transports/http/http-types';
 import {
   JsonHttpOutgoingBody,
   JsonHttpResponse,
@@ -25,7 +25,7 @@ export type SupportedRequestBody =
 export abstract class JSONApiBase {
   private jsonHttp: ReturnType<typeof useJSONHttp>;
   private apiUrl: string;
-  private getHeaders: () => OutgoingHeaders;
+  private getHeaders: () => UnparsedRequestHeaders;
   private onInvalidAuthToken: null | (() => Promise<void>);
 
   constructor(params: {
