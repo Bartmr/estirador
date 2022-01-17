@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Readable } from 'stream';
 import { promisify } from 'util';
+import { EnvironmentVariablesService } from '../environment/environment-variables.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../local-temporary-files/local-temporary-files-path';
 import { StorageService } from './storage.service';
 
@@ -60,6 +61,6 @@ export class DevStorageService implements StorageService {
   }
 
   getHostUrl() {
-    return 'http://localhost:3000/tmp/storage';
+    return `http://localhost:${EnvironmentVariablesService.variables.API_PORT}/tmp/storage`;
   }
 }

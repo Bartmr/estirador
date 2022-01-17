@@ -10,6 +10,7 @@ import { ProcessType } from './internals/process/process-context';
 import { ProcessContextManager } from './internals/process/process-context-manager';
 import { generateRandomUUID } from './internals/utils/generate-random-uuid';
 import { createApp } from './create-app';
+import { EnvironmentVariablesService } from './internals/environment/environment-variables.service';
 
 type ModuleHotData = {
   closingPromise?: Promise<unknown>;
@@ -53,7 +54,7 @@ async function bootstrap() {
   const shutdown = async () => {
     const timeout = setTimeout(() => {
       // eslint-disable-next-line no-console
-      console.error(`server:hanging-process`);
+      console.error(`hanging-process`);
       process.exit(1);
     }, 30000);
     timeout.unref();
@@ -97,7 +98,7 @@ async function bootstrap() {
     });
   }
 
-  await app.listen(3000);
+  await app.listen(EnvironmentVariablesService.variables.API_PORT);
 }
 
 bootstrap().catch((err) => {
