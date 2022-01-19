@@ -7,12 +7,10 @@ import { useStoreSelector } from 'src/logic/app-internals/store/use-store-select
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { Redirect } from '../redirect/redirect';
 import { LOGIN_ROUTE } from 'src/components/templates/login/login-routes';
-import { INDEX_ROUTE } from 'src/components/templates/index/index-routes';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { RouteComponentProps } from '@reach/router';
-import { isTransportFailure } from 'src/logic/app-internals/transports/transported-data/is-transport-failure';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { RequiredFields } from '@app/shared/internals/utils/types/requirement-types';
+import { INDEX_ROUTE } from 'src/components/templates/index/index-routes';
 
 type Props = RequiredFields<RouteComponentProps, 'path'> & {
   authenticationRules: AuthenticatedRouteRules;
@@ -26,13 +24,8 @@ export const AuthenticatedRoute = (props: Props) => {
   );
 
   if (typeof sessionWrapper.data === 'undefined') {
-    return null;
-  } else if (
-    isTransportFailure(sessionWrapper.status) ||
-    sessionWrapper.status === TransportedDataStatus.Loading
-  ) {
     return (
-      <TransportedDataGate dataWrapper={sessionWrapper}>
+      <TransportedDataGate className="py-3" dataWrapper={sessionWrapper}>
         {() => null}
       </TransportedDataGate>
     );
@@ -46,15 +39,25 @@ export const AuthenticatedRoute = (props: Props) => {
       } else {
         return (
           <Redirect
-            href={mainApiAuthRule.hrefToRedirectTo || LOGIN_ROUTE.getHref()}
+            href={
+              mainApiAuthRule.hrefToRedirectTo ||
+              LOGIN_ROUTE.getHref({ next: window.location.href })
+            }
           />
         );
       }
     } else {
       if (session) {
+        const searchParams = new URLSearchParams(window.location.search);
+
+        const nextEnconded = searchParams.get('next');
+        const next = nextEnconded ? decodeURIComponent(nextEnconded) : '';
+
         return (
           <Redirect
-            href={mainApiAuthRule.hrefToRedirectTo || INDEX_ROUTE.getHref()}
+            href={
+              mainApiAuthRule.hrefToRedirectTo || next || INDEX_ROUTE.getHref()
+            }
           />
         );
       } else {
