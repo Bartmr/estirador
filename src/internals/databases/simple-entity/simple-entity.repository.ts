@@ -19,19 +19,23 @@ type AnyEntity = {
   id: number | string;
 };
 
+type EntityAttribute<Attribute> = Attribute extends null | undefined
+  ? /*
+      enforce the use of TypeORM's IsNull operator for null values
+      and stop undefined from being considered an entity attribute
+      and have FindOperators of its own, even in relationships
+    */
+    never
+  : Attribute extends AnyEntity
+  ? Attribute | Attribute['id']
+  : Attribute extends AnyEntity[]
+  ? Attribute[number] | Attribute[number]['id']
+  : Attribute | FindOperator<Attribute>;
+
 type WhereObject<Entity extends SimpleEntity> = {
-  // Eager relations
-  [K in keyof Entity]?: Entity[K] extends AnyEntity
-    ? Entity[K] | Entity[K]['id']
-    : Entity[K] extends AnyEntity[]
-    ? Entity[K][number] | Entity[K][number]['id']
-    : // Lazy relations
-    Entity[K] extends Promise<AnyEntity>
-    ? UnwrapPromise<Entity[K]> | UnwrapPromise<Entity[K]>['id']
-    : Entity[K] extends Promise<AnyEntity[]>
-    ? UnwrapPromise<Entity[K]>[number] | UnwrapPromise<Entity[K]>[number]['id']
-    : // Columns
-      Entity[K] | FindOperator<Entity[K]>;
+  [K in keyof Entity]?: Entity[K] extends Promise<unknown>
+    ? EntityAttribute<UnwrapPromise<Entity[K]>>
+    : EntityAttribute<Entity[K]>;
 };
 
 export type Where<Entity extends SimpleEntity> =
