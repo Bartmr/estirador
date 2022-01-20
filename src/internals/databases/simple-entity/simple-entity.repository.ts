@@ -19,7 +19,7 @@ type AnyEntity = {
   id: number | string;
 };
 
-type EntityAttribute<Attribute> = Attribute extends null | undefined
+type WhereEntityAttribute<Attribute> = Attribute extends null | undefined
   ? /*
       enforce the use of TypeORM's IsNull operator for null values
       and stop undefined from being considered an entity attribute
@@ -34,8 +34,8 @@ type EntityAttribute<Attribute> = Attribute extends null | undefined
 
 type WhereObject<Entity extends SimpleEntity> = {
   [K in keyof Entity]?: Entity[K] extends Promise<unknown>
-    ? EntityAttribute<UnwrapPromise<Entity[K]>>
-    : EntityAttribute<Entity[K]>;
+    ? WhereEntityAttribute<UnwrapPromise<Entity[K]>>
+    : WhereEntityAttribute<Entity[K]>;
 };
 
 export type Where<Entity extends SimpleEntity> =
