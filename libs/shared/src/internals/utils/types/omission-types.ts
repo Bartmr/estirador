@@ -1,8 +1,5 @@
-export type OmitWithTypesafeKeys<T, K extends keyof T> = Omit<T, K>;
+export type OmitWithTypesafeKeys<T, Keys extends keyof T> = Omit<T, Keys>;
 
-export type OmitWithUndefined<T, K extends keyof T> = OmitWithTypesafeKeys<
-  T,
-  K
-> & {
-  [NNK in K]?: undefined;
+export type OmitWithUndefined<T, Keys extends keyof T> = Omit<T, Keys> & {
+  [K in Keys]?: undefined;
 };
