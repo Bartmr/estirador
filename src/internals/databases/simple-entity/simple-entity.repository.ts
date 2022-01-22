@@ -54,6 +54,11 @@ export interface FindOneOptions<Entity extends SimpleEntity>
   where: Where<Entity>;
 }
 
+export interface DangerouslyFindAllOptions<Entity extends SimpleEntity>
+  extends FindOptionsBase<Entity> {
+  where?: Where<Entity>;
+}
+
 export interface FindOptions<Entity extends SimpleEntity>
   extends FindOptionsBase<Entity> {
   where?: Where<Entity>;
@@ -109,6 +114,21 @@ export abstract class SimpleEntityRepository<
       rows: results[0],
       total: results[1],
     };
+  }
+
+  /**
+   * This method will return all existing entities that match the query
+   * It may become a performance bottleneck
+   */
+  async dangerouslyFindAll(
+    query: DangerouslyFindAllOptions<Entity>,
+    options?: Partial<{ manager: EntityManager }>,
+  ) {
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    return repository.find(query);
   }
 
   async count(
@@ -255,7 +275,7 @@ export abstract class SimpleEntityRepository<
     }
   }
 
-  async getManyAndCount(
+  async selectManyAndCount(
     options: {
       alias: string;
       withDeleted?: boolean;
@@ -282,6 +302,30 @@ export abstract class SimpleEntityRepository<
       rows: results[0],
       total: results[1],
     };
+  }
+
+  /**
+   * This method will return all existing entities that match the query
+   * It may become a performance bottleneck
+   */
+  async dangerouslySelectMany(
+    options: {
+      alias: string;
+      withDeleted?: boolean;
+    },
+    builderFn: (
+      queryBuilder: SelectQueryBuilder<Entity>,
+    ) => SelectQueryBuilder<Entity>,
+  ) {
+    let queryBuilder = this.repository.createQueryBuilder(options.alias);
+
+    if (options.withDeleted) {
+      queryBuilder = queryBuilder.withDeleted();
+    }
+
+    queryBuilder = builderFn(queryBuilder);
+
+    return queryBuilder.getMany();
   }
 
   async incrementalUpdate(
