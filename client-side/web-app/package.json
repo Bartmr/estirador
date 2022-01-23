@@ -75,7 +75,7 @@
     "gatsby"
   ],
   "scripts": {
-    "clean": "rimraf dist .webpack-bundle-analyzer _graphql-generated_ **/*._graphql-generated_.ts && gatsby clean",
+    "clean": "gatsby clean && rimraf dist .webpack-bundle-analyzer _graphql-generated_ **/*._graphql-generated_.ts",
     "build": "gatsby build --prefix-paths",
     "build:ci": "CI=true npm run build",
     "develop": "gatsby develop",
