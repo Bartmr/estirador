@@ -1,6 +1,6 @@
 FROM node:16-alpine
 
-COPY ./libs/ /usr/src/app/libs/
+COPY ./libs/shared/src/ /usr/src/app/libs/shared/src/
 COPY ./src/ /usr/src/app/src/
 COPY ./scripts/ /usr/src/app/scripts/
 COPY ./type-declarations/ /usr/src/app/type-declarations/
