@@ -1,7 +1,7 @@
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import { Client } from 'pg';
 import { LoggingService } from 'src/internals/logging/logging.service';
-import { QueryRunner } from 'typeorm';
+import { QueryRunner } from 'typeorm-bartmr';
 import { EnvironmentVariablesService } from '../../environment/environment-variables.service';
 
 type SupportedSchema = Schema<Array<{ [key: string]: string | number | null }>>;

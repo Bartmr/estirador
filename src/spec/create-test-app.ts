@@ -1,6 +1,6 @@
 import { LoggerService, ModuleMetadata } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from 'nestjs-typeorm-bartmr';
 import { CROSS_CUTTING_PROVIDERS } from 'src/cross-cutting-providers';
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from 'src/internals/databases/default-db-typeorm-conn-opts';
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';

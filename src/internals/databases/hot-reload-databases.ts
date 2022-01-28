@@ -2,9 +2,13 @@
 import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';
 import { HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS } from './databases-constants';
-import { MigrationExecutor, ConnectionManager, Connection } from 'typeorm';
-import { ConnectionMetadataBuilder } from 'typeorm/connection/ConnectionMetadataBuilder';
-import { ObjectUtils } from 'typeorm/util/ObjectUtils';
+import {
+  MigrationExecutor,
+  ConnectionManager,
+  Connection,
+} from 'typeorm-bartmr';
+import { ConnectionMetadataBuilder } from 'typeorm-bartmr/connection/ConnectionMetadataBuilder';
+import { ObjectUtils } from 'typeorm-bartmr/util/ObjectUtils';
 import { throwError } from 'libs/shared/src/internals/utils/throw-error';
 
 type ModuleHotData = {

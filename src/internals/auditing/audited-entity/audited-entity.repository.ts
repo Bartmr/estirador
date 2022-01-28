@@ -3,7 +3,7 @@ import {
   IncrementalUpdateChanges,
   SimpleEntityRepository,
 } from 'src/internals/databases/simple-entity/simple-entity.repository';
-import { DeepPartial, EntityManager } from 'typeorm';
+import { DeepPartial, EntityManager } from 'typeorm-bartmr';
 import { AuditedEntity } from './audited.entity';
 import { ConcreteClass } from 'libs/shared/src/internals/utils/types/classes-types';
 

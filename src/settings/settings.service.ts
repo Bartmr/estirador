@@ -1,4 +1,4 @@
-import { InjectConnection } from '@nestjs/typeorm';
+import { InjectConnection } from 'nestjs-typeorm-bartmr';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import {
   IncrementalUpdateChanges,
@@ -9,7 +9,7 @@ import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';
 import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 import { throwError } from 'src/internals/utils/throw-error';
-import { Connection, EntityManager, EntityRepository } from 'typeorm';
+import { Connection, EntityManager, EntityRepository } from 'typeorm-bartmr';
 import { Settings } from './typeorm/settings.entity';
 
 @EntityRepository(Settings)

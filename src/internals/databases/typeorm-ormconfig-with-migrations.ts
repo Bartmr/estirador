@@ -1,4 +1,4 @@
-import { ConnectionOptions } from 'typeorm';
+import { ConnectionOptions } from 'typeorm-bartmr';
 import { ALL_MIGRATIONS } from './all-migrations';
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './default-db-typeorm-conn-opts';
 

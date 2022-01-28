@@ -1,8 +1,8 @@
 import { NODE_ENV } from '../../environment/node-env.constants';
-import { Connection, ConnectionManager } from 'typeorm';
+import { Connection, ConnectionManager } from 'typeorm-bartmr';
 import { NodeEnv } from '../../environment/node-env.types';
 import { TYPEORM_ORMCONFIG } from '../typeorm-ormconfig';
-import { ConnectionOptions } from 'typeorm';
+import { ConnectionOptions } from 'typeorm-bartmr';
 import { TYPEORM_DEFAULT_CONNECTION_NAME } from '../databases-constants';
 
 if (NODE_ENV !== NodeEnv.Test) {
