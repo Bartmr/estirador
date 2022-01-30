@@ -243,38 +243,6 @@ export abstract class SimpleEntityRepository<
     await repository.save(entities as unknown as DeepPartial<Entity>[]);
   }
 
-  async remove(
-    entity: Entity,
-    auditContext: AuditContext,
-    options?: Partial<{ manager: EntityManager }>,
-  ): Promise<void> {
-    return this.removeMany([entity], auditContext, options);
-  }
-
-  async removeMany(
-    entities: Entity[],
-    auditContext: AuditContext,
-    options?: Partial<{ manager: EntityManager }>,
-  ): Promise<void> {
-    const EntityClass = this.repository.target as Class;
-
-    for (const entity of entities) {
-      if (!(entity instanceof EntityClass)) {
-        throw new Error();
-      }
-    }
-
-    const repository = options?.manager
-      ? options.manager.getRepository<Entity>(EntityClass)
-      : this.repository;
-
-    if (this.repository.metadata.deleteDateColumn) {
-      await repository.softRemove(entities as unknown as DeepPartial<Entity>[]);
-    } else {
-      await repository.remove(entities);
-    }
-  }
-
   async selectManyAndCount(
     options: {
       alias: string;
