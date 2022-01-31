@@ -9,7 +9,7 @@ if (NODE_ENV !== NodeEnv.Test) {
   throw new Error();
 }
 
-export async function getDatabaseConnection(
+export async function getTestDatabaseConnection(
   entities?: ConnectionOptions['entities'],
   connectionName = TYPEORM_DEFAULT_CONNECTION_NAME,
 ): Promise<Connection> {
