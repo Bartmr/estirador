@@ -47,7 +47,5 @@ export async function testsBaseGlobalSetup() {
     }
   });
 
-  const connections = await hotReloadDatabases();
-
-  await Promise.all(connections.map((c) => c.close()));
+  await hotReloadDatabases();
 }

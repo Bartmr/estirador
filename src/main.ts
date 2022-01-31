@@ -4,8 +4,6 @@ import 'src/internals/environment/load-environment-variables';
 import { LoggingServiceSingleton } from './internals/logging/logging.service.singleton';
 import { NODE_ENV } from './internals/environment/node-env.constants';
 import { NodeEnv } from './internals/environment/node-env.types';
-import type { hotReloadDatabases } from './internals/databases/hot-reload-databases';
-import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
 import { ProcessType } from './internals/process/process-context';
 import { ProcessContextManager } from './internals/process/process-context-manager';
 import { generateRandomUUID } from './internals/utils/generate-random-uuid';
@@ -31,14 +29,11 @@ async function bootstrap() {
 
   const loggingService = LoggingServiceSingleton.makeInstance();
 
-  let hotReloadedDatabasesResult:
-    | UnwrapPromise<ReturnType<typeof hotReloadDatabases>>
-    | undefined = undefined;
   if (NODE_ENV === NodeEnv.Development) {
-    const { hotReloadDatabases: hotReloadDatabasesImpl } = await import(
+    const { hotReloadDatabases } = await import(
       './internals/databases/hot-reload-databases'
     );
-    hotReloadedDatabasesResult = await hotReloadDatabasesImpl();
+    await hotReloadDatabases();
   }
 
   /*
@@ -66,10 +61,6 @@ async function bootstrap() {
     }
 
     await app.close();
-
-    if (hotReloadedDatabasesResult) {
-      await Promise.all(hotReloadedDatabasesResult.map((c) => c.close()));
-    }
   };
 
   const shutdownHandler = () => {
