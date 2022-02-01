@@ -2,7 +2,7 @@ import 'source-map-support/register';
 import 'src/internals/environment/load-environment-variables';
 
 import { tearDownDatabases } from 'test-environment-impl/base/tear-down-databases';
-import { createConnection } from 'typeorm-bartmr';
+import { createConnection } from 'typeorm';
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';
 import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';

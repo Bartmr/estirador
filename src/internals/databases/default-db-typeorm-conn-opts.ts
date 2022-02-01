@@ -1,4 +1,4 @@
-import { ConnectionOptions } from 'typeorm-bartmr';
+import { ConnectionOptions } from 'typeorm';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
 import { ALL_SUBSCRIBERS } from './all-subscribers';
 import { LOG_DATABASES } from './databases-constants';

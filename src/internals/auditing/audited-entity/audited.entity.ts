@@ -1,5 +1,5 @@
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
-import { Column, DeleteDateColumn } from 'typeorm-bartmr';
+import { Column, DeleteDateColumn } from 'typeorm';
 
 /*
   Use Postgres uuid v1mc instead of v1 in order

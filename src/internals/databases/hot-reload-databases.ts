@@ -2,7 +2,7 @@
 import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';
 import { HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS } from './databases-constants';
-import { MigrationExecutor, ConnectionManager } from 'typeorm-bartmr';
+import { MigrationExecutor, ConnectionManager } from 'typeorm';
 
 if (NODE_ENV !== NodeEnv.Development && NODE_ENV !== NodeEnv.Test) {
   throw new Error();

@@ -1,5 +1,5 @@
 import { createTestAuditContext } from 'src/internals/auditing/spec/create-test-audit-context';
-import { Column, Connection, Entity, EntityRepository } from 'typeorm-bartmr';
+import { Column, Connection, Entity, EntityRepository } from 'typeorm';
 import { getTestDatabaseConnection } from '../spec/databases-test-utils';
 import { SimpleEntityRepository } from './simple-entity.repository';
 import { SimpleEntity } from './simple.entity';

@@ -1,5 +1,5 @@
 import { Module, OnModuleInit } from '@nestjs/common';
-import { TypeOrmModule } from 'nestjs-typeorm-bartmr';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { SettingsService } from './settings.service';
 import { Settings } from './typeorm/settings.entity';
 

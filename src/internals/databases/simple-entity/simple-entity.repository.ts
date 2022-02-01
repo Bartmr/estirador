@@ -9,10 +9,10 @@ import {
   EntityManager,
   FindOperator,
   SelectQueryBuilder,
-} from 'typeorm-bartmr';
+} from 'typeorm';
 import { SimpleEntity } from './simple.entity';
 import { throwError } from 'src/internals/utils/throw-error';
-import { QueryDeepPartialEntity } from 'typeorm-bartmr/query-builder/QueryPartialEntity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
 
 type AnyEntity = {

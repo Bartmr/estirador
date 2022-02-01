@@ -1,10 +1,6 @@
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';
 import { NodeEnv } from 'src/internals/environment/node-env.types';
-import {
-  Connection,
-  ConnectionManager,
-  MigrationExecutor,
-} from 'typeorm-bartmr';
+import { Connection, ConnectionManager, MigrationExecutor } from 'typeorm';
 import { TYPEORM_ORMCONFIG_WITH_MIGRATIONS } from 'src/internals/databases/typeorm-ormconfig-with-migrations';
 
 if (NODE_ENV !== NodeEnv.Development && NODE_ENV !== NodeEnv.Test) {

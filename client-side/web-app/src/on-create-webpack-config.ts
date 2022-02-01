@@ -56,9 +56,9 @@ export async function onCreateWebpackConfig({
           pointing the imports root directly to the root of the project.
         */
         src: path.join(process.cwd(), `src`),
-        'typeorm-bartmr': path.join(
+        typeorm: path.join(
           process.cwd(),
-          '../../node_modules/typeorm-bartmr/typeorm-model-shim.js',
+          '../../node_modules/typeorm/typeorm-model-shim.js',
         ),
         '@app/shared': path.join(process.cwd(), '../../libs/shared/src'),
       },

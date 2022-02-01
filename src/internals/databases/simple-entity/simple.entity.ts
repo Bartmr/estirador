@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn } from 'typeorm-bartmr';
+import { PrimaryGeneratedColumn } from 'typeorm';
 
 export abstract class SimpleEntity {
   @PrimaryGeneratedColumn('uuid')
