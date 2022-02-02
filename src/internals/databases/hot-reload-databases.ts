@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import path from 'path';
+import fs from 'fs';
 import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';
 import { HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS } from './databases-constants';
@@ -9,6 +10,41 @@ if (NODE_ENV !== NodeEnv.Development && NODE_ENV !== NodeEnv.Test) {
 }
 
 export async function hotReloadDatabases(): Promise<void> {
+  if (!module.hot) {
+    const typeormConfigPath = path.join(
+      process.cwd(),
+      'src/internals/databases/typeorm-ormconfig-with-migrations.ts',
+    );
+    const allMigrationsArrayPath = path.join(
+      process.cwd(),
+      'src/internals/databases/all-migrations.ts',
+    );
+    const migrationsDirectoryPath = path.join(
+      process.cwd(),
+      'src/internals/databases/migrations',
+    );
+
+    if (
+      !(
+        fs.existsSync(typeormConfigPath) &&
+        fs.existsSync(allMigrationsArrayPath) &&
+        fs.existsSync(migrationsDirectoryPath)
+      )
+    ) {
+      throw new Error();
+    }
+
+    Object.keys(require.cache).forEach(function (absolutePath) {
+      if (
+        absolutePath === typeormConfigPath ||
+        absolutePath === allMigrationsArrayPath ||
+        absolutePath.startsWith(migrationsDirectoryPath)
+      ) {
+        delete require.cache[absolutePath];
+      }
+    });
+  }
+
   const { TYPEORM_ORMCONFIG_WITH_MIGRATIONS } = await import(
     './typeorm-ormconfig-with-migrations'
   );
