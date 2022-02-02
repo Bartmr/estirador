@@ -27,8 +27,11 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 
 const authTokenIdSchema = string()
+  .test((s) =>
+    s == undefined || s.startsWith('Bearer ') ? null : 'must-be-bearer-scheme',
+  )
   .transform((s) => (s ? s.replace('Bearer ', '') : s))
-  .test((s) => (s == undefined || isUUID(s) ? null : 'Must be an UUID'));
+  .test((s) => (s == undefined || isUUID(s) ? null : 'must-be-uuid'));
 
 const authTokenKeySchema = uuid().required();
 

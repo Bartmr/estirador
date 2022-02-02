@@ -32,7 +32,7 @@ export function useMainJSONApi() {
 
       if (authTokenId) {
         return {
-          Authorization: authTokenId,
+          Authorization: `Bearer ${authTokenId}`,
         };
       } else {
         return {};
