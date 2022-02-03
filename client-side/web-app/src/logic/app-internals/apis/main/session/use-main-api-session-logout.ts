@@ -8,7 +8,6 @@ import { useLocalStorage } from 'src/logic/app-internals/transports/use-local-st
 import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
 import { mainApiReducer } from '../main-api-reducer';
 import { useStoreGetState } from 'src/logic/app-internals/store/use-store-get-state';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { LOGIN_ROUTE } from 'src/components/templates/login/login-routes';
 
 class MainApiSessionLogout {
@@ -22,12 +21,14 @@ class MainApiSessionLogout {
   async logout() {
     const state = this.getState();
 
-    if (state.mainApi.session.status === TransportedDataStatus.Loading) {
+    if (state.mainApi.isLoggingOut) {
       return;
     }
     this.dispatch({
       type: MAIN_API_SESSION_LOGOUT,
     });
+
+    /* ----- */
 
     this.localStorage.wipeAll();
     this.sessionStorage.wipeAll();
