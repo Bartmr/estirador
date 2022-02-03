@@ -9,6 +9,7 @@ import { MAIN_API_SESSION_LOGOUT } from '../apis/main/session/main-api-session-a
 import { StoreReducersMap } from './store-reducers-map';
 import { createContext, ReactNode, useContext } from 'react';
 import { throwError } from '../utils/throw-error';
+import { TransportedDataStatus } from '../transports/transported-data/transported-data-types';
 
 type RootReducer = Reducer<StoreState, StoreAction>;
 
@@ -39,7 +40,13 @@ class StoreManager {
       let state = stateArg;
 
       if (action.type === MAIN_API_SESSION_LOGOUT) {
-        state = undefined;
+        state = {
+          mainApi: {
+            session: {
+              status: TransportedDataStatus.Loading,
+            },
+          },
+        };
       }
 
       return combinedReducer(state, action);
