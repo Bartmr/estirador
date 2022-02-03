@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "files": ["src/main.ts"],
-  "include": ["type-declarations", "src/**/*.job.ts"],
+  "include": ["type-declarations", "src/**/*.job.ts", "scripts"],
   "compilerOptions": {
     "baseUrl": "./"
   }

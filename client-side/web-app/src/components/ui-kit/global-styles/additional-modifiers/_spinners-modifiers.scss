@@ -17,15 +17,6 @@
 
 .spinner-border,
 .spinner-grow {
-  &.spinner-sm {
-    width: $spinner-width-sm;
-    height: $spinner-height-sm;
-  }
-  &.spinner-lg {
-    width: $spinner-width-lg;
-    height: $spinner-height-lg;
-  }
-
   @each $breakpoint in map-keys($grid-breakpoints) {
     @include media-breakpoint-up($breakpoint) {
       $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
@@ -42,6 +33,10 @@
         width: $spinner-width-lg;
         height: $spinner-height-lg;
       }
+      &.spinner-inherit {
+        width: 1em;
+        height: 1em;
+      }
     }
   }
 }
@@ -50,13 +45,6 @@
   Set spinner-border border width depending on its size
 */
 .spinner-border {
-  &.spinner-sm {
-    border-width: $spinner-border-width-sm;
-  }
-  &.spinner-lg {
-    border-width: $spinner-border-width-lg;
-  }
-
   @each $breakpoint in map-keys($grid-breakpoints) {
     @include media-breakpoint-up($breakpoint) {
       $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
@@ -69,6 +57,9 @@
       }
       &.spinner#{$infix}-lg {
         border-width: $spinner-border-width-lg;
+      }
+      &.spinner-inherit {
+        border-width: 0.2em;
       }
     }
   }

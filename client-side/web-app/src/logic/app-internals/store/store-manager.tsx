@@ -50,6 +50,7 @@ class StoreManager {
 
   loadReducersMap(reducersMapToLoad: Partial<StoreReducersMap>) {
     let thereAreChangesToMerge = false;
+
     const changes: Partial<StoreReducersMap> = {};
 
     for (const keyArg in reducersMapToLoad) {
@@ -57,15 +58,11 @@ class StoreManager {
 
       const reducer = reducersMapToLoad[key];
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (!reducer) return;
-      else if (reducer === this.reducersMap[key]) return;
+      if (reducer && reducer !== this.reducersMap[key]) {
+        thereAreChangesToMerge = true;
 
-      thereAreChangesToMerge = true;
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      changes[key] = reducer;
+        changes[key] = reducer;
+      }
     }
 
     if (thereAreChangesToMerge) {

@@ -10,7 +10,14 @@
   }
 }
 
-@each $color, $value in $theme-colors {
+$colors: join(
+  $theme-colors,
+  (
+    'body': $body-bg,
+  )
+);
+
+@each $color, $value in $colors {
   .text-link.text-#{$color} {
     &:hover {
       color: get-contrasting-color('#{$color}-hover') !important;

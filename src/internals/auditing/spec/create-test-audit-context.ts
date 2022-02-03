@@ -2,7 +2,7 @@ import { ProcessContextManager } from 'src/internals/process/process-context-man
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 import { AuditContext } from '../audit-context';
 
-export function createAuditContextTestMock() {
+export function createTestAuditContext() {
   const processContext = ProcessContextManager.getContext();
 
   const operationId = generateRandomUUID();

@@ -14,7 +14,7 @@ require('ts-node').register({
   project: tsConfigFileName,
   compilerOptions: {
     module: 'commonjs',
-    target: 'es2020',
+    target: 'es2021',
   },
 });
 

@@ -23,6 +23,7 @@ export async function createApp() {
   app.enableCors({
     origin: WEB_APP_ORIGIN,
     credentials: true,
+    exposedHeaders: ['X-Resource-Not-Found'],
   });
 
   const loggingService = app.get(LoggingService);

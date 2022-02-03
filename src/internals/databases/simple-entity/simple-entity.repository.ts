@@ -19,19 +19,23 @@ type AnyEntity = {
   id: number | string;
 };
 
+type WhereEntityAttribute<Attribute> = Attribute extends null | undefined
+  ? /*
+      enforce the use of TypeORM's IsNull operator for null values
+      and stop undefined from being considered an entity attribute
+      and have FindOperators of its own, even in relationships
+    */
+    never
+  : Attribute extends AnyEntity
+  ? Attribute | Attribute['id']
+  : Attribute extends AnyEntity[]
+  ? Attribute[number] | Attribute[number]['id']
+  : Attribute | FindOperator<Attribute>;
+
 type WhereObject<Entity extends SimpleEntity> = {
-  // Eager relations
-  [K in keyof Entity]?: Entity[K] extends AnyEntity
-    ? Entity[K] | Entity[K]['id']
-    : Entity[K] extends AnyEntity[]
-    ? Entity[K][number] | Entity[K][number]['id']
-    : // Lazy relations
-    Entity[K] extends Promise<AnyEntity>
-    ? UnwrapPromise<Entity[K]> | UnwrapPromise<Entity[K]>['id']
-    : Entity[K] extends Promise<AnyEntity[]>
-    ? UnwrapPromise<Entity[K]>[number] | UnwrapPromise<Entity[K]>[number]['id']
-    : // Columns
-      Entity[K] | FindOperator<Entity[K]>;
+  [K in keyof Entity]?: Entity[K] extends Promise<unknown>
+    ? WhereEntityAttribute<UnwrapPromise<Entity[K]>>
+    : WhereEntityAttribute<Entity[K]>;
 };
 
 export type Where<Entity extends SimpleEntity> =
@@ -48,6 +52,11 @@ type FindOptionsBase<Entity extends SimpleEntity> = {
 export interface FindOneOptions<Entity extends SimpleEntity>
   extends FindOptionsBase<Entity> {
   where: Where<Entity>;
+}
+
+export interface DangerouslyFindAllOptions<Entity extends SimpleEntity>
+  extends FindOptionsBase<Entity> {
+  where?: Where<Entity>;
 }
 
 export interface FindOptions<Entity extends SimpleEntity>
@@ -105,6 +114,21 @@ export abstract class SimpleEntityRepository<
       rows: results[0],
       total: results[1],
     };
+  }
+
+  /**
+   * This method will return all existing entities that match the query
+   * It may become a performance bottleneck
+   */
+  async dangerouslyFindAll(
+    query: DangerouslyFindAllOptions<Entity>,
+    options?: Partial<{ manager: EntityManager }>,
+  ) {
+    const repository = options?.manager
+      ? options.manager.getRepository<Entity>(this.repository.target)
+      : this.repository;
+
+    return repository.find(query);
   }
 
   async count(
@@ -219,39 +243,7 @@ export abstract class SimpleEntityRepository<
     await repository.save(entities as unknown as DeepPartial<Entity>[]);
   }
 
-  async remove(
-    entity: Entity,
-    auditContext: AuditContext,
-    options?: Partial<{ manager: EntityManager }>,
-  ): Promise<void> {
-    return this.removeMany([entity], auditContext, options);
-  }
-
-  async removeMany(
-    entities: Entity[],
-    auditContext: AuditContext,
-    options?: Partial<{ manager: EntityManager }>,
-  ): Promise<void> {
-    const EntityClass = this.repository.target as Class;
-
-    for (const entity of entities) {
-      if (!(entity instanceof EntityClass)) {
-        throw new Error();
-      }
-    }
-
-    const repository = options?.manager
-      ? options.manager.getRepository<Entity>(EntityClass)
-      : this.repository;
-
-    if (this.repository.metadata.deleteDateColumn) {
-      await repository.softRemove(entities as unknown as DeepPartial<Entity>[]);
-    } else {
-      await repository.remove(entities);
-    }
-  }
-
-  async getManyAndCount(
+  async selectManyAndCount(
     options: {
       alias: string;
       withDeleted?: boolean;
@@ -278,6 +270,30 @@ export abstract class SimpleEntityRepository<
       rows: results[0],
       total: results[1],
     };
+  }
+
+  /**
+   * This method will return all existing entities that match the query
+   * It may become a performance bottleneck
+   */
+  async dangerouslySelectMany(
+    options: {
+      alias: string;
+      withDeleted?: boolean;
+    },
+    builderFn: (
+      queryBuilder: SelectQueryBuilder<Entity>,
+    ) => SelectQueryBuilder<Entity>,
+  ) {
+    let queryBuilder = this.repository.createQueryBuilder(options.alias);
+
+    if (options.withDeleted) {
+      queryBuilder = queryBuilder.withDeleted();
+    }
+
+    queryBuilder = builderFn(queryBuilder);
+
+    return queryBuilder.getMany();
   }
 
   async incrementalUpdate(

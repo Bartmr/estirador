@@ -1,8 +1,8 @@
-FROM node:14-buster
+FROM node:16-buster
 
 COPY ./client-side/web-app/src/ /usr/src/app/client-side/web-app/src/
 
-COPY ./libs/shared/ /usr/src/app/libs/shared/
+COPY ./libs/shared/src/ /usr/src/app/libs/shared/src/
 COPY ./package.json ./package-lock.json /usr/src/app/
 
 COPY ./client-side/web-app/.babelrc \ 

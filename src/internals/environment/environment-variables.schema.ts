@@ -48,4 +48,12 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
         return value;
       }
     }),
+
+  API_PORT: number().transform((v) => {
+    if (v == null) {
+      return 3000;
+    } else {
+      return v;
+    }
+  }),
 }).required();

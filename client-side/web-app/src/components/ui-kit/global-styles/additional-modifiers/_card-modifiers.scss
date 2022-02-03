@@ -1,9 +1,5 @@
 @each $color, $_ in $theme-colors {
-  /*
-    It's card-color-(color name) instead of card-(color name)
-    in order not to conflict with Bootstrap's 'card-body' subcomponent class
-  */
-  .card.card-color-#{$color} {
+  .card.card-#{$color} {
     border-color: set-contrasting-color-alpha($color, 0.3);
 
     $background-color: set-contrasting-color-alpha($color, 0.2);

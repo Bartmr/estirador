@@ -26,21 +26,13 @@ export function prepareJob(
   jobFunction: JobFunction,
 ): () => void {
   const runAsync = async (): Promise<void> => {
-    let loggingService: LoggingService;
+    ProcessContextManager.setContext({
+      type: ProcessType.Job,
+      name: jobName,
+      workerId: generateRandomUUID(),
+    });
 
-    try {
-      ProcessContextManager.setContext({
-        type: ProcessType.Job,
-        name: jobName,
-        workerId: generateRandomUUID(),
-      });
-
-      loggingService = LoggingServiceSingleton.makeInstance();
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(`${jobName}:setup`, err);
-      process.exit(1);
-    }
+    const loggingService = LoggingServiceSingleton.makeInstance();
 
     try {
       await jobFunction({
@@ -59,8 +51,11 @@ export function prepareJob(
   };
 
   const run = () => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    runAsync();
+    runAsync().catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error(`${jobName}:setup`, err);
+      process.exit(1);
+    });
   };
 
   return run;

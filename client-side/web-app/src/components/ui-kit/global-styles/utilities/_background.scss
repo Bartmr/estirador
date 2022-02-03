@@ -45,6 +45,23 @@
   }
 }
 
+.bg-body {
+  @include with-contrasting-colors($body-bg);
+
+  @include on-inverted-color-scheme {
+    background-color: $body-bg-inverted !important;
+    @include with-contrasting-colors($body-bg-inverted);
+  }
+}
+
+.bg-black {
+  @include with-contrasting-colors($black);
+}
+
+.bg-white {
+  @include with-contrasting-colors($white);
+}
+
 .bg-transparent {
   @include inherit-contrasting-colors;
 }

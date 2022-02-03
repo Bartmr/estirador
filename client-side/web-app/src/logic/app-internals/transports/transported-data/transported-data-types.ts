@@ -1,12 +1,12 @@
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 
 export enum TransportedDataStatus {
-  NotInitialized = 'n',
+  NotInitialized = 'not-initialized',
   // Loading is for data that is not available or should not be used when loading or updating
-  Loading = 'l',
-  Done = 'd',
+  Loading = 'loading',
+  Done = 'done',
   // Refreshing is for data that can still be used while it's being updated
-  Refreshing = 'r',
+  Refreshing = 'refreshing',
   //
   // Errors related to a connection failure are tagged using TransportFailure enum
 }
