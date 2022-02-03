@@ -36,15 +36,14 @@ class MainApiSessionLogout {
       Redirect to the login page,
       in order to remove all the TransportedDataGates in public pages
       that are stuck in TransportFailure.AbortedAndDealtWith,
-      and also explicitly point out to the user that the session has expired
+      and also to explicitly point out to the user that the session has expired.
 
-      Do not reload to the same page, since some cases might lead to an endless reload loop
+      In case you need to change where to redirect to,
+      do not redirect back to the same page, since some cases might lead to an endless reload loop
       of no session > unauthorized response > trigger logout > reload > no session...
     */
-    const searchParams = new URLSearchParams(window.location.search);
-    const nextEnconded = searchParams.get('next');
-    const next = nextEnconded ? decodeURIComponent(nextEnconded) : '';
-    window.location.href = LOGIN_ROUTE.getHref({ next });
+    const currentHref = window.location.href;
+    window.location.href = LOGIN_ROUTE.getHref({ next: currentHref });
   }
 }
 
