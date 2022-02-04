@@ -13,7 +13,6 @@ import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
 import { navigate } from 'gatsby';
 import { LOGIN_ROUTE } from 'src/components/templates/login/login-routes';
-import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 
 type ModuleHotData = {
   storeManager?: ReturnType<typeof createStoreManager>;
@@ -35,7 +34,7 @@ const FrameWithState = (props: { children: ReactNode }) => {
         mainApiState.session.status === TransportedDataStatus.NotInitialized
       ) {
         if (mainApiState.isLoggingOut) {
-          await navigate(LOGIN_ROUTE.getHref({ next: getCurrentLocalHref() }));
+          await navigate(LOGIN_ROUTE.getHref({ next: null }));
 
           dispatch({
             type: 'FINISHED_LOGGING_OUT',
