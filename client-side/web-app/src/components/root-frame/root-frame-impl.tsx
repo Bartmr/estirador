@@ -1,23 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Logger } from 'src/logic/app-internals/logging/logger';
-// eslint-disable-next-line node/no-restricted-import
-import { Provider } from 'react-redux';
-import {
-  createStoreManager,
-  StoreManagerProvider,
-} from 'src/logic/app-internals/store/store-manager';
-import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
-import { navigate } from 'gatsby';
-import { LOGIN_ROUTE } from '../templates/login/login-routes';
-import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
+import { StatefulFrame } from './components/stateful-frame';
 
 const FatalErrorFrame = () => {
   return (
@@ -36,7 +22,7 @@ const FatalErrorFrame = () => {
   );
 };
 
-type ErrorBoundaryProps = { children: () => ReactNode };
+type ErrorBoundaryProps = {};
 type ErrorBoundaryState = { fatalErrorOccurred: boolean };
 class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
@@ -60,71 +46,9 @@ class ErrorBoundary extends React.Component<
       return <FatalErrorFrame />;
     }
 
-    return <>{this.props.children()}</>;
+    return <>{this.props.children}</>;
   }
 }
-
-const ContentsFrame = (props: { children: ReactNode }) => {
-  const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
-
-  const mainApiSession = useMainApiSession();
-
-  const mainApiState = useStoreSelector(
-    { mainApi: mainApiReducer },
-    (s) => s.mainApi,
-  );
-
-  useEffect(() => {
-    (async () => {
-      if (
-        mainApiState.session.status === TransportedDataStatus.NotInitialized
-      ) {
-        if (mainApiState.isLoggingOut) {
-          await navigate(LOGIN_ROUTE.getHref({ next: getCurrentLocalHref() }));
-
-          dispatch({
-            type: 'FINISHED_LOGGING_OUT',
-          });
-        }
-
-        await mainApiSession.restoreSession();
-      }
-    })();
-  }, [mainApiState.session.status]);
-
-  return <>{props.children}</>;
-};
-
-type ModuleHotData = {
-  storeManager?: ReturnType<typeof createStoreManager>;
-};
-
-const GiveContextToContents = (props: { children: ReactNode }) => {
-  const [storeManager] = useState(() => {
-    const storeManagerFromPreviousRuntime = (
-      module.hot?.data as ModuleHotData | undefined
-    )?.storeManager;
-
-    const storeManagerForCurrentRuntime =
-      storeManagerFromPreviousRuntime || createStoreManager();
-
-    if (module.hot && RUNNING_IN_CLIENT) {
-      module.hot.dispose((data: ModuleHotData) => {
-        data.storeManager = storeManagerForCurrentRuntime;
-      });
-    }
-
-    return storeManagerForCurrentRuntime;
-  });
-
-  return (
-    <StoreManagerProvider storeManager={storeManager}>
-      <Provider store={storeManager.store}>
-        <ContentsFrame>{props.children}</ContentsFrame>
-      </Provider>
-    </StoreManagerProvider>
-  );
-};
 
 export const _RootFrameImpl = (props: { children: ReactNode }) => {
   const [fatalErrorOccurred, replaceFatalErrorOccurredFlag] = useState(false);
@@ -160,16 +84,14 @@ export const _RootFrameImpl = (props: { children: ReactNode }) => {
   }, []);
 
   if (EnvironmentVariables.DISABLE_ERROR_BOUNDARIES) {
-    return <GiveContextToContents>{props.children}</GiveContextToContents>;
+    return <StatefulFrame>{props.children}</StatefulFrame>;
   } else {
     if (fatalErrorOccurred) {
       return <FatalErrorFrame />;
     } else {
       return (
         <ErrorBoundary>
-          {() => (
-            <GiveContextToContents>{props.children}</GiveContextToContents>
-          )}
+          <StatefulFrame>{props.children}</StatefulFrame>
         </ErrorBoundary>
       );
     }
