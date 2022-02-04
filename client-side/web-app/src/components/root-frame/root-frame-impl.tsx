@@ -14,6 +14,10 @@ import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
+import { navigate } from 'gatsby';
+import { LOGIN_ROUTE } from '../templates/login/login-routes';
+import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 
 const FatalErrorFrame = () => {
   return (
@@ -61,20 +65,32 @@ class ErrorBoundary extends React.Component<
 }
 
 const ContentsFrame = (props: { children: ReactNode }) => {
+  const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
+
   const mainApiSession = useMainApiSession();
 
-  const mainApiSessionStatus = useStoreSelector(
+  const mainApiState = useStoreSelector(
     { mainApi: mainApiReducer },
-    (s) => s.mainApi.session.status,
+    (s) => s.mainApi,
   );
 
   useEffect(() => {
     (async () => {
-      if (mainApiSessionStatus === TransportedDataStatus.NotInitialized) {
+      if (
+        mainApiState.session.status === TransportedDataStatus.NotInitialized
+      ) {
+        if (mainApiState.isLoggingOut) {
+          await navigate(LOGIN_ROUTE.getHref({ next: getCurrentLocalHref() }));
+
+          dispatch({
+            type: 'FINISHED_LOGGING_OUT',
+          });
+        }
+
         await mainApiSession.restoreSession();
       }
     })();
-  }, [mainApiSessionStatus]);
+  }, [mainApiState.session.status]);
 
   return <>{props.children}</>;
 };

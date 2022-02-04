@@ -27,6 +27,11 @@ export const mainApiReducer: MainApiReducer = (
         ...state,
         session: action.payload,
       };
+    case 'FINISHED_LOGGING_OUT':
+      return {
+        ...state,
+        isLoggingOut: false,
+      };
     default:
       return state;
   }
