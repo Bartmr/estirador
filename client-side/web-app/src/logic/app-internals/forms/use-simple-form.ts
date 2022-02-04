@@ -4,20 +4,14 @@ import { useState } from 'react';
 
 type FormValueBase = { [key: string]: unknown };
 
-export type UncompletedSimpleFormValue<T> = T extends undefined | null
-  ? T
-  : T extends Array<unknown>
-  ? Array<UncompletedSimpleFormValue<T[number]> | undefined>
-  : T extends { [key: string]: unknown }
-  ? {
-      [K in keyof T]?: UncompletedSimpleFormValue<T[K]>;
-    }
-  : T | undefined;
+export type UncompletedSimpleFormValue<FormValue extends FormValueBase> = {
+  [K in keyof FormValue]?: FormValue[K];
+};
 
 type FieldUtils<FormValue extends FormValueBase> = {
   setValue: <Name extends keyof FormValue>(
     name: Name,
-    value: UncompletedSimpleFormValue<FormValue[Name]>,
+    value: FormValue[Name] | undefined,
   ) => void;
   hasErrors: (name: keyof FormValue) => boolean;
   getErrors: (name: keyof FormValue) => { [key: string]: string };
@@ -30,7 +24,6 @@ export type SimpleForm<FormValue extends FormValueBase> = {
   reset: (defaultValues?: UncompletedSimpleFormValue<FormValue>) => void;
   getFinalValue(): { invalid: true } | { invalid: false; data: FormValue };
   formIsValid: boolean;
-  finalValueWasRequested: boolean;
 };
 
 export function useSimpleForm<
@@ -44,7 +37,7 @@ export function useSimpleForm<
    */
   const [values, replaceValues] = useState<
     UncompletedSimpleFormValue<FormValue>
-  >(args.defaultValues || ({} as UncompletedSimpleFormValue<FormValue>));
+  >(args.defaultValues || {});
   /*
    */
   const [visibleErrors, replaceVisibleErrors] = useState<{
@@ -60,10 +53,6 @@ export function useSimpleForm<
   const [dirtyFields, replaceDirtyFields] = useState<{
     [K in keyof FormValue]?: boolean;
   }>({});
-  /*
-   */
-  const [finalValueWasRequested, replaceFinalValueWasRequested] =
-    useState(false);
   /*
    */
 
@@ -118,15 +107,12 @@ export function useSimpleForm<
     values,
     field: fieldUtils,
     reset: (defaultValues) => {
-      replaceValues(
-        defaultValues || ({} as UncompletedSimpleFormValue<FormValue>),
-      );
+      replaceValues(defaultValues || {});
       replaceVisibleErrors({});
       replaceTotalErrors({});
+      replaceDirtyFields({});
     },
     getFinalValue: () => {
-      replaceFinalValueWasRequested(true);
-
       const validationResult = args.schema.validate(values);
 
       if (validationResult.errors) {
@@ -175,6 +161,5 @@ export function useSimpleForm<
       }
     },
     formIsValid: Object.keys(totalErrors).length === 0,
-    finalValueWasRequested,
   };
 }
