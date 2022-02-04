@@ -12,15 +12,11 @@
 }
 
 .card-title {
-  @extend .h3;
+  @extend .h5;
 }
 
 .card-subtitle {
   color: $text-muted;
 
   margin-bottom: map-get($spacers, 3);
-}
-
-.card-body {
-  padding: map-get($spacers, 3);
 }
