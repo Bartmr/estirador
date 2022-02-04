@@ -17,12 +17,12 @@ async function seed() {
       workerId: generateRandomUUID(),
     });
 
-    const { DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS } = await import(
+    const { DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS } = await import(
       'src/internals/databases/typeorm-ormconfig-with-migrations'
     );
 
     const defaultDBConnection = await createConnection({
-      ...DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS,
+      ...DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS,
       entities: ['src/**/typeorm/*.entity.ts'],
     });
 

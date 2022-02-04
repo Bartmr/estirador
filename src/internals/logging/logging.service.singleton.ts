@@ -1,28 +1,34 @@
 /* eslint-disable no-console */
 import { inspect } from 'util';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
-import { ClusterModeServiceSingleton } from '../server/cluster-mode-service';
+import { NODE_ENV } from '../environment/node-env.constants';
+import { NodeEnv } from '../environment/node-env.types';
 import { LoggingService } from './logging.service';
+
+if (NODE_ENV === NodeEnv.Test) {
+  throw new Error(
+    'Do not import this logging implementation in testing environments. Use a mock instead',
+  );
+}
 
 function nestedValuesToString(value: unknown) {
   return inspect(value, undefined, 10);
 }
 
 /*
-  WARNING:
-  due to the terminal output being asynchronous,
-  if you have to use `console` to log anything, make it in a single call,
-  or else the output will come out unordered,
-  and without a correct reference to the worker that did that `console` call.
+  TODO: connect to the logging provider
+
+  Cases:
+  - Regular caught errors
+  - Uncaught errors and unhandled promise rejections
+  - Process and workers hanging on shutdown
 */
 
 class LoggingServiceImpl extends LoggingService {
   logDebug(key: string, extraData?: unknown) {
-    const clusterModeService = ClusterModeServiceSingleton.getInstance();
-
     if (EnvironmentVariablesService.variables.LOG_DEBUG) {
       console.log(
-        `----- DEBUG [Worker ${clusterModeService.workerId}]:`,
+        `----- DEBUG:`,
         key,
         '\nExtra data:',
         nestedValuesToString(extraData),
@@ -32,10 +38,8 @@ class LoggingServiceImpl extends LoggingService {
   }
 
   logInfo(key: string, message: string, extraData?: unknown) {
-    const clusterModeService = ClusterModeServiceSingleton.getInstance();
-
     console.info(
-      `[Worker ${clusterModeService.workerId}] ` + 'Info:',
+      'Info:',
       key,
       '\nMessage:',
       message,
@@ -46,10 +50,7 @@ class LoggingServiceImpl extends LoggingService {
   }
 
   logWarning(key: string, message: string, extraData?: unknown) {
-    const clusterModeService = ClusterModeServiceSingleton.getInstance();
-
     console.warn(
-      `[Worker ${clusterModeService.workerId}] `,
       'Warning:',
       key,
       '\nMessage:',
@@ -69,10 +70,10 @@ class LoggingServiceImpl extends LoggingService {
     caughtValue: unknown,
     extraData?: unknown,
   ) {
-    this._onlyLogErrorToConsole(key, caughtValue, extraData);
+    this.logErrorToConsole(key, caughtValue, extraData);
   }
 
-  _onlyLogErrorToConsole(
+  private logErrorToConsole(
     key: string,
     /*
         In Javascript, any value type can be thrown,
@@ -84,10 +85,8 @@ class LoggingServiceImpl extends LoggingService {
     const caughtValueIsInstanceOfError = caughtValue instanceof Error;
     const error = caughtValueIsInstanceOfError ? caughtValue : new Error();
 
-    const clusterModeService = ClusterModeServiceSingleton.getInstance();
-
     console.error(
-      `[Worker ${clusterModeService.workerId}] ` + 'Error:' + key,
+      'Error:' + key,
       '\nError:',
       nestedValuesToString(error),
       !caughtValueIsInstanceOfError

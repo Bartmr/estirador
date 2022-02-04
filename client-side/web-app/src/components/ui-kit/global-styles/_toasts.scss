@@ -1,0 +1,19 @@
+.toast {
+  @include with-contrasting-colors($toast-background-color);
+
+  @include on-inverted-color-scheme {
+    background-color: $toast-background-color-inverted;
+
+    @include with-contrasting-colors($toast-background-color-inverted);
+  }
+}
+
+.toast-header {
+  @include with-contrasting-colors($toast-header-background-color);
+
+  @include on-inverted-color-scheme {
+    background-color: $toast-header-background-color-inverted;
+
+    @include with-contrasting-colors($toast-header-background-color-inverted);
+  }
+}

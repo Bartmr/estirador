@@ -1,14 +1,10 @@
-import { OmitWithTypesafeKeys } from './omission-types';
-
 export type RequiredExcept<T, Exceptions extends keyof T> = Required<
-  OmitWithTypesafeKeys<T, Exceptions>
-> &
-  Pick<T, Exceptions>;
+  Omit<T, Exceptions>
+> & {
+  [K in Exceptions]: T[K];
+};
 
-export type RequiredFields<
-  T,
-  RequiredFieldKeys extends keyof T,
-> = OmitWithTypesafeKeys<T, RequiredFieldKeys> &
+export type RequiredFields<T, Keys extends keyof T> = Omit<T, Keys> &
   Required<{
-    [RK in RequiredFieldKeys]: T[RK];
+    [K in Keys]: T[K];
   }>;

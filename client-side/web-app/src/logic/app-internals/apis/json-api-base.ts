@@ -1,7 +1,7 @@
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
-import { OutgoingHeaders } from '../transports/http/http-types';
+import { Logger } from '../logging/logger';
+import { UnparsedRequestHeaders } from '../transports/http/http-types';
 import {
-  JsonHttpHEADResponse,
   JsonHttpOutgoingBody,
   JsonHttpResponse,
   JsonHttpResponseBase,
@@ -26,19 +26,22 @@ export type SupportedRequestBody =
 export abstract class JSONApiBase {
   private jsonHttp: ReturnType<typeof useJSONHttp>;
   private apiUrl: string;
-  private getHeaders: () => OutgoingHeaders;
+  private getHeaders: () => UnparsedRequestHeaders;
   private onInvalidAuthToken: null | (() => Promise<void>);
+  private hasSession: () => boolean;
 
   constructor(params: {
     jsonHttp: JSONApiBase['jsonHttp'];
     apiUrl: JSONApiBase['apiUrl'];
     getHeaders: JSONApiBase['getHeaders'];
     onInvalidAuthToken: JSONApiBase['onInvalidAuthToken'];
+    hasSession: JSONApiBase['hasSession'];
   }) {
     this.jsonHttp = params.jsonHttp;
     this.apiUrl = params.apiUrl;
     this.getHeaders = params.getHeaders;
     this.onInvalidAuthToken = params.onInvalidAuthToken;
+    this.hasSession = params.hasSession;
   }
 
   private async doRequest<R extends JsonHttpResponseBase>(
@@ -57,6 +60,8 @@ export abstract class JSONApiBase {
           acceptableStatusCodes: readonly R['status'][];
         },
   ): Promise<JsonHttpResponse<R>> {
+    const doesHaveSession = this.hasSession();
+
     const originallyAcceptableStatusCodes = params.acceptableStatusCodes;
 
     const transformedRequestParams = {
@@ -96,24 +101,36 @@ export abstract class JSONApiBase {
 
     if (res.failure) {
       return res;
-    } else if (!originallyAcceptableStatusCodes.includes(res.response.status)) {
+    } else if (originallyAcceptableStatusCodes.includes(res.response.status)) {
+      return res;
+    } else {
       if (res.response.status === 404) {
         if (res.headers.get('X-Resource-Not-Found') === 'true') {
           return { failure: TransportFailure.NotFound };
-        } else {
-          return res.logAndReturnAsUnexpected();
         }
-      } else if (res.response.status === 403) {
+      }
+
+      if (res.response.status === 403) {
         return { failure: TransportFailure.Forbidden };
-      } else if (this.onInvalidAuthToken && res.response.status === 401) {
+      }
+
+      if (this.onInvalidAuthToken && res.response.status === 401) {
+        if (!doesHaveSession) {
+          Logger.logError(
+            'tried-to-access-authenticated-endpoint-without-session',
+            new Error(),
+            {
+              url: transformedRequestParams.url,
+            },
+          );
+        }
+
         await this.onInvalidAuthToken();
 
         return { failure: TransportFailure.AbortedAndDealtWith };
-      } else {
-        return res;
       }
-    } else {
-      return res;
+
+      return res.logAndReturnAsUnexpected();
     }
   }
 
@@ -190,13 +207,14 @@ export abstract class JSONApiBase {
     });
   }
   head<
+    Response extends { status: number; body: undefined } = never,
     QueryParams extends SupportedRequestQueryParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
-    acceptableStatusCodes: number[];
-  }): Promise<JsonHttpHEADResponse> {
-    return this.doRequest<{ status: number; body: undefined }>({
+    acceptableStatusCodes: readonly Response['status'][];
+  }): Promise<JsonHttpResponse<Response>> {
+    return this.doRequest({
       method: 'head',
       ...params,
     });

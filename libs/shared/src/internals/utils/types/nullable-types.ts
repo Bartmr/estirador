@@ -1,12 +1,9 @@
-import { OmitWithTypesafeKeys } from './omission-types';
-
 export type NonNullableExcept<T, Exceptions extends keyof T> = {
-  [NNK in Exclude<keyof T, Exceptions>]-?: NonNullable<T[NNK]>;
-} & Pick<T, Exceptions>;
+  [K in Exclude<keyof T, Exceptions>]-?: NonNullable<T[K]>;
+} & {
+  [K in Exceptions]: T[K];
+};
 
-export type NonNullableFields<
-  T,
-  NonNullableFieldKeys extends keyof T,
-> = OmitWithTypesafeKeys<T, NonNullableFieldKeys> & {
-  [NNK in NonNullableFieldKeys]-?: NonNullable<T[NNK]>;
+export type NonNullableFields<T, Keys extends keyof T> = Omit<T, Keys> & {
+  [K in Keys]-?: NonNullable<T[K]>;
 };

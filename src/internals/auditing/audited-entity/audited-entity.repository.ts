@@ -14,7 +14,7 @@ export abstract class AuditedEntityRepository<
   Entity,
   keyof AuditedEntity | FieldsOmittedBeforePersistence
 > {
-  private assignArchiveAttributesToEntity(
+  protected assignArchiveAttributesToEntity(
     entity: Entity,
     auditContext: AuditContext,
   ) {
@@ -22,9 +22,10 @@ export abstract class AuditedEntityRepository<
     entity.requestPath = auditContext.requestPath;
     entity.requestMethod = auditContext.requestMethod;
     entity.processId = auditContext.processId;
+    entity.deletedAt = new Date();
   }
 
-  private async archiveChanges(
+  protected async archiveChanges(
     updatedEntities: Entity[],
     auditContext: AuditContext,
     manager: EntityManager,
@@ -37,7 +38,6 @@ export abstract class AuditedEntityRepository<
       };
 
       this.assignArchiveAttributesToEntity(entityDataClone, auditContext);
-      entityDataClone.deletedAt = new Date();
 
       toArchive.push(entityDataClone);
     }
@@ -97,7 +97,7 @@ export abstract class AuditedEntityRepository<
 
       await repository.save(toSave);
 
-      const createdEntities = toSave as Entity[];
+      const createdEntities = toSave as unknown as Entity[];
 
       await this.archiveChanges(createdEntities, auditContext, manager);
 
@@ -123,27 +123,6 @@ export abstract class AuditedEntityRepository<
       await super.saveMany(entities, auditContext, { manager });
 
       await this.archiveChanges(entities, auditContext, manager);
-    };
-
-    if (this.manager.queryRunner?.isTransactionActive) {
-      return run(this.manager);
-    } else {
-      return this.manager.transaction(run);
-    }
-  }
-
-  async removeMany(
-    entities: Entity[],
-    auditContext: AuditContext,
-  ): Promise<void> {
-    const run = async (manager: EntityManager) => {
-      for (const entity of entities) {
-        this.assignArchiveAttributesToEntity(entity, auditContext);
-      }
-
-      await super.saveMany(entities, auditContext, { manager });
-
-      await super.removeMany(entities, auditContext, { manager });
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {

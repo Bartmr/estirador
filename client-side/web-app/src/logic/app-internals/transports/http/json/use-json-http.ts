@@ -1,7 +1,7 @@
 import { JSONData } from '@app/shared/internals/transports/json-types';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { TransportFailure } from '../../transported-data/transport-failures';
-import { OutgoingHeaders } from '../http-types';
+import { UnparsedRequestHeaders } from '../http-types';
 import {
   JsonHttpHEADResponse,
   JsonHttpOutgoingBody,
@@ -60,7 +60,7 @@ async function makeJsonHttpRequest({
   withCredentials,
 }: {
   url: string;
-  headers: OutgoingHeaders;
+  headers: UnparsedRequestHeaders | undefined;
   acceptableStatusCodes: readonly number[];
   withCredentials: boolean | undefined;
 } & (
@@ -85,9 +85,7 @@ async function makeJsonHttpRequest({
     body = JSON.stringify(uncategorizedBody);
   }
 
-  for (const key of Object.keys(customHeaders)) {
-    const value = customHeaders[key];
-
+  for (const [key, value] of Object.entries(customHeaders || {})) {
     if (typeof value === 'string') {
       headers[key] = value;
     }
@@ -177,9 +175,9 @@ class JSONHttp {
     withCredentials,
   }: {
     url: string;
-    headers: OutgoingHeaders;
+    headers?: UnparsedRequestHeaders;
     acceptableStatusCodes: readonly R['status'][];
-    withCredentials: boolean | undefined;
+    withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -200,10 +198,10 @@ class JSONHttp {
     withCredentials,
   }: {
     url: string;
-    headers: OutgoingHeaders;
+    headers?: UnparsedRequestHeaders;
     body: JsonHttpOutgoingBody;
     acceptableStatusCodes: readonly R['status'][];
-    withCredentials: boolean | undefined;
+    withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -225,10 +223,10 @@ class JSONHttp {
     withCredentials,
   }: {
     url: string;
-    headers: OutgoingHeaders;
+    headers?: UnparsedRequestHeaders;
     body: JsonHttpOutgoingBody;
     acceptableStatusCodes: readonly R['status'][];
-    withCredentials: boolean | undefined;
+    withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -250,10 +248,10 @@ class JSONHttp {
     withCredentials,
   }: {
     url: string;
-    headers: OutgoingHeaders;
+    headers?: UnparsedRequestHeaders;
     body: JsonHttpOutgoingBody;
     acceptableStatusCodes: readonly R['status'][];
-    withCredentials: boolean | undefined;
+    withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -274,9 +272,9 @@ class JSONHttp {
     withCredentials,
   }: {
     url: string;
-    headers: OutgoingHeaders;
+    headers?: UnparsedRequestHeaders;
     acceptableStatusCodes: readonly R['status'][];
-    withCredentials: boolean | undefined;
+    withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {
     const res = (await makeJsonHttpRequest({
       url,
@@ -296,9 +294,9 @@ class JSONHttp {
     withCredentials,
   }: {
     url: string;
-    headers: OutgoingHeaders;
+    headers?: UnparsedRequestHeaders;
     acceptableStatusCodes: number[];
-    withCredentials: boolean | undefined;
+    withCredentials?: boolean;
   }): Promise<JsonHttpHEADResponse> {
     const res = (await makeJsonHttpRequest({
       url,

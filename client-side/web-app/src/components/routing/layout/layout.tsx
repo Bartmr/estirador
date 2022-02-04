@@ -33,7 +33,7 @@ export function Layout(props: Props) {
         >
           {props.children()}
         </main>
-        {/* Footer goes here */}
+        {/* TODO: Footer goes here */}
       </div>
     </SSRProvider>
   );

@@ -26,13 +26,6 @@ class LoggingTestService extends LoggingService {
     throw new Error();
   }
   logError(key: string, caughtValue: unknown, extraData?: unknown): void {
-    this._onlyLogErrorToConsole(key, caughtValue, extraData);
-  }
-  _onlyLogErrorToConsole(
-    key: string,
-    caughtValue: unknown,
-    extraData?: unknown,
-  ): void {
     console.error(inspect([key, caughtValue, extraData], undefined, 30));
 
     /*

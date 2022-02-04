@@ -153,3 +153,23 @@ tunnels:
 ## Related projects
 
 - Not-Me: <https://github.com/Bartmr/not-me>
+
+### Upgrading Node
+
+#### Files to be changed
+
+- .nvmrc
+- BREAKING-CHANGES.md
+- Dockerfile
+- client-side/web-app/.nvmrc
+- client-side/web-app/Dockerfile
+- client-side/web-app/load-build-environment.js
+- client-side/web-app/package-lock.json
+- client-side/web-app/package.json
+  - `engine` field
+  - `@types/node` version
+- package-lock.json
+- package.json
+  - `engine` field
+  - `@types/node` version
+- tsconfig.base.json

@@ -1,70 +1,62 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import path from 'path';
+import fs from 'fs';
 import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';
 import { HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS } from './databases-constants';
-import { MigrationExecutor, ConnectionManager, Connection } from 'typeorm';
-import { ConnectionMetadataBuilder } from 'typeorm/connection/ConnectionMetadataBuilder';
-import { ObjectUtils } from 'typeorm/util/ObjectUtils';
-import { throwError } from 'libs/shared/src/internals/utils/throw-error';
-
-type ModuleHotData = {
-  connections?: Connection[];
-};
+import { MigrationExecutor, ConnectionManager } from 'typeorm';
 
 if (NODE_ENV !== NodeEnv.Development && NODE_ENV !== NodeEnv.Test) {
   throw new Error();
 }
 
-export async function hotReloadDatabases(): Promise<Connection[]> {
+export async function hotReloadDatabases(): Promise<void> {
+  if (!module.hot) {
+    const typeormConfigPath = path.join(
+      process.cwd(),
+      'src/internals/databases/typeorm-ormconfig-with-migrations.ts',
+    );
+    const allMigrationsArrayPath = path.join(
+      process.cwd(),
+      'src/internals/databases/all-migrations.ts',
+    );
+    const migrationsDirectoryPath = path.join(
+      process.cwd(),
+      'src/internals/databases/migrations',
+    );
+
+    if (
+      !(
+        fs.existsSync(typeormConfigPath) &&
+        fs.existsSync(allMigrationsArrayPath) &&
+        fs.existsSync(migrationsDirectoryPath)
+      )
+    ) {
+      throw new Error();
+    }
+
+    Object.keys(require.cache).forEach(function (absolutePath) {
+      if (
+        absolutePath === typeormConfigPath ||
+        absolutePath === allMigrationsArrayPath ||
+        absolutePath.startsWith(migrationsDirectoryPath)
+      ) {
+        delete require.cache[absolutePath];
+      }
+    });
+  }
+
   const { TYPEORM_ORMCONFIG_WITH_MIGRATIONS } = await import(
     './typeorm-ormconfig-with-migrations'
   );
 
   const connectionManager = new ConnectionManager();
 
-  let connections: Connection[];
-
-  const moduleHotData = module.hot?.data as ModuleHotData | undefined;
-
-  if (moduleHotData?.connections) {
-    const previousConnections = moduleHotData.connections;
-
-    const toRestore: Connection[] = [];
-
-    for (let i = 0; i < previousConnections.length; i++) {
-      const connection = previousConnections[i] || throwError();
-      const ormConfig = TYPEORM_ORMCONFIG_WITH_MIGRATIONS[i] || throwError();
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      connection.migrations = ormConfig.migrations;
-
-      const connectionMetadataBuilder = new ConnectionMetadataBuilder(
-        connection,
-      );
-      const migrations = connectionMetadataBuilder.buildMigrations(
-        ormConfig.migrations || [],
-      );
-      ObjectUtils.assign(connection, { migrations: migrations });
-
-      toRestore.push(connection);
-    }
-
-    connections = toRestore;
-  } else {
-    connections = await Promise.all(
-      TYPEORM_ORMCONFIG_WITH_MIGRATIONS.map(async (cOptions) => {
-        const connection = connectionManager.create(cOptions);
-        return connection.connect();
-      }),
-    );
-  }
-
-  if (module.hot) {
-    module.hot.dispose((data: ModuleHotData) => {
-      data.connections = connections;
-    });
-  }
+  const connections = await Promise.all(
+    TYPEORM_ORMCONFIG_WITH_MIGRATIONS.map(async (cOptions) => {
+      const connection = connectionManager.create(cOptions);
+      return connection.connect();
+    }),
+  );
 
   await Promise.all(
     connections.map(async (connection) => {
@@ -89,5 +81,5 @@ export async function hotReloadDatabases(): Promise<Connection[]> {
     }),
   );
 
-  return connections;
+  await Promise.all(connections.map((c) => c.close()));
 }

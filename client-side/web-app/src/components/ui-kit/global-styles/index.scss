@@ -16,6 +16,11 @@
 @import 'src/components/ui-kit/global-styles/additional-modifiers/contrasting-colors-modifiers';
 /* --- */
 
+$component-active-color: get-contrasting-color-absolute-value(
+  $component-active-bg,
+  'body'
+);
+
 $stripe-width-lg: 0.5rem;
 
 $hr-border-width: 1px;
@@ -64,6 +69,57 @@ $input-btn-focus-color: set-contrasting-color-alpha(
 );
 $input-focus-border-color: get-contrasting-color('primary');
 
+$list-group-color: get-contrasting-color('body');
+$list-group-bg: $body-bg;
+$list-group-bg-inverted: $body-bg-inverted;
+$list-group-border-color: set-contrasting-color-alpha('body', 0.125);
+
+$list-group-hover-bg: null;
+@if (is-color-dark($list-group-bg)) {
+  $list-group-hover-bg: lighten($list-group-bg, 15);
+} @else {
+  $list-group-hover-bg: darken($list-group-bg, 15);
+}
+
+$list-group-disabled-color: set-contrasting-color-alpha(
+  'body',
+  $text-muted-opacity
+);
+$list-group-disabled-bg: $list-group-bg;
+
+$list-group-action-color: get-contrasting-color('body');
+$list-group-action-hover-color: get-contrasting-color('body');
+
+$list-group-action-active-color: $component-active-color;
+$list-group-action-active-bg: $component-active-bg;
+
+$list-group-item-bg-scale: null;
+$list-group-item-color-scale: null;
+@if (is-color-dark($list-group-bg)) {
+  $list-group-item-bg-scale: 80%;
+  $list-group-item-color-scale: -40%;
+} @else {
+  $list-group-item-bg-scale: -80%;
+  $list-group-item-color-scale: 40%;
+}
+
+$list-group-item-bg-scale-inverted: null;
+$list-group-item-color-scale-inverted: null;
+@if ($inverted-is-dark-mode) {
+  $list-group-item-bg-scale-inverted: 80%;
+  $list-group-item-color-scale-inverted: -40%;
+} @else {
+  $list-group-item-bg-scale-inverted: -80%;
+  $list-group-item-color-scale-inverted: 40%;
+}
+
+$toast-background-color-inverted: $body-bg-inverted;
+$toast-color: get-contrasting-color('body');
+$toast-border-color: set-contrasting-color-alpha(body, 0.2);
+
+$toast-header-background-color-inverted: $body-bg-inverted;
+$toast-header-border-color: set-contrasting-color-alpha(body, 0.1);
+
 @import 'node_modules/bootstrap/scss/bootstrap';
 
 /* --- */
@@ -81,6 +137,8 @@ $input-focus-border-color: get-contrasting-color('primary');
 @import 'src/components/ui-kit/global-styles/navbar';
 @import 'src/components/ui-kit/global-styles/progress';
 @import 'src/components/ui-kit/global-styles/forms';
+@import 'src/components/ui-kit/global-styles/list-group';
+@import 'src/components/ui-kit/global-styles/toasts';
 
 @import 'src/components/ui-kit/global-styles/additional-components/icon';
 

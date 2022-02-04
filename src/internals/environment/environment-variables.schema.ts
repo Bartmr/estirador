@@ -1,6 +1,5 @@
 import { NODE_ENV } from './node-env.constants';
 import { NodeEnv } from './node-env.types';
-import inspector from 'inspector';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
@@ -23,18 +22,6 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   LOG_REQUEST_CONTENTS_ON_ERROR: boolean(),
 
   SHOW_ALL_LOGS_IN_TESTS: boolean(),
-
-  FORK_WORKERS: boolean()
-    .notNull()
-    .transform((value) => {
-      if (module.hot || inspector.url()) {
-        return false;
-      } else if (value === undefined) {
-        return true;
-      } else {
-        return value;
-      }
-    }),
 
   ENABLE_SWAGGER: boolean().transform((value) => {
     if (NODE_ENV === NodeEnv.Development) {
@@ -61,4 +48,12 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
         return value;
       }
     }),
+
+  API_PORT: number().transform((v) => {
+    if (v == null) {
+      return 3000;
+    } else {
+      return v;
+    }
+  }),
 }).required();
