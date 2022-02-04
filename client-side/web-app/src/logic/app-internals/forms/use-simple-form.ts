@@ -1,15 +1,16 @@
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import { useState } from 'react';
-import { DeepPartial } from 'redux';
 
 type FormValueBase = { [key: string]: unknown };
 
-export type UncompletedSimpleFormValue<T> = T extends Array<unknown>
-  ? Array<DeepPartial<T[number]>>
+export type UncompletedSimpleFormValue<T> = T extends undefined | null
+  ? T
+  : T extends Array<unknown>
+  ? Array<UncompletedSimpleFormValue<T[number]> | undefined>
   : T extends { [key: string]: unknown }
   ? {
-      [K in keyof T]?: DeepPartial<T[K]>;
+      [K in keyof T]?: UncompletedSimpleFormValue<T[K]>;
     }
   : T | undefined;
 
