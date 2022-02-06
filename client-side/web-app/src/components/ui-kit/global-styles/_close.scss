@@ -1,3 +1,11 @@
 .btn-close {
-  mix-blend-mode: difference;
+  background-image: none;
+  padding: 0;
+
+  &::after {
+    content: '\2715';
+    font-size: $btn-close-width;
+    position: relative;
+    top: calc($btn-close-width / -4);
+  }
 }

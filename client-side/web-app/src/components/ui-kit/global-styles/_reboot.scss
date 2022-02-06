@@ -17,3 +17,7 @@ pre {
     color: $code-color;
   }
 }
+
+*:disabled {
+  cursor: not-allowed;
+}

@@ -1,12 +1,4 @@
 .accordion-button {
-  &.collapsed,
-  &.collapsed:hover,
-  &.collapsed:focus {
-    &::after {
-      mix-blend-mode: difference;
-    }
-  }
-
   &.collapsed:hover,
   &.collapsed:focus {
     background-color: $hovered-bg;

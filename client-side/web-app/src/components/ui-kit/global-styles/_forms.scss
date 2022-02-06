@@ -7,14 +7,7 @@
 }
 
 .form-control {
-  @include with-contrasting-colors($input-bg);
-
-  &:focus {
-    @include with-contrasting-colors($input-bg);
-  }
-
   &:disabled {
-    @include with-contrasting-colors($input-disabled-bg);
     color: set-contrasting-color-alpha('body', $text-muted-opacity);
   }
 
@@ -38,10 +31,6 @@
     }
   }
 
-  &[readonly] {
-    @include with-contrasting-colors($input-disabled-bg);
-  }
-
   &::file-selector-button {
     @include with-contrasting-colors($form-file-button-bg);
   }
@@ -60,14 +49,7 @@
 }
 
 .form-select {
-  @include with-contrasting-colors($form-select-bg);
-
-  &:focus {
-    @include with-contrasting-colors($form-select-bg);
-  }
-
   &:disabled {
-    @include with-contrasting-colors($form-select-disabled-bg);
     color: set-contrasting-color-alpha('body', $text-muted-opacity);
   }
 
