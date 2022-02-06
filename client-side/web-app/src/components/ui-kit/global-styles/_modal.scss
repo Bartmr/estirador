@@ -1,0 +1,3 @@
+.modal-content {
+  @include with-contrasting-colors($modal-content-bg);
+}

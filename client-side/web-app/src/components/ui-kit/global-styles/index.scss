@@ -62,12 +62,29 @@ $navbar-light-brand-hover-color: get-contrasting-color('body-hover');
 $navbar-dark-brand-color: get-contrasting-color('body');
 $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
 
+/*
+  Contrast will be applied using mix-blend-mode
+*/
+$btn-close-color: #ffffff;
+$btn-close-white-filter: none;
+
 $input-btn-focus-color-opacity: 0.25;
 $input-btn-focus-color: set-contrasting-color-alpha(
   'primary',
   $input-btn-focus-color-opacity
 );
 $input-focus-border-color: get-contrasting-color('primary');
+
+$input-group-addon-bg: #e9ecef;
+$input-color: get-contrasting-color-absolute-value(
+  $input-group-addon-bg,
+  'body'
+);
+$input-plaintext-color: $input-color;
+
+$form-select-indicator-color: #888888;
+
+$form-check-input-border: 1px solid set-contrasting-color-alpha('body', 0.25);
 
 $list-group-color: get-contrasting-color('body');
 $list-group-bg: $body-bg;
@@ -85,7 +102,7 @@ $list-group-disabled-color: set-contrasting-color-alpha(
   'body',
   $text-muted-opacity
 );
-$list-group-disabled-bg: $list-group-bg;
+$list-group-disabled-bg: set-contrasting-color-alpha('body', 0.15);
 
 $list-group-action-color: get-contrasting-color('body');
 $list-group-action-hover-color: get-contrasting-color('body');
@@ -113,6 +130,18 @@ $list-group-item-color-scale-inverted: null;
   $list-group-item-color-scale-inverted: 40%;
 }
 
+$pagination-bg: transparent;
+$pagination-border-color: $border-color;
+
+$pagination-hover-bg: $hovered-bg;
+$pagination-focus-bg: $hovered-bg;
+
+$pagination-disabled-color: $text-muted;
+$pagination-disabled-bg: set-contrasting-color-alpha('body', 0.15);
+$pagination-disabled-border-color: $pagination-disabled-bg;
+
+$table-color: get-contrasting-color('body');
+
 $toast-background-color-inverted: $body-bg-inverted;
 $toast-color: get-contrasting-color('body');
 $toast-border-color: set-contrasting-color-alpha(body, 0.2);
@@ -120,9 +149,27 @@ $toast-border-color: set-contrasting-color-alpha(body, 0.2);
 $toast-header-background-color-inverted: $body-bg-inverted;
 $toast-header-border-color: set-contrasting-color-alpha(body, 0.1);
 
-$accordion-bg: $body-bg;
-$accordion-color: get-contrasting-color-absolute-value($accordion-bg, 'body');
-$accordion-border-color: set-contrasting-color-alpha('body', 0.125);
+$accordion-color: get-contrasting-color('body');
+$accordion-bg: transparent;
+$accordion-border-color: $border-color;
+
+$accordion-button-color: get-contrasting-color('body');
+$accordion-button-bg: transparent;
+
+/*
+  Contrast will be applied using mix-blend-mode
+*/
+$accordion-icon-color: #ffffff;
+
+$popover-header-bg: $light;
+$popover-header-color: get-contrasting-color-absolute-value(
+  $popover-header-bg,
+  'body'
+);
+$popover-bg: $lightest;
+$popover-body-color: get-contrasting-color-absolute-value($popover-bg, 'body');
+
+$offcanvas-color: get-contrasting-color('body');
 
 /* --- */
 
@@ -145,6 +192,13 @@ $accordion-border-color: set-contrasting-color-alpha('body', 0.125);
 @import 'src/components/ui-kit/global-styles/forms';
 @import 'src/components/ui-kit/global-styles/list-group';
 @import 'src/components/ui-kit/global-styles/toasts';
+@import 'src/components/ui-kit/global-styles/modal';
+@import 'src/components/ui-kit/global-styles/offcanvas';
+@import 'src/components/ui-kit/global-styles/accordion';
+@import 'src/components/ui-kit/global-styles/close';
+@import 'src/components/ui-kit/global-styles/helpers';
+
+/* --- */
 
 @import 'src/components/ui-kit/global-styles/additional-components/icon';
 

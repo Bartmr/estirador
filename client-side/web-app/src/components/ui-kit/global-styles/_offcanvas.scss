@@ -1,0 +1,3 @@
+.offcanvas {
+  @include with-contrasting-colors($offcanvas-bg-color);
+}

@@ -1,4 +1,10 @@
 .btn {
+  color: get-contrasting-color('body');
+
+  &:hover {
+    color: get-contrasting-color('body');
+  }
+
   &:disabled,
   &.disabled {
     filter: grayscale(100%);
@@ -8,6 +14,8 @@
 
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
+    @include with-contrasting-colors($value);
+
     border-color: set-contrasting-color-alpha($color, 0.5);
 
     &:hover,

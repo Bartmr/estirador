@@ -37,6 +37,10 @@
         set-contrasting-color-alpha('danger', 0.25);
     }
   }
+
+  &[readonly] {
+    @include with-contrasting-colors($input-disabled-bg);
+  }
 }
 
 .form-select {

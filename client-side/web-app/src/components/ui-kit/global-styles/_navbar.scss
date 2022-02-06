@@ -1,6 +1,6 @@
 .navbar,
-.navbar.navbar-light,
-.navbar.navbar-dark {
+.navbar-light,
+.navbar-dark {
   background-color: $navbar-bg;
   @include with-contrasting-colors($navbar-bg);
 

@@ -11,3 +11,9 @@ html,
 body {
   font-size: 16px;
 }
+
+pre {
+  code {
+    color: $code-color;
+  }
+}

@@ -143,12 +143,12 @@ $dark-contrasting-colors: (
 
 $light-contrasting-colors: (
   default: $light,
-  primary: change-color($primary, $lightness: 60%),
-  secondary: change-color($secondary, $lightness: 60%),
-  success: change-color($success, $lightness: 60%),
-  info: change-color($info, $lightness: 60%),
-  warning: change-color($warning, $lightness: 60%),
-  danger: change-color($danger, $lightness: 60%),
+  primary: change-color($primary, $lightness: 70%),
+  secondary: change-color($secondary, $lightness: 70%),
+  success: change-color($success, $lightness: 70%),
+  info: change-color($info, $lightness: 70%),
+  warning: change-color($warning, $lightness: 70%),
+  danger: change-color($danger, $lightness: 70%),
   light: $light,
   lightest: $lightest,
   dark: $dark,
@@ -173,8 +173,8 @@ $light-contrasting-colors: (
 ---
 */
 
-$hovered-bg: set-contrasting-color-alpha('body', 0.15);
-$selected-bg: set-contrasting-color-alpha('body', 0.3);
+$hovered-bg: set-contrasting-color-alpha('body', 0.1);
+$selected-bg: set-contrasting-color-alpha('primary', 0.2);
 
 $component-active-bg: $primary;
 
@@ -222,6 +222,8 @@ $link-color: get-contrasting-color('primary');
 $link-hover-color: get-contrasting-color('primary-hover');
 $link-decoration: underline;
 
+$code-color: get-contrasting-color('secondary');
+
 $text-muted-opacity: 0.5;
 $text-muted: set-contrasting-color-alpha('body', $text-muted-opacity);
 
@@ -235,6 +237,8 @@ $border-color: set-contrasting-color-alpha('body', 0.3);
 $border-radius: 0.7rem;
 $border-radius-lg: 1.5rem;
 $border-radius-sm: 0.4rem;
+
+$box-shadow-inset: inset 0 1px 2px rgba($darkest, 0.5);
 
 $box-shadow-sm-dimensions: 0 0.125rem 0.25rem;
 $box-shadow-sm-opacity: 0.2;

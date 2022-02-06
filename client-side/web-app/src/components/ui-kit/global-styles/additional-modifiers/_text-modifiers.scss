@@ -10,24 +10,6 @@
   }
 }
 
-$colors: join(
-  $theme-colors,
-  (
-    'body': $body-bg,
-  )
-);
-
-@each $color, $value in $colors {
-  .text-link.text-#{$color} {
-    &:hover {
-      color: get-contrasting-color('#{$color}-hover') !important;
-    }
-    &:focus {
-      color: get-contrasting-color('#{$color}-hover') !important;
-    }
-  }
-}
-
 .text-highlight {
   text-decoration: underline !important;
 }
