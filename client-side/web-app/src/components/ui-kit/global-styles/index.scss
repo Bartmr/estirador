@@ -16,6 +16,8 @@
 @import 'src/components/ui-kit/global-styles/additional-modifiers/contrasting-colors-modifiers';
 /* --- */
 
+$body-color: get-contrasting-color-absolute-value($body-bg, 'body');
+
 $component-active-color: get-contrasting-color-absolute-value(
   $component-active-bg,
   'body'
@@ -120,8 +122,6 @@ $toast-border-color: set-contrasting-color-alpha(body, 0.2);
 $toast-header-background-color-inverted: $body-bg-inverted;
 $toast-header-border-color: set-contrasting-color-alpha(body, 0.1);
 
-$accordion-bg: $body-bg;
-$accordion-color: get-contrasting-color-absolute-value($accordion-bg, 'body');
 $accordion-border-color: set-contrasting-color-alpha('body', 0.125);
 
 /* --- */
