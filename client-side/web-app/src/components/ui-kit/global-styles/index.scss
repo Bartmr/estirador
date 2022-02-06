@@ -120,6 +120,12 @@ $toast-border-color: set-contrasting-color-alpha(body, 0.2);
 $toast-header-background-color-inverted: $body-bg-inverted;
 $toast-header-border-color: set-contrasting-color-alpha(body, 0.1);
 
+$accordion-bg: $body-bg;
+$accordion-color: get-contrasting-color-absolute-value($accordion-bg, 'body');
+$accordion-border-color: set-contrasting-color-alpha('body', 0.125);
+
+/* --- */
+
 @import 'node_modules/bootstrap/scss/bootstrap';
 
 /* --- */
