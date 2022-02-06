@@ -175,6 +175,7 @@ $light-contrasting-colors: (
 
 $hovered-bg: set-contrasting-color-alpha('body', 0.1);
 $selected-bg: set-contrasting-color-alpha('primary', 0.2);
+$disabled-bg: set-contrasting-color-alpha('body', 0.15);
 
 $component-active-bg: $primary;
 

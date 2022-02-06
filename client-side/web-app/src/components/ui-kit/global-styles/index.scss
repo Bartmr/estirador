@@ -24,11 +24,18 @@ $component-active-color: get-contrasting-color-absolute-value(
 $stripe-width-lg: 0.5rem;
 
 $hr-border-width: 1px;
-$hr-border-color: set-contrasting-color-alpha('body', 0.3);
+$hr-border-color: $border-color;
 
 $spinner-width-lg: 3rem;
 $spinner-height-lg: 3rem;
 $spinner-border-width-lg: 0.3em;
+
+$nav-link-color: $link-color;
+
+$nav-tabs-link-active-color: $nav-link-color;
+$nav-tabs-border-color: $border-color;
+$nav-tabs-link-hover-border-color: $border-color;
+$nav-tabs-link-active-border-color: $border-color;
 
 $navbar-bg: $body-bg;
 $navbar-bg-inverted: $body-bg-inverted;
@@ -73,23 +80,44 @@ $input-btn-focus-color: set-contrasting-color-alpha(
   'primary',
   $input-btn-focus-color-opacity
 );
+
+$input-bg: $body-bg;
+$input-color: get-contrasting-color-absolute-value($input-bg, 'body');
+$input-plaintext-color: get-contrasting-color('body');
+$input-border-color: $border-color;
 $input-focus-border-color: get-contrasting-color('primary');
 
 $input-group-addon-bg: #e9ecef;
-$input-color: get-contrasting-color-absolute-value(
+$input-group-addon-color: get-contrasting-color-absolute-value(
   $input-group-addon-bg,
   'body'
 );
-$input-plaintext-color: $input-color;
 
-$form-select-indicator-color: #888888;
+/*
+  Contrast will be applied using mix-blend-mode
+*/
+$form-select-indicator-color: #ffffff;
 
-$form-check-input-border: 1px solid set-contrasting-color-alpha('body', 0.25);
+$form-check-input-border: $border-color;
+
+$form-range-track-bg: set-contrasting-color-alpha('body', 0.2);
+$form-range-thumb-bg: get-contrasting-color('primary');
+$form-range-thumb-active-bg: get-contrasting-color('primary-hover');
+$form-range-thumb-disabled-bg: set-contrasting-color-alpha('body', 0.5);
+
+$form-feedback-valid-color: get-contrasting-color-absolute-value(
+  $input-bg,
+  'success'
+);
+$form-feedback-invalid-color: get-contrasting-color-absolute-value(
+  $input-bg,
+  'danger'
+);
 
 $list-group-color: get-contrasting-color('body');
 $list-group-bg: $body-bg;
 $list-group-bg-inverted: $body-bg-inverted;
-$list-group-border-color: set-contrasting-color-alpha('body', 0.125);
+$list-group-border-color: $border-color;
 
 $list-group-hover-bg: null;
 @if (is-color-dark($list-group-bg)) {
@@ -102,7 +130,7 @@ $list-group-disabled-color: set-contrasting-color-alpha(
   'body',
   $text-muted-opacity
 );
-$list-group-disabled-bg: set-contrasting-color-alpha('body', 0.15);
+$list-group-disabled-bg: $disabled-bg;
 
 $list-group-action-color: get-contrasting-color('body');
 $list-group-action-hover-color: get-contrasting-color('body');
@@ -137,17 +165,17 @@ $pagination-hover-bg: $hovered-bg;
 $pagination-focus-bg: $hovered-bg;
 
 $pagination-disabled-color: $text-muted;
-$pagination-disabled-bg: set-contrasting-color-alpha('body', 0.15);
+$pagination-disabled-bg: $disabled-bg;
 $pagination-disabled-border-color: $pagination-disabled-bg;
 
 $table-color: get-contrasting-color('body');
 
 $toast-background-color-inverted: $body-bg-inverted;
 $toast-color: get-contrasting-color('body');
-$toast-border-color: set-contrasting-color-alpha(body, 0.2);
+$toast-border-color: $border-color;
 
 $toast-header-background-color-inverted: $body-bg-inverted;
-$toast-header-border-color: set-contrasting-color-alpha(body, 0.1);
+$toast-header-border-color: $border-color;
 
 $accordion-color: get-contrasting-color('body');
 $accordion-bg: transparent;

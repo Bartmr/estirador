@@ -14,7 +14,7 @@
   }
 
   &:disabled {
-    @include with-contrasting-colors($form-select-disabled-bg);
+    @include with-contrasting-colors($input-disabled-bg);
     color: set-contrasting-color-alpha('body', $text-muted-opacity);
   }
 
@@ -41,13 +41,29 @@
   &[readonly] {
     @include with-contrasting-colors($input-disabled-bg);
   }
+
+  &::file-selector-button {
+    @include with-contrasting-colors($form-file-button-bg);
+  }
+
+  &::-webkit-file-upload-button {
+    @include with-contrasting-colors($form-file-button-bg);
+  }
+
+  &:disabled,
+  &[readonly] {
+    &::file-selector-button,
+    &::-webkit-file-upload-button {
+      text-decoration: line-through;
+    }
+  }
 }
 
 .form-select {
   @include with-contrasting-colors($form-select-bg);
 
   &:focus {
-    @include with-contrasting-colors($input-bg);
+    @include with-contrasting-colors($form-select-bg);
   }
 
   &:disabled {
@@ -119,5 +135,11 @@
     &:not(:checked) {
       border-color: get-contrasting-color('danger');
     }
+  }
+}
+
+.form-floating {
+  label {
+    color: $input-color;
   }
 }

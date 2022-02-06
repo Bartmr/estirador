@@ -9,3 +9,9 @@
     @include with-contrasting-colors($navbar-bg-inverted);
   }
 }
+
+.navbar-nav {
+  .active {
+    background-color: set-contrasting-color-alpha('body', 0.2);
+  }
+}

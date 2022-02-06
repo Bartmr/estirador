@@ -4,17 +4,15 @@
   }
 }
 
-.navbar-nav,
-.nav:not(.nav-pills),
-.nav:not(.nav-tabs) {
-  .nav-link {
-    &:not(a[href]) {
-      @extend .text-link;
-      text-decoration: none !important;
-    }
+.nav-link {
+  &:not(a[href]) {
+    @extend .text-link;
+    text-decoration: none !important;
+  }
+}
 
-    &.active {
-      background-color: $selected-bg;
-    }
+.nav:not(.nav-pills) {
+  .active {
+    background-color: $selected-bg;
   }
 }
