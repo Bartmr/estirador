@@ -10,6 +10,14 @@
 
   @include list-group-item-variant($color-name, $bg-color, $color);
 
+  .list-group-item-#{$color-name} {
+    @include with-contrasting-colors($bg-color);
+  }
+  .list-group-item-#{$color-name}.list-group-item-action.active {
+    @include with-contrasting-colors($color);
+    color: get-contrasting-color('body');
+  }
+
   @include on-inverted-color-scheme {
     $bg-color-inverted: shift-color(
       get-inverted-theme-color($color-name),
@@ -25,5 +33,13 @@
       $bg-color-inverted,
       $color-inverted
     );
+
+    .list-group-item-#{$color-name} {
+      @include with-contrasting-colors($bg-color-inverted);
+    }
+    .list-group-item-#{$color-name}.list-group-item-action.active {
+      @include with-contrasting-colors($color-inverted);
+      color: get-contrasting-color('body');
+    }
   }
 }

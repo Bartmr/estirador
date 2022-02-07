@@ -112,12 +112,7 @@ $list-group-color: get-contrasting-color('body');
 $list-group-bg: transparent;
 $list-group-border-color: $border-color;
 
-$list-group-hover-bg: null;
-@if (is-color-dark($list-group-bg)) {
-  $list-group-hover-bg: lighten($list-group-bg, 15);
-} @else {
-  $list-group-hover-bg: darken($list-group-bg, 15);
-}
+$list-group-hover-bg: $hovered-bg;
 
 $list-group-disabled-color: set-contrasting-color-alpha(
   'body',
