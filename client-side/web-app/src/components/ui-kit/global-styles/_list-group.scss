@@ -4,7 +4,7 @@
     $list-group-item-bg-scale
   );
   $color: shift-color(
-    get-contrasting-color-absolute-value($bg-color, 'body'),
+    get-contrasting-color-absolute-value($bg-color, $color-name),
     $list-group-item-color-scale
   );
 
@@ -15,7 +15,6 @@
   }
   .list-group-item-#{$color-name}.list-group-item-action.active {
     @include with-contrasting-colors($color);
-    color: get-contrasting-color('body');
   }
 
   @include on-inverted-color-scheme {
@@ -24,7 +23,7 @@
       $list-group-item-bg-scale-inverted
     );
     $color-inverted: shift-color(
-      get-contrasting-color-absolute-value($bg-color-inverted, 'body'),
+      get-contrasting-color-absolute-value($bg-color-inverted, $color-name),
       $list-group-item-color-scale-inverted
     );
 
@@ -39,7 +38,6 @@
     }
     .list-group-item-#{$color-name}.list-group-item-action.active {
       @include with-contrasting-colors($color-inverted);
-      color: get-contrasting-color('body');
     }
   }
 }

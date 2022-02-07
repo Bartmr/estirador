@@ -125,8 +125,8 @@ $dark-contrasting-colors: (
   info: $info,
   warning: $warning,
   danger: $danger,
-  light: $light,
-  lightest: $lightest,
+  light: $dark,
+  lightest: $darkest,
   dark: $dark,
   darkest: $darkest,
   body: $darkest,
@@ -151,8 +151,8 @@ $light-contrasting-colors: (
   danger: change-color($danger, $lightness: 70%),
   light: $light,
   lightest: $lightest,
-  dark: $dark,
-  darkest: $darkest,
+  dark: $light,
+  darkest: $lightest,
   body: $lightest,
 );
 
