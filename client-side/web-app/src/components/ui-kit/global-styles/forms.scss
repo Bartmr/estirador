@@ -125,6 +125,13 @@
   }
 }
 
+.form-range:not(:disabled) {
+  &::-webkit-slider-thumb,
+  &::-moz-range-thumb {
+    cursor: pointer;
+  }
+}
+
 .form-floating {
   label {
     color: $input-color;
