@@ -30,9 +30,9 @@ import './spinners.scss';
 import './offcanvas.scss';
 import './placeholders.scss';
 
-import './helpers';
+import './helpers.scss';
 
-import './utilities';
+import './utilities.scss';
 
 /* --- */
 

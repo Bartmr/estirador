@@ -1,4 +1,4 @@
-@import 'variables';
+@import 'src/components/ui-kit/global-styles/load';
 
 .with-dark-contrasting-colors {
   @include attach-map-of-contrasting-colors($dark-contrasting-colors);

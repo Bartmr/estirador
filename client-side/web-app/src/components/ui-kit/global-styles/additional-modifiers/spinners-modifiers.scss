@@ -1,22 +1,4 @@
-@import 'variables';
-@import 'breakpoints-mixins';
-
-/*
-  Clone Bootstrap small spinner styles
-  into new spinner-sm modifier class
-*/
-.spinner-border {
-  &.spinner-sm {
-    @extend .spinner-border-sm;
-  }
-}
-
-.spinner-grow {
-  &.spinner-sm {
-    @extend .spinner-grow-sm;
-  }
-}
-/* --- */
+@import 'src/components/ui-kit/global-styles/load';
 
 .spinner-border,
 .spinner-grow {

@@ -1,21 +1,5 @@
 @import 'src/components/ui-kit/global-styles/variables';
 
-/*
-  KEEP THESE CONTRASTING COLORS IMPORTS ON TOP,
-  RIGHT AFTER VARIABLES
-
-  These modifiers change the color of the text,
-  in order to have text contrasting with the background automatically,
-  in case the component itself hasn't set it already.
-
-  To avoid style conflicts, we must keep this import on top,
-  so the component's styles can be declared below these modifiers in the final CSS,
-  overriding the default colors from these modifiers
-*/
-@import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
-@import 'src/components/ui-kit/global-styles/additional-modifiers/contrasting-colors-modifiers';
-/* --- */
-
 $component-active-color: get-contrasting-color-absolute-value(
   $component-active-bg,
   'body'
@@ -23,8 +7,6 @@ $component-active-color: get-contrasting-color-absolute-value(
 
 $card-bg: $body-bg;
 $card-bg-inverted: $body-bg-inverted;
-
-$stripe-width-lg: 0.5rem;
 
 $hr-border-width: 1px;
 $hr-border-color: $border-color;
@@ -192,6 +174,7 @@ $offcanvas-color: get-contrasting-color('body');
 
 /* --- */
 
+@import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
 @import 'src/components/ui-kit/global-styles/additional-mixins/inverted-color-scheme-mixins';
 
 /* --- */

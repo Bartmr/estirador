@@ -1,19 +1,21 @@
 @import 'variables';
 
+$stripe-width: 0.5rem;
+
 .stripe-top {
-  border-top: $stripe-width-lg solid $primary !important;
+  border-top: $stripe-width solid $primary !important;
 }
 
 .stripe-end {
-  border-right: $stripe-width-lg solid $primary !important;
+  border-right: $stripe-width solid $primary !important;
 }
 
 .stripe-bottom {
-  border-bottom: $stripe-width-lg solid $primary !important;
+  border-bottom: $stripe-width solid $primary !important;
 }
 
 .stripe-start {
-  border-left: $stripe-width-lg solid $primary !important;
+  border-left: $stripe-width solid $primary !important;
 }
 
 @each $color, $value in $theme-colors {

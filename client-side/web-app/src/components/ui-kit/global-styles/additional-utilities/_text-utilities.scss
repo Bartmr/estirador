@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'inverted-color-scheme-mixins';
 
 @each $color, $value in $theme-colors {
   .text-#{$color}-muted {

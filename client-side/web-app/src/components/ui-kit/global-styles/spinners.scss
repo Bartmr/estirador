@@ -1,2 +1,14 @@
 @import 'src/components/ui-kit/global-styles/load';
 @import 'node_modules/bootstrap/scss/spinners';
+
+.spinner-border {
+  &.spinner-sm {
+    @extend .spinner-border-sm;
+  }
+}
+
+.spinner-grow {
+  &.spinner-sm {
+    @extend .spinner-grow-sm;
+  }
+}
