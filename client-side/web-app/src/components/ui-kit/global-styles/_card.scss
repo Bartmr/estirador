@@ -6,8 +6,8 @@
   @include on-inverted-color-scheme {
     border-color: set-contrasting-color-alpha(body, 0.5);
 
-    @include with-contrasting-colors($body-bg-inverted);
-    background-color: $body-bg-inverted;
+    @include with-contrasting-colors($card-bg-inverted);
+    background-color: $card-bg-inverted;
   }
 }
 

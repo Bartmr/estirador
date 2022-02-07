@@ -21,6 +21,9 @@ $component-active-color: get-contrasting-color-absolute-value(
   'body'
 );
 
+$card-bg: $body-bg;
+$card-bg-inverted: $body-bg-inverted;
+
 $stripe-width-lg: 0.5rem;
 
 $hr-border-width: 1px;
@@ -106,8 +109,7 @@ $form-range-thumb-disabled-bg: set-contrasting-color-alpha('body', 0.5);
 $form-range-thumb-width: 1.25rem;
 
 $list-group-color: get-contrasting-color('body');
-$list-group-bg: $body-bg;
-$list-group-bg-inverted: $body-bg-inverted;
+$list-group-bg: transparent;
 $list-group-border-color: $border-color;
 
 $list-group-hover-bg: null;
