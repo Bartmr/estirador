@@ -1,6 +1,8 @@
-@import 'src/components/ui-kit/global-styles/variables';
-@import 'src/components/ui-kit/global-styles/_load-all-functions-and-mixins';
+@import 'variables';
+@import 'setup-bootstrap';
 @import 'node_modules/bootstrap/scss/list-group';
+@import 'contrasting-colors-mixins';
+@import 'inverted-color-scheme-mixins';
 
 @each $color-name, $color-value in $theme-colors {
   $bg-color: shift-color(

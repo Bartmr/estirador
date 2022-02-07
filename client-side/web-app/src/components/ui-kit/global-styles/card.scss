@@ -1,6 +1,8 @@
-@import 'src/components/ui-kit/global-styles/variables';
-@import 'src/components/ui-kit/global-styles/_load-all-functions-and-mixins';
+@import 'variables';
+@import 'setup-bootstrap';
 @import 'node_modules/bootstrap/scss/card';
+@import 'contrasting-colors-mixins';
+@import 'inverted-color-scheme-mixins';
 
 .card {
   border-color: set-contrasting-color-alpha(body, 0.2);

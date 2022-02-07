@@ -1,1 +1,5 @@
+/*
+  Variables should be loaded outside this file.
+  This is in order for them to only be loaded once, and be overridable.
+*/
 @import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';

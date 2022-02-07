@@ -48,7 +48,16 @@ import './additional-modifiers/selectable-modifiers.scss';
 
 /* --- */
 
-import './additional-utilities.scss';
+import './additional-utilities/background-utilities.scss';
+import './additional-utilities/text-utilities.scss';
+import './additional-utilities/link-utilities.scss';
+import './additional-utilities/shadows-utilities.scss';
+import './additional-utilities/text-shadows-utilities.scss';
+import './additional-utilities/stripes-utilities.scss';
+import './additional-utilities/user-select-utilities.scss';
+import './additional-utilities/opacity-utilities.scss';
+import './additional-utilities/z-index-utilities.scss';
+import './additional-utilities/size-utilities.scss';
 
 /* --- */
 

@@ -1,5 +1,8 @@
-@import 'src/components/ui-kit/global-styles/variables';
-@import 'src/components/ui-kit/global-styles/_load-all-functions-and-mixins';
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'contrasting-colors-mixins';
+@import 'inverted-color-scheme-mixins';
+
 @import 'node_modules/bootstrap/scss/utilities';
 @import 'node_modules/bootstrap/scss/utilities/api';
 

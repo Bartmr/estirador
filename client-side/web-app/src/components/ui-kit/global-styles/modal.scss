@@ -1,6 +1,7 @@
-@import 'src/components/ui-kit/global-styles/variables';
-@import 'src/components/ui-kit/global-styles/_load-all-functions-and-mixins';
+@import 'variables';
+@import 'setup-bootstrap';
 @import 'node_modules/bootstrap/scss/modal';
+@import 'contrasting-colors-mixins';
 
 .modal-content {
   @include with-contrasting-colors($modal-content-bg);

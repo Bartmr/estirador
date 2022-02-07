@@ -164,15 +164,6 @@ $popover-body-color: get-contrasting-color-absolute-value($popover-bg, 'body');
 
 $offcanvas-color: get-contrasting-color('body');
 
-/* --- */
-
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins';
-
-/* --- */
-
-@import 'src/components/ui-kit/global-styles/additional-mixins/contrasting-colors-mixins';
-@import 'src/components/ui-kit/global-styles/additional-mixins/inverted-color-scheme-mixins';
-
-/* --- */
