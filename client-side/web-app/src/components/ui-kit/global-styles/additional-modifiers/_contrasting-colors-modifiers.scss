@@ -1,3 +1,5 @@
+@import 'variables';
+
 .with-dark-contrasting-colors {
   @include attach-map-of-contrasting-colors($dark-contrasting-colors);
   color: get-contrasting-color('body');

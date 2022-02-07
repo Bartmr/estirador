@@ -2,7 +2,6 @@
 
 import './root.scss';
 import './reboot.scss';
-import './type.scss';
 import './images.scss';
 import './containers.scss';
 import './grid.scss';
@@ -38,28 +37,28 @@ import './utilities';
 
 /* --- */
 
-import 'src/components/ui-kit/global-styles/additional-components/icon';
+import './additional-components/icon.scss';
 
 /* --- */
 
-import 'src/components/ui-kit/global-styles/additional-modifiers/text-modifiers';
-import 'src/components/ui-kit/global-styles/additional-modifiers/card-modifiers';
-import 'src/components/ui-kit/global-styles/additional-modifiers/spinners-modifiers';
-import 'src/components/ui-kit/global-styles/additional-modifiers/navbar-modifiers';
-import 'src/components/ui-kit/global-styles/additional-modifiers/selectable-modifiers';
+import './additional-modifiers/text-modifiers.scss';
+import './additional-modifiers/card-modifiers.scss';
+import './additional-modifiers/spinners-modifiers.scss';
+import './additional-modifiers/navbar-modifiers.scss';
+import './additional-modifiers/selectable-modifiers.scss';
 
 /* --- */
 
-import 'src/components/ui-kit/global-styles/additional-utilities/background-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/text-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/link-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/shadows-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/text-shadows-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/stripes-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/user-select-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/opacity-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/z-index-utilities';
-import 'src/components/ui-kit/global-styles/additional-utilities/size-utilities';
+import './additional-utilities/background-utilities.scss';
+import './additional-utilities/text-utilities.scss';
+import './additional-utilities/link-utilities.scss';
+import './additional-utilities/shadows-utilities.scss';
+import './additional-utilities/text-shadows-utilities.scss';
+import './additional-utilities/stripes-utilities.scss';
+import './additional-utilities/user-select-utilities.scss';
+import './additional-utilities/opacity-utilities.scss';
+import './additional-utilities/z-index-utilities.scss';
+import './additional-utilities/size-utilities.scss';
 
 /* --- */
 

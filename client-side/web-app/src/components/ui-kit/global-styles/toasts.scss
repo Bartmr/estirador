@@ -1,5 +1,5 @@
 @import 'src/components/ui-kit/global-styles/load';
-@import 'node_modules/bootstrap/scss/toast';
+@import 'node_modules/bootstrap/scss/toasts';
 
 .toast {
   @include with-contrasting-colors($toast-background-color);

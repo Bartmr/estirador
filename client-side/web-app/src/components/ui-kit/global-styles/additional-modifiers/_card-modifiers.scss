@@ -1,3 +1,5 @@
+@import 'variables';
+
 @each $color, $_ in $theme-colors {
   .card.card-#{$color} {
     border-color: set-contrasting-color-alpha($color, 0.3);

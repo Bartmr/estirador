@@ -1,3 +1,5 @@
+@import 'variables';
+
 @each $color, $value in $theme-colors {
   .text-#{$color}-muted {
     color: set-contrasting-color-alpha($color, $text-muted-opacity) !important;
