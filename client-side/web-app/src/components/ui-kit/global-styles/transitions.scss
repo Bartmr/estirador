@@ -1,2 +1,3 @@
-@import 'src/components/ui-kit/global-styles/load';
+@import 'src/components/ui-kit/global-styles/variables';
+@import 'src/components/ui-kit/global-styles/_load-all-functions-and-mixins';
 @import 'node_modules/bootstrap/scss/transitions';
