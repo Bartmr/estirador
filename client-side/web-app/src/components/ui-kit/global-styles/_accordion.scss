@@ -1,3 +1,6 @@
+@import 'src/components/ui-kit/global-styles/load';
+@import 'node_modules/bootstrap/scss/accordion';
+
 .accordion-button {
   &.collapsed:hover,
   &.collapsed:focus {
