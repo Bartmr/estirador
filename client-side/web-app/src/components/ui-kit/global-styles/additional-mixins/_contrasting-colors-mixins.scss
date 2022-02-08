@@ -3,7 +3,7 @@
     $value: map-get($contrasting-colors-map, $color-name);
 
     @if ($value == null) {
-      @error "-> #{$color-name} does not exist in contrasting-color-css-custom-properties-values map when dark = #{$dark}";
+      @error "-> #{$color-name} does not exist in contrasting-color-css-custom-properties-values map";
     }
 
     $color: get-contrasting-color-css-custom-property($color-name);
