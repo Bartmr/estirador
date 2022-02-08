@@ -58,6 +58,7 @@ import './additional-utilities/user-select-utilities.scss';
 import './additional-utilities/opacity-utilities.scss';
 import './additional-utilities/z-index-utilities.scss';
 import './additional-utilities/size-utilities.scss';
+import './additional-utilities/contrasting-colors-utilities.scss';
 
 /* --- */
 

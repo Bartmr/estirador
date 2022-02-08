@@ -1,0 +1,20 @@
+@import 'variables';
+@import 'contrasting-colors-mixins';
+
+.with-dark-contrasting-colors {
+  @include attach-map-of-contrasting-colors($dark-contrasting-colors, true);
+  color: get-contrasting-color('body') !important;
+}
+
+.with-light-contrasting-colors {
+  @include attach-map-of-contrasting-colors($light-contrasting-colors, true);
+  color: get-contrasting-color('body') !important;
+}
+
+.dark-contrasting-color-vars {
+  @include attach-map-of-contrasting-colors($dark-contrasting-colors, true);
+}
+
+.light-contrasting-color-vars {
+  @include attach-map-of-contrasting-colors($light-contrasting-colors, true);
+}
