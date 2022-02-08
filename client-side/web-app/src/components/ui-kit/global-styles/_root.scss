@@ -1,7 +1,0 @@
-:root {
-  @include with-contrasting-colors($body-bg);
-
-  @each $spacer, $value in $spacers {
-    --spacer-#{$spacer}: #{$value};
-  }
-}

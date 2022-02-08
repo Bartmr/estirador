@@ -1,22 +1,17 @@
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import { useState } from 'react';
-import { DeepPartial } from 'redux';
 
 type FormValueBase = { [key: string]: unknown };
 
-export type UncompletedSimpleFormValue<T> = T extends Array<unknown>
-  ? Array<DeepPartial<T[number]>>
-  : T extends { [key: string]: unknown }
-  ? {
-      [K in keyof T]?: DeepPartial<T[K]>;
-    }
-  : T | undefined;
+export type UncompletedSimpleFormValue<FormValue extends FormValueBase> = {
+  [K in keyof FormValue]?: FormValue[K];
+};
 
 type FieldUtils<FormValue extends FormValueBase> = {
   setValue: <Name extends keyof FormValue>(
     name: Name,
-    value: UncompletedSimpleFormValue<FormValue[Name]>,
+    value: FormValue[Name] | undefined,
   ) => void;
   hasErrors: (name: keyof FormValue) => boolean;
   getErrors: (name: keyof FormValue) => { [key: string]: string };
@@ -29,7 +24,6 @@ export type SimpleForm<FormValue extends FormValueBase> = {
   reset: (defaultValues?: UncompletedSimpleFormValue<FormValue>) => void;
   getFinalValue(): { invalid: true } | { invalid: false; data: FormValue };
   formIsValid: boolean;
-  finalValueWasRequested: boolean;
 };
 
 export function useSimpleForm<
@@ -38,12 +32,13 @@ export function useSimpleForm<
 >(args: {
   schema: S;
   defaultValues?: UncompletedSimpleFormValue<FormValue>;
+  debounceMilliseconds?: number;
 }): SimpleForm<FormValue> {
   /*
    */
   const [values, replaceValues] = useState<
     UncompletedSimpleFormValue<FormValue>
-  >(args.defaultValues || ({} as UncompletedSimpleFormValue<FormValue>));
+  >(args.defaultValues || {});
   /*
    */
   const [visibleErrors, replaceVisibleErrors] = useState<{
@@ -61,8 +56,9 @@ export function useSimpleForm<
   }>({});
   /*
    */
-  const [finalValueWasRequested, replaceFinalValueWasRequested] =
-    useState(false);
+  const [debounceTimeout, replaceDebounceTimeout] = useState<
+    number | undefined
+  >();
   /*
    */
 
@@ -77,38 +73,51 @@ export function useSimpleForm<
         }));
       }
 
-      const validationResult = args.schema.validate(value);
-
-      if (validationResult.errors) {
-        const messagesTree = validationResult.messagesTree;
-
-        const formMessagesTree = messagesTree[0];
-
-        if (typeof formMessagesTree === 'object') {
-          replaceTotalErrors(formMessagesTree);
-
-          const fieldErrors = formMessagesTree[name as string];
-
-          if (fieldErrors) {
-            replaceVisibleErrors((e) => ({
-              ...e,
-              [name]: fieldErrors
-                .filter((c): c is string => typeof c === 'string')
-                .reduce<{ [key: string]: string }>((acc, fieldError) => {
-                  acc[fieldError] = fieldError;
-
-                  return acc;
-                }, {}),
-            }));
-          }
-        } else {
-          throw new Error(
-            "Cannot have form errors coming from the form root object. Only it's fields.",
-          );
-        }
-      }
-
       replaceValues((oldValues) => ({ ...oldValues, [name]: value }));
+
+      const validate = () => {
+        const validationResult = args.schema.validate(value);
+
+        if (validationResult.errors) {
+          const messagesTree = validationResult.messagesTree;
+
+          const formMessagesTree = messagesTree[0];
+
+          if (typeof formMessagesTree === 'object') {
+            replaceTotalErrors(formMessagesTree);
+
+            const fieldErrors = formMessagesTree[name as string];
+
+            if (fieldErrors) {
+              replaceVisibleErrors((e) => ({
+                ...e,
+                [name]: fieldErrors
+                  .filter((c): c is string => typeof c === 'string')
+                  .reduce<{ [key: string]: string }>((acc, fieldError) => {
+                    acc[fieldError] = fieldError;
+
+                    return acc;
+                  }, {}),
+              }));
+            }
+          } else {
+            throw new Error(
+              "Cannot have form errors coming from the form root object. Only it's fields.",
+            );
+          }
+        }
+      };
+
+      if (args.debounceMilliseconds != null) {
+        if (debounceTimeout != null) {
+          window.clearTimeout(debounceTimeout);
+        }
+
+        const newDebouceTimeout = window.setTimeout(validate, debounceTimeout);
+        replaceDebounceTimeout(newDebouceTimeout);
+      } else {
+        validate();
+      }
     },
     isDirty: (name) => !!dirtyFields[name],
   };
@@ -117,15 +126,17 @@ export function useSimpleForm<
     values,
     field: fieldUtils,
     reset: (defaultValues) => {
-      replaceValues(
-        defaultValues || ({} as UncompletedSimpleFormValue<FormValue>),
-      );
+      if (debounceTimeout != null) {
+        window.clearTimeout(debounceTimeout);
+      }
+
+      replaceDebounceTimeout(undefined);
+      replaceValues(defaultValues || {});
       replaceVisibleErrors({});
       replaceTotalErrors({});
+      replaceDirtyFields({});
     },
     getFinalValue: () => {
-      replaceFinalValueWasRequested(true);
-
       const validationResult = args.schema.validate(values);
 
       if (validationResult.errors) {
@@ -174,6 +185,5 @@ export function useSimpleForm<
       }
     },
     formIsValid: Object.keys(totalErrors).length === 0,
-    finalValueWasRequested,
   };
 }

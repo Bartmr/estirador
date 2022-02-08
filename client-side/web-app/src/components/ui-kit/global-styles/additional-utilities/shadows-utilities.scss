@@ -1,0 +1,59 @@
+@import 'variables';
+
+@each $color, $value in $theme-colors {
+  .shadow-#{$color} {
+    &.shadow-sm {
+      box-shadow: #{$box-shadow-sm-dimensions}
+        rgba($value, $box-shadow-sm-opacity) !important;
+    }
+    &.shadow {
+      box-shadow: #{$box-shadow-dimensions}
+        rgba($value, $box-shadow-opacity) !important;
+    }
+    &.shadow-lg {
+      box-shadow: #{$box-shadow-lg-dimensions}
+        rgba($value, $box-shadow-lg-opacity) !important;
+    }
+  }
+}
+
+.drop-shadow-sm {
+  filter: drop-shadow(
+    #{$box-shadow-sm-dimensions} set-contrasting-color-alpha('darkest', $text-shadow-sm-opacity)
+  ) !important;
+}
+
+.drop-shadow {
+  filter: drop-shadow(
+    #{$box-shadow-dimensions} set-contrasting-color-alpha('darkest', $text-shadow-opacity)
+  ) !important;
+}
+
+.drop-shadow-lg {
+  filter: drop-shadow(
+    #{$box-shadow-lg-dimensions} set-contrasting-color-alpha('darkest', $text-shadow-lg-opacity)
+  ) !important;
+}
+
+@each $color, $value in $theme-colors {
+  .drop-shadow-#{$color} {
+    &.drop-shadow-sm {
+      filter: drop-shadow(
+        #{$box-shadow-sm-dimensions}
+          #{set-contrasting-color-alpha($color, $text-shadow-sm-opacity)}
+      ) !important;
+    }
+    &.drop-shadow {
+      filter: drop-shadow(
+        #{$box-shadow-dimensions}
+          #{set-contrasting-color-alpha($color, $text-shadow-opacity)}
+      ) !important;
+    }
+    &.drop-shadow-lg {
+      filter: drop-shadow(
+        #{$box-shadow-lg-dimensions}
+          #{set-contrasting-color-alpha($color, $text-shadow-lg-opacity)}
+      ) !important;
+    }
+  }
+}

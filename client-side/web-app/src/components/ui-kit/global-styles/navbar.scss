@@ -1,0 +1,23 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/navbar';
+@import 'contrasting-colors-mixins';
+@import 'inverted-color-scheme-mixins';
+
+.navbar,
+.navbar-light,
+.navbar-dark {
+  background-color: $navbar-bg;
+  @include with-contrasting-colors($navbar-bg);
+
+  @include on-inverted-color-scheme {
+    background-color: $navbar-bg-inverted;
+    @include with-contrasting-colors($navbar-bg-inverted);
+  }
+}
+
+.navbar-nav {
+  .active {
+    background-color: set-contrasting-color-alpha('body', 0.2);
+  }
+}

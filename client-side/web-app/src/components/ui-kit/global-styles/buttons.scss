@@ -1,0 +1,90 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/buttons';
+@import 'contrasting-colors-mixins';
+
+.btn {
+  color: get-contrasting-color('body');
+
+  &:hover {
+    color: get-contrasting-color('body');
+  }
+
+  &:disabled,
+  &.disabled {
+    filter: grayscale(100%);
+    cursor: not-allowed;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    @include with-contrasting-colors($value);
+
+    border-color: set-contrasting-color-alpha($color, 0.5);
+
+    &:hover,
+    &:focus {
+      border-color: set-contrasting-color-alpha($color, 0.5);
+    }
+
+    &:focus,
+    &.focus {
+      box-shadow: 0
+        0
+        0
+        $btn-focus-width
+        set-contrasting-color-alpha($color, 0.5);
+    }
+
+    &:disabled,
+    &.disabled {
+      border-color: transparent;
+
+      &:hover,
+      &:active {
+        border-color: transparent;
+      }
+    }
+  }
+
+  .btn-outline-#{$color} {
+    $outline-color: get-contrasting-color($color);
+    $active-color: get-theme-color($color);
+    $active-text-color: get-contrasting-color-absolute-value(
+      $active-color,
+      'body'
+    );
+
+    @include button-outline-variant(
+      $outline-color,
+      $active-text-color,
+      $active-color,
+      $active-color
+    );
+
+    &:focus,
+    &.focus {
+      box-shadow: 0
+        0
+        0
+        $btn-focus-width
+        set-contrasting-color-alpha($color, 0.5);
+    }
+
+    &:disabled,
+    &.disabled {
+      text-decoration: line-through;
+      border-color: $outline-color;
+
+      &:hover,
+      &:focus,
+      &:active {
+        text-decoration: line-through;
+        border-color: $outline-color;
+      }
+    }
+  }
+}
+
+@import 'src/components/ui-kit/global-styles/button-group';

@@ -1,0 +1,37 @@
+@import 'variables';
+
+$stripe-width: 0.5rem;
+
+.stripe-top {
+  border-top: $stripe-width solid $primary !important;
+}
+
+.stripe-end {
+  border-right: $stripe-width solid $primary !important;
+}
+
+.stripe-bottom {
+  border-bottom: $stripe-width solid $primary !important;
+}
+
+.stripe-start {
+  border-left: $stripe-width solid $primary !important;
+}
+
+@each $color, $value in $theme-colors {
+  .stripe-top.stripe-top-#{$color} {
+    border-top-color: $value !important;
+  }
+
+  .stripe-end.stripe-end-#{$color} {
+    border-right-color: $value !important;
+  }
+
+  .stripe-bottom.stripe-bottom-#{$color} {
+    border-bottom-color: $value !important;
+  }
+
+  .stripe-start.stripe-start-#{$color} {
+    border-left-color: $value !important;
+  }
+}

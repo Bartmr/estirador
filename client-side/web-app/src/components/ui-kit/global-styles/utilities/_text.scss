@@ -9,13 +9,4 @@ $colors: join(
   .text-#{$color} {
     color: get-contrasting-color($color) !important;
   }
-
-  a.text-#{$color}:not(.btn) {
-    color: get-contrasting-color($color) !important;
-
-    &:hover,
-    &:focus {
-      color: get-contrasting-color(#{$color}-hover) !important;
-    }
-  }
 }
