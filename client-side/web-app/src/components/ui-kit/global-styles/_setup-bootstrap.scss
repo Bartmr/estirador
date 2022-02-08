@@ -1,3 +1,14 @@
+/*
+  node_modules/bootstrap/scss/mixins/_grid.scss sets default vertical gutters to 0,
+  and default horizontal gutters to this variable
+
+  In order to avoid different horizontal and vertical gutters,
+  gutter size should be zero if not specified
+*/
+$grid-gutter-width: 0;
+
+$container-padding-x: $spacer;
+
 $component-active-color: get-contrasting-color-absolute-value(
   $component-active-bg,
   'body'

@@ -202,16 +202,6 @@ $grid-breakpoints: (
   xxl: 1400px,
 );
 
-/*
-  node_modules/bootstrap/scss/mixins/_grid.scss sets default vertical gutters to 0,
-  and default horizontal gutters to this variable
-
-  In order to avoid different horizontal and vertical gutters,
-  gutter size should be zero if not specified
-*/
-$grid-gutter-width: 0;
-$container-padding-x: $spacer;
-
 $font-1: 'Open Sans', sans-serif;
 
 $font-family-sans-serif: $font-1;
@@ -273,10 +263,12 @@ $text-shadow-lg-opacity: 1;
 $zindex-dropdown: 1000;
 $zindex-sticky: 1020;
 $zindex-fixed: 1030;
-$zindex-modal-backdrop: 1040;
-$zindex-modal: 1050;
-$zindex-popover: 1060;
-$zindex-tooltip: 1070;
+$zindex-offcanvas-backdrop: 1040;
+$zindex-offcanvas: 1045;
+$zindex-modal-backdrop: 1050;
+$zindex-modal: 1055;
+$zindex-popover: 1070;
+$zindex-tooltip: 1080;
 
 //
 //
