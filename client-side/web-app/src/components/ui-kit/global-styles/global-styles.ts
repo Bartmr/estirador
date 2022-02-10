@@ -45,12 +45,12 @@ import './additional-modifiers/card-modifiers.scss';
 import './additional-modifiers/spinners-modifiers.scss';
 import './additional-modifiers/navbar-modifiers.scss';
 import './additional-modifiers/selectable-modifiers.scss';
+import './additional-modifiers/link-modifiers.scss';
 
 /* --- */
 
 import './additional-utilities/background-utilities.scss';
 import './additional-utilities/text-utilities.scss';
-import './additional-utilities/link-utilities.scss';
 import './additional-utilities/shadows-utilities.scss';
 import './additional-utilities/text-shadows-utilities.scss';
 import './additional-utilities/stripes-utilities.scss';
