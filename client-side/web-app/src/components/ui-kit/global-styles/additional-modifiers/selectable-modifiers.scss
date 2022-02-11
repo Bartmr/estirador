@@ -9,7 +9,8 @@
     background-color: $hovered-bg;
   }
 
-  &:active {
+  &:active,
+  &:active:focus {
     background-color: $selected-bg;
   }
 }
