@@ -4,12 +4,6 @@
 @import 'contrasting-colors-mixins';
 
 .nav-link {
-  .icon {
-    margin-right: map-get($map: $spacers, $key: 1);
-  }
-}
-
-.nav-link {
   display: flex;
   justify-content: center;
   align-items: center;

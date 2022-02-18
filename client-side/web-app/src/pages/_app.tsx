@@ -47,12 +47,12 @@ import '../components/ui-kit/global-styles/additional-modifiers/card-modifiers.s
 import '../components/ui-kit/global-styles/additional-modifiers/spinners-modifiers.scss';
 import '../components/ui-kit/global-styles/additional-modifiers/navbar-modifiers.scss';
 import '../components/ui-kit/global-styles/additional-modifiers/selectable-modifiers.scss';
+import '../components/ui-kit/global-styles/additional-modifiers/link-modifiers.scss';
 
 /* --- */
 
 import '../components/ui-kit/global-styles/additional-utilities/background-utilities.scss';
 import '../components/ui-kit/global-styles/additional-utilities/text-utilities.scss';
-import '../components/ui-kit/global-styles/additional-utilities/link-utilities.scss';
 import '../components/ui-kit/global-styles/additional-utilities/shadows-utilities.scss';
 import '../components/ui-kit/global-styles/additional-utilities/text-shadows-utilities.scss';
 import '../components/ui-kit/global-styles/additional-utilities/stripes-utilities.scss';
@@ -60,9 +60,12 @@ import '../components/ui-kit/global-styles/additional-utilities/user-select-util
 import '../components/ui-kit/global-styles/additional-utilities/opacity-utilities.scss';
 import '../components/ui-kit/global-styles/additional-utilities/z-index-utilities.scss';
 import '../components/ui-kit/global-styles/additional-utilities/size-utilities.scss';
+import '../components/ui-kit/global-styles/additional-utilities/contrasting-colors-utilities.scss';
 
 /* --- */
 
+import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 
 export default RootFrame;

@@ -4,12 +4,6 @@
 @import 'contrasting-colors-mixins';
 
 .btn {
-  color: get-contrasting-color('body');
-
-  &:hover {
-    color: get-contrasting-color('body');
-  }
-
   &:disabled,
   &.disabled {
     filter: grayscale(100%);
@@ -22,6 +16,21 @@
     @include with-contrasting-colors($value);
 
     border-color: set-contrasting-color-alpha($color, 0.5);
+
+    &:active {
+      background-color: darken($value, 10);
+    }
+
+    &.active::before {
+      content: '\2713';
+      margin-right: map-get($map: $spacers, $key: 1);
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      @include with-contrasting-colors($value);
+    }
 
     &:hover,
     &:focus {
@@ -63,6 +72,11 @@
       $active-color
     );
 
+    &.active::before {
+      content: '\2713';
+      margin-right: map-get($map: $spacers, $key: 1);
+    }
+
     &:focus,
     &.focus {
       box-shadow: 0
@@ -72,8 +86,15 @@
         set-contrasting-color-alpha($color, 0.5);
     }
 
+    &:not(:disabled):not(.disabled):active {
+      background-color: darken($active-color, 10);
+      @include with-contrasting-colors($active-color);
+    }
+
     &:disabled,
     &.disabled {
+      color: get-contrasting-color('body');
+
       text-decoration: line-through;
       border-color: $outline-color;
 

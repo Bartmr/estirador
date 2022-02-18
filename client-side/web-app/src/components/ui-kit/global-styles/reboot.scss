@@ -4,6 +4,10 @@
 @import 'contrasting-colors-mixins';
 @import 'inverted-color-scheme-mixins';
 
+html {
+  font-size: 16px;
+}
+
 body {
   @include with-contrasting-colors($body-bg);
 
@@ -11,11 +15,6 @@ body {
     background-color: $body-bg-inverted;
     @include with-contrasting-colors($body-bg-inverted);
   }
-}
-
-html,
-body {
-  font-size: 16px;
 }
 
 pre {
