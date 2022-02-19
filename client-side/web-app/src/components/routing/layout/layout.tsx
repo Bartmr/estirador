@@ -37,7 +37,7 @@ export function Layout(props: Props) {
     <SSRProvider>
       <Helmet>
         <title>{title}</title>
-        <style type="text/css">{dom.css()}</style>
+        <style>{dom.css()}</style>
       </Helmet>
       <div className="min-vh-100 d-flex flex-column align-items-stretch">
         <Header menuHtmlId="page-header-menu" className="sticky-top" />
