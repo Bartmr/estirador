@@ -4,6 +4,13 @@ import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environmen
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StatefulFrame } from './components/stateful-frame';
+import { dom } from '@fortawesome/fontawesome-svg-core';
+import Head from 'next/head';
+
+type NextJSProps = {
+  Component: FunctionComponent<{ [key: string]: unknown }>;
+  pageProps: { [key: string]: unknown };
+};
 
 const FatalErrorFrame = () => {
   return (
@@ -50,10 +57,7 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-export const _RootFrameImpl = (props: {
-  Component: FunctionComponent<{ [key: string]: unknown }>;
-  pageProps: { [key: string]: unknown };
-}) => {
+export const UncaughtErrorHandler = (props: NextJSProps) => {
   const [fatalErrorOccurred, replaceFatalErrorOccurredFlag] = useState(false);
 
   useEffect(() => {
@@ -107,4 +111,15 @@ export const _RootFrameImpl = (props: {
       );
     }
   }
+};
+
+export const _RootFrameImpl = (props: NextJSProps) => {
+  return (
+    <>
+      <Head>
+        <style>{dom.css()}</style>
+      </Head>
+      <UncaughtErrorHandler {...props} />
+    </>
+  );
 };
