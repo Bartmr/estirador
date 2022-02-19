@@ -55,7 +55,7 @@ export class AuthController {
     //   httpOnly: true,
     //   secure: NODE_ENV === NodeEnv.Production,
     //   domain: hostname,
-    //   sameSite: 'none',
+    //   sameSite: NODE_ENV === NodeEnv.Production ? 'none' : undefined,
     // });
     //
     // return {
