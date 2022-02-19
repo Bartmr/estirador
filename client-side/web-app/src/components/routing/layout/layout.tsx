@@ -24,7 +24,7 @@ export function Layout(props: Props) {
           href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
           rel="stylesheet"
         />
-        <style type="text/css">{dom.css()}</style>
+        <style>{dom.css()}</style>
       </Head>
       <div className="min-vh-100 d-flex flex-column align-items-stretch">
         <Header menuHtmlId="page-header-menu" className="sticky-top" />
