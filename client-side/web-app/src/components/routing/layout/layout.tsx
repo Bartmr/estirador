@@ -7,7 +7,6 @@ import { throwError } from 'src/logic/app-internals/utils/throw-error';
 import { Header } from './header/header';
 import { GQLLayoutQuery } from './layout._graphql-generated_';
 import SSRProvider from 'react-bootstrap/SSRProvider';
-import { dom } from '@fortawesome/fontawesome-svg-core';
 
 type Props = {
   children: () => ReactNode;
@@ -37,7 +36,6 @@ export function Layout(props: Props) {
     <SSRProvider>
       <Helmet>
         <title>{title}</title>
-        <style>{dom.css()}</style>
       </Helmet>
       <div className="min-vh-100 d-flex flex-column align-items-stretch">
         <Header menuHtmlId="page-header-menu" className="sticky-top" />
