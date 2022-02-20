@@ -4,6 +4,7 @@ import './logic/app-internals/runtime/environment-variables';
 import path from 'path';
 
 import { NextConfig } from 'next';
+import { EnvironmentVariables } from './logic/app-internals/runtime/environment-variables';
 
 export const NEXT_CONFIG = (): NextConfig => {
   return {
@@ -20,7 +21,9 @@ export const NEXT_CONFIG = (): NextConfig => {
           process.cwd(),
           '../../node_modules/typeorm/typeorm-model-shim.js',
         ),
-        '@app/shared': path.join(process.cwd(), '../../libs/shared/src'),
+        '@app/shared': EnvironmentVariables.CI
+          ? path.join(process.cwd(), 'dist/libs/shared/src')
+          : path.join(process.cwd(), '../../libs/shared/src'),
       };
       return config;
     },
