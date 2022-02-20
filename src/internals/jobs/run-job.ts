@@ -21,10 +21,11 @@ type Dependencies = {
 };
 type JobFunction = (dependencies: Dependencies) => Promise<void>;
 
-export function prepareJob(
-  jobName: string,
-  jobFunction: JobFunction,
-): () => void {
+declare global {
+  let app__runJob: (jobName: string, jobFunction: JobFunction) => void;
+}
+
+app__runJob = (jobName: string, jobFunction: JobFunction) => {
   const runAsync = async (): Promise<void> => {
     ProcessContextManager.setContext({
       type: ProcessType.Job,
@@ -50,13 +51,9 @@ export function prepareJob(
     timeout.unref();
   };
 
-  const run = () => {
-    runAsync().catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(`${jobName}:setup`, err);
-      process.exit(1);
-    });
-  };
-
-  return run;
-}
+  runAsync().catch((err) => {
+    // eslint-disable-next-line no-console
+    console.error(`${jobName}:setup`, err);
+    process.exit(1);
+  });
+};
