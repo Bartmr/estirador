@@ -60,7 +60,9 @@ export async function onCreateWebpackConfig({
           process.cwd(),
           '../../node_modules/typeorm/typeorm-model-shim.js',
         ),
-        '@app/shared': path.join(process.cwd(), '../../libs/shared/src'),
+        '@app/shared': EnvironmentVariables.CI
+          ? path.join(process.cwd(), 'dist/libs/shared/src')
+          : path.join(process.cwd(), '../../libs/shared/src'),
       },
     },
   });
