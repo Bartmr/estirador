@@ -1,30 +1,57 @@
 /* eslint-disable no-console */
 import { EnvironmentVariables } from '../runtime/environment-variables';
-import { RUNNING_IN_CLIENT, RUNNING_IN_SERVER } from '../runtime/running-in';
+import { RUNNING_IN_SERVER } from '../runtime/running-in';
 
 const LOG_ENTRIES_LIMIT = 3;
 
 class LoggerImpl {
   private loggedErrors: { [key: string]: undefined | number } = {};
   private loggedWarnings: { [key: string]: undefined | number } = {};
+  private loggedDebug: { [key: string]: undefined | number } = {};
 
   logDebug(key: string, extraData?: unknown) {
     if (EnvironmentVariables.LOG_DEBUG) {
-      console.log('----- DEBUG: ' + key, '\nExtra data:', extraData);
+      const numberOfTimesLogged = this.loggedDebug[key] || 0;
+
+      if (
+        EnvironmentVariables.DISABLE_LOGGING_LIMIT ||
+        numberOfTimesLogged < LOG_ENTRIES_LIMIT
+      ) {
+        this.loggedDebug[key] = numberOfTimesLogged + 1;
+
+        // TODO: Implement remote logging here
+
+        /*
+          Some remote loggers also capture console messages.
+          Maybe it's best to just call either the remote logger or the console,
+          and not both, so we don't get twice the events.
+        */
+
+        console.log('----- DEBUG: ' + key, '\nExtra data:', extraData);
+      }
     }
   }
 
   logWarning(key: string, message: string, extraData?: unknown) {
     const numberOfTimesLogged = this.loggedWarnings[key] || 0;
 
-    if (numberOfTimesLogged < LOG_ENTRIES_LIMIT) {
+    if (
+      EnvironmentVariables.DISABLE_LOGGING_LIMIT ||
+      numberOfTimesLogged < LOG_ENTRIES_LIMIT
+    ) {
       this.loggedWarnings[key] = numberOfTimesLogged + 1;
 
       // TODO: Implement remote logging here
-    }
 
-    console.warn('Logged warning with key: ' + key + '. ' + message);
-    console.warn('Extra data:', extraData);
+      /*
+        Some remote loggers also capture console messages.
+        Maybe it's best to just call either the remote logger or the console,
+        and not both, so we don't get twice the events.
+      */
+
+      console.warn('Logged warning with key: ' + key + '. ' + message);
+      console.warn('Extra data:', extraData);
+    }
   }
 
   logError(
@@ -39,14 +66,52 @@ class LoggerImpl {
     const caughtValueIsInstanceOfError = caughtValue instanceof Error;
     const error = caughtValueIsInstanceOfError ? caughtValue : new Error();
 
+    // Stop building pages if one of them has an error
+    if (RUNNING_IN_SERVER) {
+      this.logErrorToConsole(
+        errorKey,
+        caughtValue,
+        error,
+        caughtValueIsInstanceOfError,
+        extraData,
+      );
+
+      throw caughtValue;
+    }
+
     const numberOfTimesLogged = this.loggedErrors[errorKey] || 0;
 
-    if (numberOfTimesLogged < LOG_ENTRIES_LIMIT) {
+    if (
+      EnvironmentVariables.DISABLE_LOGGING_LIMIT ||
+      numberOfTimesLogged < LOG_ENTRIES_LIMIT
+    ) {
       this.loggedErrors[errorKey] = numberOfTimesLogged + 1;
 
       // TODO: Implement remote logging here
-    }
 
+      /*
+        Some remote loggers also capture console messages.
+        Maybe it's best to just call either the remote logger or the console,
+        and not both, so we don't get twice the events.
+      */
+
+      this.logErrorToConsole(
+        errorKey,
+        caughtValue,
+        error,
+        caughtValueIsInstanceOfError,
+        extraData,
+      );
+    }
+  }
+
+  private logErrorToConsole(
+    errorKey: string,
+    caughtValue: unknown,
+    error: unknown,
+    caughtValueIsInstanceOfError: boolean,
+    extraData: unknown,
+  ) {
     console.error('Logged error with key: ' + errorKey);
 
     if (!caughtValueIsInstanceOfError) {
@@ -58,52 +123,9 @@ class LoggerImpl {
     if (typeof extraData !== 'undefined') {
       console.error('Error extra data:', extraData);
     }
-
-    // Stop building pages if one of them has an error
-    if (RUNNING_IN_SERVER) {
-      throw caughtValue;
-    }
   }
 }
 
 const Logger = new LoggerImpl();
-
-if (RUNNING_IN_CLIENT) {
-  /*
-    Wrap in IIFE to avoid crashing due to unexisting `window` variable
-  */
-  (() => {
-    const unhandledPromiseRejectionHandler = (event: PromiseRejectionEvent) => {
-      /*
-        The logging provider library problably has another event listener
-        that will do the remote reporting.
-
-        We just want the error to be printed on the console too.
-      */
-      console.error('unhandled-promise-rejection', event.reason, undefined);
-    };
-
-    const uncaughtExceptionHandler = (event: ErrorEvent) => {
-      /*
-        The logging provider library problably has another event listener
-        that will do the remote reporting.
-
-        We just want the error to be printed on the console too.
-      */
-      console.error('uncaught-error', event.error, {
-        message: event.message,
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno,
-      });
-    };
-
-    window.addEventListener(
-      'unhandledrejection',
-      unhandledPromiseRejectionHandler,
-    );
-    window.addEventListener('error', uncaughtExceptionHandler);
-  })();
-}
 
 export { Logger };
