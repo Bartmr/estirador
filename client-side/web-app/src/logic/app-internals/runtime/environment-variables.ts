@@ -29,6 +29,13 @@ const schema = object({
   CI: boolean(),
   IS_INTEGRITY_CHECK: boolean(),
   DISABLE_ERROR_BOUNDARIES: boolean(),
+  DISABLE_LOGGING_LIMIT: boolean().transform((v) => {
+    if (process.env.NODE_ENV === 'development') {
+      return true;
+    } else {
+      return v;
+    }
+  }),
   LOG_DEBUG: boolean(),
   MAIN_API_URL: string().filled(),
 }).required();
