@@ -3,7 +3,7 @@ import { Logger } from 'src/logic/app-internals/logging/logger';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StatefulFrame } from './components/stateful-frame';
+import { StateProvider } from './components/state-provider';
 import { Helmet } from 'react-helmet';
 import { dom } from '@fortawesome/fontawesome-svg-core';
 
@@ -86,14 +86,14 @@ export const UncaughtErrorHandler = (props: { children: ReactNode }) => {
   }, []);
 
   if (EnvironmentVariables.DISABLE_ERROR_BOUNDARIES) {
-    return <StatefulFrame>{props.children}</StatefulFrame>;
+    return <StateProvider>{props.children}</StateProvider>;
   } else {
     if (fatalErrorOccurred) {
       return <FatalErrorFrame />;
     } else {
       return (
         <ErrorBoundary>
-          <StatefulFrame>{props.children}</StatefulFrame>
+          <StateProvider>{props.children}</StateProvider>
         </ErrorBoundary>
       );
     }
