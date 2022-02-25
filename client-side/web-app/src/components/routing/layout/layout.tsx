@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { ReactNode } from 'react';
 import { Header } from './header/header';
 import { PROJECT_NAME } from '@app/shared/project-details';
-import SSRProvider from 'react-bootstrap/SSRProvider';
 
 type Props = {
   children: () => ReactNode;
@@ -14,7 +13,7 @@ type Props = {
 
 export function Layout(props: Props) {
   return (
-    <SSRProvider>
+    <>
       <Head>
         <title>
           {props.title} - {PROJECT_NAME}
@@ -35,6 +34,6 @@ export function Layout(props: Props) {
         </main>
         {/* TODO: Footer goes here */}
       </div>
-    </SSRProvider>
+    </>
   );
 }

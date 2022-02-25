@@ -3,7 +3,7 @@ import { Logger } from 'src/logic/app-internals/logging/logger';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StatefulFrame } from './components/stateful-frame';
+import { StateProvider } from './components/state-provider';
 import { dom } from '@fortawesome/fontawesome-svg-core';
 import Head from 'next/head';
 
@@ -94,9 +94,9 @@ export const UncaughtErrorHandler = (props: NextJSProps) => {
 
   if (EnvironmentVariables.DISABLE_ERROR_BOUNDARIES) {
     return (
-      <StatefulFrame>
+      <StateProvider>
         <Component {...props.pageProps} />
-      </StatefulFrame>
+      </StateProvider>
     );
   } else {
     if (fatalErrorOccurred) {
@@ -104,9 +104,9 @@ export const UncaughtErrorHandler = (props: NextJSProps) => {
     } else {
       return (
         <ErrorBoundary>
-          <StatefulFrame>
+          <StateProvider>
             <Component {...props.pageProps} />
-          </StatefulFrame>
+          </StateProvider>
         </ErrorBoundary>
       );
     }
