@@ -36,7 +36,7 @@
 @function get-contrasting-color-absolute-value($fill, $name) {
   $fill-is-dark: is-color-dark($fill);
 
-  @if ($fill-is-dark == true) {
+  @if ($fill-is-dark) {
     $value: map-get($light-contrasting-colors, $name);
 
     @if ($value == null) {

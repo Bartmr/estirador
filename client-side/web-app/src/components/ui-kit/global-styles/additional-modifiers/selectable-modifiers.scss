@@ -1,0 +1,16 @@
+@import 'variables';
+
+.selectable,
+.link-unstyled.selectable {
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: $hovered-bg;
+  }
+
+  &:active,
+  &:active:focus {
+    background-color: $selected-bg;
+  }
+}

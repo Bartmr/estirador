@@ -1,0 +1,10 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/accordion';
+
+.accordion-button {
+  &.collapsed:hover,
+  &.collapsed:focus {
+    background-color: $hovered-bg;
+  }
+}

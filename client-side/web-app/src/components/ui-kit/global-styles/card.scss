@@ -1,0 +1,24 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/card';
+@import 'contrasting-colors-mixins';
+@import 'inverted-color-scheme-mixins';
+
+.card {
+  border-color: set-contrasting-color-alpha(body, 0.2);
+
+  @include with-contrasting-colors($card-bg);
+
+  @include on-inverted-color-scheme {
+    border-color: set-contrasting-color-alpha(body, 0.5);
+
+    @include with-contrasting-colors($card-bg-inverted);
+    background-color: $card-bg-inverted;
+  }
+}
+
+.card-subtitle {
+  color: $text-muted;
+
+  margin-bottom: map-get($spacers, 3);
+}

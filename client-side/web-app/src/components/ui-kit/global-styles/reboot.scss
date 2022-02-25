@@ -1,0 +1,30 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/reboot';
+@import 'contrasting-colors-mixins';
+@import 'inverted-color-scheme-mixins';
+
+html {
+  font-size: 16px;
+}
+
+body {
+  @include with-contrasting-colors($body-bg);
+
+  @include on-inverted-color-scheme {
+    background-color: $body-bg-inverted;
+    @include with-contrasting-colors($body-bg-inverted);
+  }
+}
+
+pre {
+  code {
+    color: $code-color;
+  }
+}
+
+*:disabled {
+  cursor: not-allowed;
+}
+
+@import 'src/components/ui-kit/global-styles/type';

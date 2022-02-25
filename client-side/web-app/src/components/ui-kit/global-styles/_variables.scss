@@ -118,18 +118,18 @@ $contrasting-color-css-custom-properties: ();
 /* Dark text colors to use in light background colors */
 
 $dark-contrasting-colors: (
-  default: $dark,
-  primary: $primary,
-  secondary: $secondary,
-  success: $success,
-  info: $info,
-  warning: $warning,
-  danger: $danger,
-  light: $light,
-  lightest: $lightest,
-  dark: $dark,
-  darkest: $darkest,
-  body: $darkest,
+  'default': $dark,
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'lightest': $lightest,
+  'dark': $dark,
+  'darkest': $darkest,
+  'body': $darkest,
 );
 
 @each $color, $value in $dark-contrasting-colors {
@@ -142,18 +142,18 @@ $dark-contrasting-colors: (
 /* Light text colors to use in dark background colors */
 
 $light-contrasting-colors: (
-  default: $light,
-  primary: change-color($primary, $lightness: 60%),
-  secondary: change-color($secondary, $lightness: 60%),
-  success: change-color($success, $lightness: 60%),
-  info: change-color($info, $lightness: 60%),
-  warning: change-color($warning, $lightness: 60%),
-  danger: change-color($danger, $lightness: 60%),
-  light: $light,
-  lightest: $lightest,
-  dark: $dark,
-  darkest: $darkest,
-  body: $lightest,
+  'default': $light,
+  'primary': change-color($primary, $lightness: 70%),
+  'secondary': change-color($secondary, $lightness: 70%),
+  'success': change-color($success, $lightness: 70%),
+  'info': change-color($info, $lightness: 70%),
+  'warning': change-color($warning, $lightness: 70%),
+  'danger': change-color($danger, $lightness: 70%),
+  'light': $light,
+  'lightest': $lightest,
+  'dark': $dark,
+  'darkest': $darkest,
+  'body': $lightest,
 );
 
 @each $color, $value in $light-contrasting-colors {
@@ -173,8 +173,9 @@ $light-contrasting-colors: (
 ---
 */
 
-$hovered-bg: set-contrasting-color-alpha('body', 0.15);
-$selected-bg: set-contrasting-color-alpha('body', 0.3);
+$hovered-bg: set-contrasting-color-alpha('body', 0.1);
+$selected-bg: set-contrasting-color-alpha('primary', 0.2);
+$disabled-bg: set-contrasting-color-alpha('body', 0.15);
 
 $component-active-bg: $primary;
 
@@ -201,26 +202,19 @@ $grid-breakpoints: (
   xxl: 1400px,
 );
 
-/*
-  node_modules/bootstrap/scss/mixins/_grid.scss sets default vertical gutters to 0,
-  and default horizontal gutters to this variable
-
-  In order to avoid different horizontal and vertical gutters,
-  gutter size should be zero if not specified
-*/
-$grid-gutter-width: 0;
-$container-padding-x: $spacer;
-
 $font-1: 'Open Sans', sans-serif;
 
-$font-family-sans-serif: $font-1;
-$font-family-base: $font-family-sans-serif;
+// Note: Use `inspect` for lists so that quoted items keep the quotes.
+// See https://github.com/sass/sass/issues/2383#issuecomment-336349172
+$font-family-base: inspect($font-1);
 
 $font-size-base: 1rem;
 
 $link-color: get-contrasting-color('primary');
 $link-hover-color: get-contrasting-color('primary-hover');
 $link-decoration: underline;
+
+$code-color: get-contrasting-color('secondary');
 
 $text-muted-opacity: 0.5;
 $text-muted: set-contrasting-color-alpha('body', $text-muted-opacity);
@@ -233,8 +227,10 @@ $opacity-subtle: 0.1;
 $border-color: set-contrasting-color-alpha('body', 0.3);
 
 $border-radius: 0.7rem;
-$border-radius-lg: 1.5rem;
+$border-radius-lg: 1rem;
 $border-radius-sm: 0.4rem;
+
+$box-shadow-inset: inset 0 1px 2px rgba($darkest, 0.5);
 
 $box-shadow-sm-dimensions: 0 0.125rem 0.25rem;
 $box-shadow-sm-opacity: 0.2;
@@ -268,10 +264,12 @@ $text-shadow-lg-opacity: 1;
 $zindex-dropdown: 1000;
 $zindex-sticky: 1020;
 $zindex-fixed: 1030;
-$zindex-modal-backdrop: 1040;
-$zindex-modal: 1050;
-$zindex-popover: 1060;
-$zindex-tooltip: 1070;
+$zindex-offcanvas-backdrop: 1040;
+$zindex-offcanvas: 1045;
+$zindex-modal-backdrop: 1050;
+$zindex-modal: 1055;
+$zindex-popover: 1070;
+$zindex-tooltip: 1080;
 
 //
 //

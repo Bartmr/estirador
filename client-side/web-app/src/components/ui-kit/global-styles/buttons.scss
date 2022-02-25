@@ -1,0 +1,111 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/buttons';
+@import 'contrasting-colors-mixins';
+
+.btn {
+  &:disabled,
+  &.disabled {
+    filter: grayscale(100%);
+    cursor: not-allowed;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    @include with-contrasting-colors($value);
+
+    border-color: set-contrasting-color-alpha($color, 0.5);
+
+    &:active {
+      background-color: darken($value, 10);
+    }
+
+    &.active::before {
+      content: '\2713';
+      margin-right: map-get($map: $spacers, $key: 1);
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      @include with-contrasting-colors($value);
+    }
+
+    &:hover,
+    &:focus {
+      border-color: set-contrasting-color-alpha($color, 0.5);
+    }
+
+    &:focus,
+    &.focus {
+      box-shadow: 0
+        0
+        0
+        $btn-focus-width
+        set-contrasting-color-alpha($color, 0.5);
+    }
+
+    &:disabled,
+    &.disabled {
+      border-color: transparent;
+
+      &:hover,
+      &:active {
+        border-color: transparent;
+      }
+    }
+  }
+
+  .btn-outline-#{$color} {
+    $outline-color: get-contrasting-color($color);
+    $active-color: get-theme-color($color);
+    $active-text-color: get-contrasting-color-absolute-value(
+      $active-color,
+      'body'
+    );
+
+    @include button-outline-variant(
+      $outline-color,
+      $active-text-color,
+      $active-color,
+      $active-color
+    );
+
+    &.active::before {
+      content: '\2713';
+      margin-right: map-get($map: $spacers, $key: 1);
+    }
+
+    &:focus,
+    &.focus {
+      box-shadow: 0
+        0
+        0
+        $btn-focus-width
+        set-contrasting-color-alpha($color, 0.5);
+    }
+
+    &:not(:disabled):not(.disabled):active {
+      background-color: darken($active-color, 10);
+      @include with-contrasting-colors($active-color);
+    }
+
+    &:disabled,
+    &.disabled {
+      color: get-contrasting-color('body');
+
+      text-decoration: line-through;
+      border-color: $outline-color;
+
+      &:hover,
+      &:focus,
+      &:active {
+        text-decoration: line-through;
+        border-color: $outline-color;
+      }
+    }
+  }
+}
+
+@import 'src/components/ui-kit/global-styles/button-group';

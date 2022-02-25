@@ -1,0 +1,15 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/spinners';
+
+.spinner-border {
+  &.spinner-sm {
+    @extend .spinner-border-sm;
+  }
+}
+
+.spinner-grow {
+  &.spinner-sm {
+    @extend .spinner-grow-sm;
+  }
+}

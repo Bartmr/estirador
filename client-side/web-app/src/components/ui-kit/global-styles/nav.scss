@@ -1,0 +1,56 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'node_modules/bootstrap/scss/nav';
+@import 'contrasting-colors-mixins';
+
+.nav-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:not(a[href]):not(.disabled) {
+    color: $link-color;
+    cursor: pointer;
+
+    &:not(.active) {
+      &:hover,
+      &:focus {
+        color: $link-hover-color;
+      }
+    }
+  }
+}
+
+.nav:not(.nav-pills) {
+  .active {
+    background-color: $selected-bg;
+  }
+}
+
+.nav-pills {
+  .nav-link {
+    &:not(a[href]):not(.disabled) {
+      color: $link-color;
+
+      &.active {
+        color: get-contrasting-color('body');
+      }
+
+      &:not(.active) {
+        &:hover,
+        &:focus {
+          color: $link-hover-color;
+        }
+      }
+    }
+  }
+
+  .nav-link.active,
+  .show > .nav-link {
+    @include with-contrasting-colors($nav-pills-link-active-bg);
+  }
+}
+
+.nav-justified {
+  align-items: center;
+}

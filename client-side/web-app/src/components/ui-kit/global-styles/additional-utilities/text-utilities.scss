@@ -1,0 +1,34 @@
+@import 'variables';
+@import 'inverted-color-scheme-mixins';
+
+@each $color, $value in $theme-colors {
+  .text-#{$color}-muted {
+    color: set-contrasting-color-alpha($color, $text-muted-opacity) !important;
+
+    @include on-inverted-color-scheme {
+      color: set-contrasting-color-alpha(
+        $color,
+        $text-muted-opacity + 0.15
+      ) !important;
+    }
+  }
+}
+
+/* */
+
+.text-subtle {
+  color: set-contrasting-color-alpha('body', $text-subtle-opacity) !important;
+}
+
+@each $color, $value in $theme-colors {
+  .text-#{$color}-subtle {
+    color: set-contrasting-color-alpha($color, $text-subtle-opacity) !important;
+
+    @include on-inverted-color-scheme {
+      color: set-contrasting-color-alpha(
+        $color,
+        $text-subtle-opacity + 0.25
+      ) !important;
+    }
+  }
+}
