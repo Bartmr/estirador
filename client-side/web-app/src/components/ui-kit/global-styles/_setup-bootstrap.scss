@@ -165,13 +165,8 @@ $accordion-button-bg: transparent;
 
 $accordion-icon-color: #888888;
 
-$popover-header-bg: $light;
-$popover-header-color: get-contrasting-color-absolute-value(
-  $popover-header-bg,
-  'body'
-);
 $popover-bg: $lightest;
-$popover-body-color: get-contrasting-color-absolute-value($popover-bg, 'body');
+$popover-header-bg: $light;
 
 $offcanvas-color: get-contrasting-color('body');
 
