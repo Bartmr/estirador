@@ -4,15 +4,9 @@
 @import 'contrasting-colors-mixins';
 
 .dropdown-menu {
-  @include with-contrasting-colors($dropdown-bg);
-}
-.dropdown-menu {
-  color: $dropdown-color;
+  @include with-contrasting-colors-and-no-styling($dropdown-bg);
 }
 
 .dropdown-menu-dark {
-  @include with-contrasting-colors($dropdown-dark-bg);
-}
-.dropdown-menu-dark {
-  color: $dropdown-dark-color;
+  @include with-contrasting-colors-and-no-styling($dropdown-dark-bg);
 }

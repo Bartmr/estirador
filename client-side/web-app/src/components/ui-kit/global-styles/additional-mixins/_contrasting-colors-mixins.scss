@@ -42,7 +42,7 @@
   }
 }
 
-@mixin with-contrasting-colors($fill, $force: false) {
+@mixin with-contrasting-colors-and-no-styling($fill, $force: false) {
   $opacity: opacity($fill);
 
   @if ($opacity > 0.4 or $force) {
@@ -56,6 +56,10 @@
   } @else {
     @include inherit-contrasting-colors;
   }
+}
+
+@mixin with-contrasting-colors($fill, $force: false) {
+  @include with-contrasting-colors-and-no-styling($fill, $force);
 
   /*
     Spot style conflicts early,
