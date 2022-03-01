@@ -1,6 +1,3 @@
-// Validate environment variables
-import './logic/app-internals/runtime/environment-variables';
-
 import path from 'path';
 
 import { NextConfig } from 'next';
