@@ -5,7 +5,13 @@
 @import 'inverted-color-scheme-mixins';
 
 .list-group-item.active {
-  @include with-contrasting-colors($list-group-action-active-bg);
+  @include with-contrasting-colors($list-group-active-bg);
+}
+
+.list-group-item-action {
+  &:active {
+    @include with-contrasting-colors($list-group-action-active-bg);
+  }
 }
 
 @each $color-name, $color-value in $theme-colors {
