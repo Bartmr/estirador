@@ -63,6 +63,7 @@ module.exports = {
       'error',
       { ignoreVoid: false, ignoreIIFE: false },
     ],
+    '@typescript-eslint/no-misused-promises': 'error',
     '@typescript-eslint/no-unnecessary-condition': 'error',
     '@typescript-eslint/unbound-method': 'error',
     '@typescript-eslint/no-shadow': 'error',

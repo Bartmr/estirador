@@ -1,3 +1,12 @@
 @import 'variables';
 @import 'setup-bootstrap';
 @import 'node_modules/bootstrap/scss/alert';
+@import 'contrasting-colors-mixins';
+
+@each $state, $value in $theme-colors {
+  $alert-background: shift-color($value, $alert-bg-scale);
+
+  .alert-#{$state} {
+    @include with-contrasting-colors-and-no-styling($alert-background);
+  }
+}

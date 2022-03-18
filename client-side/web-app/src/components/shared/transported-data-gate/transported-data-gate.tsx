@@ -111,7 +111,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
     gateStatusUI = (
       <div className={flexClassName}>
         <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faSearch} />
-        <p className={`${textClassName} font-weight-bold mb-0`}>Not Found</p>
+        <p className={`${textClassName} mb-0`}>Not Found</p>
       </div>
     );
   } else if (dataWrapper.status === TransportFailure.ConnectionFailure) {

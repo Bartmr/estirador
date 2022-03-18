@@ -1,3 +1,12 @@
 @import 'variables';
 @import 'setup-bootstrap';
 @import 'node_modules/bootstrap/scss/dropdown';
+@import 'contrasting-colors-mixins';
+
+.dropdown-menu {
+  @include with-contrasting-colors-and-no-styling($dropdown-bg);
+}
+
+.dropdown-menu-dark {
+  @include with-contrasting-colors-and-no-styling($dropdown-dark-bg);
+}
