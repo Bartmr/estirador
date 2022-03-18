@@ -155,46 +155,45 @@ tunnels:
 
 ### Upgrading Node
 
-#### Files to be changed
-
-- .nvmrc
-- BREAKING-CHANGES.md
-- Dockerfile
-- client-side/web-app/.nvmrc
-- client-side/web-app/Dockerfile
-- client-side/web-app/load-build-environment.js
-- client-side/web-app/package-lock.json
-- client-side/web-app/package.json
-  - `engine` field
-  - `@types/node` version
-- package-lock.json
-- package.json
-  - `engine` field
-  - `@types/node` version
-- tsconfig.base.json
+- Files to be changed
+  - .nvmrc
+  - BREAKING-CHANGES.md
+    - add warning for inherited projects to delete all `node_modules` directories and `package-lock.json` files, and then run `npm run install:all`
+  - Dockerfile
+  - client-side/web-app/.nvmrc
+  - client-side/web-app/Dockerfile
+  - client-side/web-app/load-build-environment.js
+  - client-side/web-app/package.json
+    - `engine` field
+    - `@types/node` version
+  - package.json
+    - `engine` field
+    - `@types/node` version
+  - tsconfig.base.json
+- delete all `node_modules` directories and `package-lock.json` files
+- run `npm run install:all`
 
 ### Adding a library under `libs` or any `.ts` files outside of `src` or `libs/shared`
 
-#### Files to be changed
-
-- .gitignore
-  - could instead just add a `.gitignore` file inside the new library
-- .prettierignore
-- .dockerignore
-- Dockerfile
-- .eslintignore
-- .eslintrc.js
-- All `tsconfig` files
-- package.json
-  - add the necessary steps to cover the new library code in the integrity checks
-- Web App (and other nested projects)
+- Files to be changed
+  - .gitignore
+    - could instead just add a `.gitignore` file inside the new library
+  - .prettierignore
   - .dockerignore
   - Dockerfile
   - .eslintignore
   - .eslintrc.js
   - All `tsconfig` files
-    - also add an alias/path for the new library, so it doesn't get directly imported with a relative path
   - package.json
-    - copy the new library source files to the `dist` directory when running the release build
-  - Webpack resolvers and aliases
-    - add a new alias for the new library, pointing to `libs` during local builds and to `dist` during release builds
+    - add the necessary steps to cover the new library code in the integrity checks
+  - Web App (and other nested projects)
+    - .dockerignore
+    - Dockerfile
+    - .eslintignore
+    - .eslintrc.js
+    - All `tsconfig` files
+      - also add an alias/path for the new library, so it doesn't get directly imported with a relative path
+    - package.json
+      - copy the new library source files to the `dist` directory when running the release build
+    - Webpack resolvers and aliases
+      - add a new alias for the new library, pointing to `libs` during local builds and to `dist` during release builds
