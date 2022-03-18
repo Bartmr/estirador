@@ -3,7 +3,7 @@ import {
   createStore as createReduxStore,
   Reducer,
 } from 'redux';
-import { devToolsEnhancer } from 'redux-devtools-extension/developmentOnly';
+import { devToolsEnhancerDevelopmentOnly } from '@redux-devtools/extension';
 import { Store, StoreAction, StoreState } from './store-types';
 import { MAIN_API_SESSION_LOGOUT } from '../apis/main/session/main-api-session-actions';
 import { StoreReducersMap } from './store-reducers-map';
@@ -22,7 +22,7 @@ class StoreManager {
 
     this.store = createReduxStore<StoreState, StoreAction, {}, {}>(
       (state: StoreState = {}) => state,
-      devToolsEnhancer({
+      devToolsEnhancerDevelopmentOnly({
         /*
           Redux Devtools hot reload causes some bugs due to its state recomputation.
           The tradeoff of disabling Redux Devtools hot reload support is that if you change a reducer,

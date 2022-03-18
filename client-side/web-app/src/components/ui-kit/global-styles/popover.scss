@@ -1,3 +1,16 @@
 @import 'variables';
 @import 'setup-bootstrap';
 @import 'node_modules/bootstrap/scss/popover';
+@import 'contrasting-colors-mixins';
+
+.popover {
+  @include with-contrasting-colors($popover-bg);
+}
+
+.popover-header {
+  @include with-contrasting-colors($popover-header-bg);
+}
+
+.popover-body {
+  @include with-contrasting-colors($popover-bg);
+}
