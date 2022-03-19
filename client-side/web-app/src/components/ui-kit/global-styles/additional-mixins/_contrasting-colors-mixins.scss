@@ -5,29 +5,29 @@
   @each $color-name in $contrasting-colors-names {
     $value: map-get($contrasting-colors-map, $color-name);
 
-    @if ($value == null) {
-      @error "-> #{$color-name} does not exist in contrasting-color-css-custom-properties-values map";
-    }
+    @if ($value) {
+      $color: get-contrasting-color-css-custom-property($color-name);
+      $h: get-contrasting-color-css-custom-property($color-name, h);
+      $s: get-contrasting-color-css-custom-property($color-name, s);
+      $l: get-contrasting-color-css-custom-property($color-name, l);
 
-    $color: get-contrasting-color-css-custom-property($color-name);
-    $h: get-contrasting-color-css-custom-property($color-name, h);
-    $s: get-contrasting-color-css-custom-property($color-name, s);
-    $l: get-contrasting-color-css-custom-property($color-name, l);
+      $h-value: hue($value);
+      $s-value: saturation($value);
+      $l-value: lightness($value);
 
-    $h-value: hue($value);
-    $s-value: saturation($value);
-    $l-value: lightness($value);
-
-    @if ($important) {
-      #{$h}: $h-value !important;
-      #{$s}: $s-value !important;
-      #{$l}: $l-value !important;
-      #{$color}: $value !important;
+      @if ($important) {
+        #{$h}: $h-value !important;
+        #{$s}: $s-value !important;
+        #{$l}: $l-value !important;
+        #{$color}: $value !important;
+      } @else {
+        #{$h}: $h-value;
+        #{$s}: $s-value;
+        #{$l}: $l-value;
+        #{$color}: $value;
+      }
     } @else {
-      #{$h}: $h-value;
-      #{$s}: $s-value;
-      #{$l}: $l-value;
-      #{$color}: $value;
+      @error "-> #{$color-name} does not exist in contrasting-color-css-custom-properties-values map";
     }
   }
 }

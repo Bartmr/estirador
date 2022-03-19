@@ -59,21 +59,21 @@ $inverted-theme-colors: (
 @function get-theme-color($color-name) {
   $value: map-get($theme-colors, $color-name);
 
-  @if ($value == null) {
+  @if ($value) {
+    @return $value;
+  } @else {
     @error "-> #{$color-name} does not exist in $theme-colors";
   }
-
-  @return $value;
 }
 
 @function get-inverted-theme-color($color-name) {
   $value: map-get($inverted-theme-colors, $color-name);
 
-  @if ($value == null) {
+  @if ($value) {
+    @return $value;
+  } @else {
     @error "-> #{$color-name} does not exist in $inverted-theme-colors";
   }
-
-  @return $value;
 }
 
 /*
