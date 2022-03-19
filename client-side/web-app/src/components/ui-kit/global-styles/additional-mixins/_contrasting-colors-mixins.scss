@@ -14,15 +14,19 @@
     $s: get-contrasting-color-css-custom-property($color-name, s);
     $l: get-contrasting-color-css-custom-property($color-name, l);
 
+    $h-value: hue($value);
+    $s-value: saturation($value);
+    $l-value: lightness($value);
+
     @if ($important) {
-      #{$h}: hue($value) !important;
-      #{$s}: saturation($value) !important;
-      #{$l}: lightness($value) !important;
+      #{$h}: $h-value !important;
+      #{$s}: $s-value !important;
+      #{$l}: $l-value !important;
       #{$color}: $value !important;
     } @else {
-      #{$h}: hue($value);
-      #{$s}: saturation($value);
-      #{$l}: lightness($value);
+      #{$h}: $h-value;
+      #{$s}: $s-value;
+      #{$l}: $l-value;
       #{$color}: $value;
     }
   }
