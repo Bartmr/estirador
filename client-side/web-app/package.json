@@ -74,7 +74,7 @@
     "gatsby"
   ],
   "scripts": {
-    "clean": "gatsby clean && rimraf dist .webpack-bundle-analyzer _graphql-generated_ **/*._graphql-generated_.ts",
+    "clean": "gatsby clean && rimraf dist .webpack-bundle-analyzer _graphql-generated_ && find src -name \"*._graphql-generated_.ts\" -type f -delete",
     "build": "gatsby build --prefix-paths",
     "build:ci": "rm -rf dist && mkdir -p dist/libs/shared/src && cp -f -R ../../libs/shared/src dist/libs/shared && CI=true npm run build && find public -name \"*.map\" -type f -delete",
     "develop": "gatsby develop",
