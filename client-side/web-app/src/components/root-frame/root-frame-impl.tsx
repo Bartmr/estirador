@@ -10,15 +10,19 @@ import { dom } from '@fortawesome/fontawesome-svg-core';
 const FatalErrorFrame = () => {
   return (
     <div className="vh-100 bg-primary">
-      <div className="h-75 d-flex flex-column justify-content-center align-items-center">
-        <FontAwesomeIcon
-          className={`icon-thumbnail mb-4`}
-          icon={faExclamationCircle}
-        />
-        <h2>Internal Error</h2>
-        <p className="lead">
-          An internal error occured. Please refresh the page and try again.
-        </p>
+      <div className="h-75 container d-flex flex-column justify-content-center">
+        <div className="text-center">
+          <FontAwesomeIcon
+            className={`icon-thumbnail mb-4`}
+            icon={faExclamationCircle}
+          />
+          <h2>Internal Error</h2>
+          <p className="lead">
+            An internal error occured.
+            <br />
+            Please refresh the page and try again.
+          </p>
+        </div>
       </div>
     </div>
   );
