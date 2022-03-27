@@ -6,9 +6,29 @@
 */
 import './src/logic/app-internals/logging/logger';
 
-import React from 'react';
-import { RootFrame } from './src/components/root-frame/root-frame';
+import React, { useEffect, useState } from 'react';
 
-export const wrapRootElement = ({ element }) => {
-  return <RootFrame>{element}</RootFrame>;
+const RootWrapper = (props) => {
+  const [RootFrame, replaceRootFrame] = useState(
+    () => require('./src/components/root-frame/root-frame').RootFrame,
+  );
+
+  useEffect(() => {
+    if (module.hot) {
+      module.hot.accept(
+        ['./src/components/root-frame/root-frame'],
+        function () {
+          replaceRootFrame(
+            () => require('./src/components/root-frame/root-frame').RootFrame,
+          );
+        },
+      );
+    }
+  }, []);
+
+  return <RootFrame>{props.children}</RootFrame>;
 };
+
+export const wrapRootElement = ({ element }) => (
+  <RootWrapper>{element}</RootWrapper>
+);
