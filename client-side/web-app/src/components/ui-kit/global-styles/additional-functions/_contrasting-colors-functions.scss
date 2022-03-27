@@ -1,10 +1,10 @@
 @function get-contrasting-color-css-custom-property($name, $subpixel: null) {
   $map-key: null;
 
-  @if ($subpixel == null) {
-    $map-key: --#{$name}-contrasting-color;
-  } @else {
+  @if ($subpixel) {
     $map-key: --#{$name}-contrasting-color-#{$subpixel};
+  } @else {
+    $map-key: --#{$name}-contrasting-color;
   }
 
   /*
@@ -14,11 +14,11 @@
   */
   $custom-property: map-get($contrasting-color-css-custom-properties, $map-key);
 
-  @if ($custom-property == null) {
+  @if ($custom-property) {
+    @return $custom-property;
+  } @else {
     @error "-> #{$name} (#{$map-key}) does not exist in contrasting-color-css-custom-properties map";
   }
-
-  @return $custom-property;
 }
 
 @function set-contrasting-color-alpha($name, $opacity) {
@@ -39,18 +39,18 @@
   @if ($fill-is-dark) {
     $value: map-get($light-contrasting-colors, $name);
 
-    @if ($value == null) {
+    @if ($value) {
+      @return $value;
+    } @else {
       @error "-> #{$name} does not exist in light-contrasting-colors";
     }
-
-    @return $value;
   } @else {
     $value: map-get($dark-contrasting-colors, $name);
 
-    @if ($value == null) {
+    @if ($value) {
+      @return $value;
+    } @else {
       @error "-> #{$name} does not exist in dark-contrasting-colors";
     }
-
-    @return $value;
   }
 }

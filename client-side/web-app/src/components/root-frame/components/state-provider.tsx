@@ -15,8 +15,13 @@ import { navigate } from 'gatsby';
 import { LOGIN_ROUTE } from 'src/components/templates/login/login-routes';
 import { SSRProvider } from 'react-bootstrap';
 
+let previousRuntimeData:
+  | undefined
+  | {
+      storeManager: ReturnType<typeof createStoreManager>;
+    };
 type ModuleHotData = {
-  storeManager?: ReturnType<typeof createStoreManager>;
+  storeManager: ReturnType<typeof createStoreManager>;
 };
 
 const FrameWithState = (props: { children: ReactNode }) => {
@@ -52,14 +57,19 @@ const FrameWithState = (props: { children: ReactNode }) => {
 
 export function StateProvider(props: { children: ReactNode }) {
   const [storeManager] = useState(() => {
-    const storeManagerFromPreviousRuntime = (
-      module.hot?.data as ModuleHotData | undefined
-    )?.storeManager;
+    const storeManagerFromPreviousRuntime = module.hot
+      ? previousRuntimeData?.storeManager ||
+        (module.hot.data as ModuleHotData | undefined)?.storeManager
+      : undefined;
 
     const storeManagerForCurrentRuntime =
       storeManagerFromPreviousRuntime || createStoreManager();
 
     if (module.hot && RUNNING_IN_CLIENT) {
+      previousRuntimeData = {
+        storeManager: storeManagerForCurrentRuntime,
+      };
+
       module.hot.dispose((data: ModuleHotData) => {
         data.storeManager = storeManagerForCurrentRuntime;
       });

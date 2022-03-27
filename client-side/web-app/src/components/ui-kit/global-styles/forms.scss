@@ -77,6 +77,10 @@
         set-contrasting-color-alpha('danger', 0.25);
     }
   }
+
+  option {
+    color: initial;
+  }
 }
 
 .form-check-input {

@@ -1,34 +1,28 @@
-/*
-  Logger must be imported first in order to log any uncaught exception
-  thrown during the modules initialization
+// KEEP AS TOP IMPORT
+import { RootFrame } from './src/components/root-frame/root-frame';
 
-  Logger is supposed to be imported here and in root-frame.tsx
-*/
-import './src/logic/app-internals/logging/logger';
+//
 
 import React, { useEffect, useState } from 'react';
 
-const RootWrapper = (props) => {
-  const [RootFrame, replaceRootFrame] = useState(
-    () => require('./src/components/root-frame/root-frame').RootFrame,
+const Wrapper = (props) => {
+  const [ReloadedRootFrame, replaceReloadedRootFrame] = useState(
+    () => RootFrame,
   );
 
   useEffect(() => {
     if (module.hot) {
-      module.hot.accept(
-        ['./src/components/root-frame/root-frame'],
-        function () {
-          replaceRootFrame(
-            () => require('./src/components/root-frame/root-frame').RootFrame,
-          );
-        },
-      );
+      module.hot.accept(['./src/components/root-frame/root-frame'], () => {
+        replaceReloadedRootFrame(
+          () => require('./src/components/root-frame/root-frame').RootFrame,
+        );
+      });
     }
   }, []);
 
-  return <RootFrame>{props.children}</RootFrame>;
+  return <ReloadedRootFrame>{props.children}</ReloadedRootFrame>;
 };
 
-export const wrapRootElement = ({ element }) => (
-  <RootWrapper>{element}</RootWrapper>
-);
+export const wrapRootElement = ({ element }) => {
+  return <Wrapper>{element}</Wrapper>;
+};
