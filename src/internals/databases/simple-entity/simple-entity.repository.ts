@@ -272,6 +272,26 @@ export abstract class SimpleEntityRepository<
     };
   }
 
+  async selectOne(
+    options: {
+      alias: string;
+      withDeleted?: boolean;
+    },
+    builderFn: (
+      queryBuilder: SelectQueryBuilder<Entity>,
+    ) => SelectQueryBuilder<Entity>,
+  ) {
+    let queryBuilder = this.repository.createQueryBuilder(options.alias);
+
+    if (options.withDeleted) {
+      queryBuilder = queryBuilder.withDeleted();
+    }
+
+    queryBuilder = builderFn(queryBuilder);
+
+    return queryBuilder.getOne();
+  }
+
   /**
    * This method will return all existing entities that match the query
    * It may become a performance bottleneck
