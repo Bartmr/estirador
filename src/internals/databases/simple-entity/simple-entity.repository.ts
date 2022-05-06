@@ -272,6 +272,26 @@ export abstract class SimpleEntityRepository<
     };
   }
 
+  async selectAndCount(
+    options: {
+      alias: string;
+      withDeleted?: boolean;
+    },
+    builderFn: (
+      queryBuilder: SelectQueryBuilder<Entity>,
+    ) => SelectQueryBuilder<Entity>,
+  ) {
+    let queryBuilder = this.repository.createQueryBuilder(options.alias);
+
+    if (options.withDeleted) {
+      queryBuilder = queryBuilder.withDeleted();
+    }
+
+    queryBuilder = builderFn(queryBuilder);
+
+    return queryBuilder.getCount();
+  }
+
   async selectOne(
     options: {
       alias: string;
