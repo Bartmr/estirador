@@ -261,7 +261,13 @@ export abstract class SimpleEntityRepository<
       queryBuilder = queryBuilder.withDeleted();
     }
 
-    queryBuilder = builderFn(queryBuilder).skip(options.skip).take(limit);
+    queryBuilder = builderFn(queryBuilder);
+
+    queryBuilder = this.joinEagerRelations(queryBuilder, {
+      alias: options.alias,
+    });
+
+    queryBuilder = queryBuilder.skip(options.skip).take(limit);
 
     const results = await queryBuilder.getManyAndCount();
 
@@ -309,6 +315,10 @@ export abstract class SimpleEntityRepository<
 
     queryBuilder = builderFn(queryBuilder);
 
+    queryBuilder = this.joinEagerRelations(queryBuilder, {
+      alias: options.alias,
+    });
+
     return queryBuilder.getOne();
   }
 
@@ -332,6 +342,10 @@ export abstract class SimpleEntityRepository<
     }
 
     queryBuilder = builderFn(queryBuilder);
+
+    queryBuilder = this.joinEagerRelations(queryBuilder, {
+      alias: options.alias,
+    });
 
     return queryBuilder.getMany();
   }
@@ -375,5 +389,35 @@ export abstract class SimpleEntityRepository<
       .whereEntity(entities)
       .returning('*')
       .execute();
+  }
+
+  private joinEagerRelations(
+    queryBuilder: SelectQueryBuilder<Entity>,
+    options: { alias: string },
+  ) {
+    let _queryBuilder = queryBuilder;
+
+    const alreadyJoinedProperties: string[] = [];
+
+    for (const join of _queryBuilder.expressionMap.joinAttributes) {
+      if (join.relation) {
+        alreadyJoinedProperties.push(join.relation.propertyName);
+      }
+    }
+
+    const eagerRelations = this.repository.metadata.eagerRelations;
+
+    for (const relation of eagerRelations) {
+      if (alreadyJoinedProperties.includes(relation.propertyName)) {
+        continue;
+      }
+
+      _queryBuilder = _queryBuilder.leftJoinAndSelect(
+        `${options.alias}.${relation.propertyName}`,
+        relation.propertyName,
+      );
+    }
+
+    return _queryBuilder;
   }
 }
