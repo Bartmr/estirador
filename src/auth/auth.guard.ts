@@ -1,10 +1,17 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { AuditContext } from 'src/internals/auditing/audit-context';
+import { LoggingService } from 'src/internals/logging/logging.service';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 
 export class AuthGuard implements CanActivate {
+  constructor(private loggingService: LoggingService) {}
+
   canActivate(context: ExecutionContext) {
+    if (context.getType() !== 'http') {
+      throw new Error('Unknown execution context');
+    }
+
     const request: AppServerRequest = context
       .switchToHttp()
       .getRequest<AppServerRequest>();
