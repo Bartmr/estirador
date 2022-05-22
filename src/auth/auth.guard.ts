@@ -43,6 +43,10 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext) {
+    if (context.getType() !== 'http') {
+      throw new Error('Unknown execution context');
+    }
+
     const request: AppServerRequest = context
       .switchToHttp()
       .getRequest<AppServerRequest>();
