@@ -12,6 +12,7 @@ import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reduc
 import { RouteComponentProps } from '@reach/router';
 import { RequiredFields } from '@app/shared/internals/utils/types/requirement-types';
 import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
+import { useLocation } from '@reach/router';
 
 type Props = RequiredFields<RouteComponentProps, 'path'> & {
   authenticationRules: AuthenticatedRouteRules;
@@ -19,6 +20,8 @@ type Props = RequiredFields<RouteComponentProps, 'path'> & {
 };
 
 export const AuthenticatedRoute = (props: Props) => {
+  const location = useLocation();
+
   const sessionWrapper = useStoreSelector(
     { mainApi: mainApiReducer },
     (state) => state.mainApi.session,
@@ -51,12 +54,16 @@ export const AuthenticatedRoute = (props: Props) => {
       if (session) {
         const searchParams = new URLSearchParams(window.location.search);
 
-        const next = searchParams.get('next') || '';
+        const next = searchParams.get('next');
 
         return (
           <Redirect
             href={
-              mainApiAuthRule.hrefToRedirectTo || next || INDEX_ROUTE.getHref()
+              mainApiAuthRule.hrefToRedirectTo ||
+              (next && !next.startsWith(location.pathname)
+                ? next
+                : undefined) ||
+              INDEX_ROUTE.getHref()
             }
           />
         );
