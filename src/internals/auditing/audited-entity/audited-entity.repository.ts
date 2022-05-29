@@ -154,4 +154,30 @@ export abstract class AuditedEntityRepository<
       return this.manager.transaction(run);
     }
   }
+
+  protected async remove(
+    entity: Entity,
+    auditContext: AuditContext,
+  ): Promise<void> {
+    return this.removeMany([entity], auditContext);
+  }
+
+  protected async removeMany(
+    entities: Entity[],
+    auditContext: AuditContext,
+  ): Promise<void> {
+    const run = async (manager: EntityManager) => {
+      for (const entity of entities) {
+        this.assignArchiveAttributesToEntity(entity, auditContext);
+      }
+
+      await super.saveMany(entities, auditContext, { manager });
+    };
+
+    if (this.manager.queryRunner?.isTransactionActive) {
+      return run(this.manager);
+    } else {
+      return this.manager.transaction(run);
+    }
+  }
 }
