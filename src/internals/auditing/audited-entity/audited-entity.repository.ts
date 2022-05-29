@@ -17,18 +17,23 @@ export abstract class AuditedEntityRepository<
   protected assignArchiveAttributesToEntity(
     entity: Entity,
     auditContext: AuditContext,
+    options?: { alreadyRemoved?: boolean },
   ) {
     entity.operationId = auditContext.operationId;
     entity.requestPath = auditContext.requestPath;
     entity.requestMethod = auditContext.requestMethod;
     entity.processId = auditContext.processId;
-    entity.deletedAt = new Date();
+
+    if (!options?.alreadyRemoved) {
+      entity.deletedAt = new Date();
+    }
   }
 
   protected async archiveChanges(
     updatedEntities: Entity[],
     auditContext: AuditContext,
     manager: EntityManager,
+    options?: { alreadyRemoved?: boolean },
   ): Promise<void> {
     const toArchive: this['_EntityCreationAttributes'][] = [];
 
@@ -37,7 +42,9 @@ export abstract class AuditedEntityRepository<
         ...updatedEntity,
       };
 
-      this.assignArchiveAttributesToEntity(entityDataClone, auditContext);
+      this.assignArchiveAttributesToEntity(entityDataClone, auditContext, {
+        alreadyRemoved: options?.alreadyRemoved,
+      });
 
       toArchive.push(entityDataClone);
     }
@@ -69,6 +76,7 @@ export abstract class AuditedEntityRepository<
         _entityLikeObject.id = undefined;
         _entityLikeObject.instanceId = undefined;
         _entityLikeObject.deletedAt = undefined;
+        _entityLikeObject.recoveredAt = undefined;
         _entityLikeObject.operationId = undefined;
         _entityLikeObject.requestPath = undefined;
         _entityLikeObject.requestMethod = undefined;
@@ -167,11 +175,55 @@ export abstract class AuditedEntityRepository<
     auditContext: AuditContext,
   ): Promise<void> {
     const run = async (manager: EntityManager) => {
+      const toRemove: Entity[] = [];
+
       for (const entity of entities) {
-        this.assignArchiveAttributesToEntity(entity, auditContext);
+        if (!entity.deletedAt) {
+          entity.deletedAt = new Date();
+          entity.recoveredAt = null;
+
+          toRemove.push(entity);
+        }
       }
 
-      await super.saveMany(entities, auditContext, { manager });
+      await super.saveMany(toRemove, auditContext, { manager });
+      await this.archiveChanges(toRemove, auditContext, manager, {
+        alreadyRemoved: true,
+      });
+    };
+
+    if (this.manager.queryRunner?.isTransactionActive) {
+      return run(this.manager);
+    } else {
+      return this.manager.transaction(run);
+    }
+  }
+
+  protected async recover(
+    entity: Entity,
+    auditContext: AuditContext,
+  ): Promise<void> {
+    return this.recoverMany([entity], auditContext);
+  }
+
+  protected async recoverMany(
+    entities: Entity[],
+    auditContext: AuditContext,
+  ): Promise<void> {
+    const run = async (manager: EntityManager) => {
+      const toRecover: Entity[] = [];
+
+      for (const entity of entities) {
+        if (entity.deletedAt) {
+          entity.deletedAt = null;
+          entity.recoveredAt = new Date();
+
+          toRecover.push(entity);
+        }
+      }
+
+      await super.saveMany(toRecover, auditContext, { manager });
+      await this.archiveChanges(toRecover, auditContext, manager);
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {
