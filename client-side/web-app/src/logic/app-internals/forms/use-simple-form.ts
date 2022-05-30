@@ -86,25 +86,37 @@ export function useSimpleForm<
           if (typeof formMessagesTree === 'object') {
             replaceTotalErrors(formMessagesTree);
 
-            const fieldErrors = formMessagesTree[name as string];
+            replaceVisibleErrors(
+              Object.keys(formMessagesTree).reduce<{
+                [K in keyof FormValue]?: { [key: string]: string };
+              }>((formErrors, _key) => {
+                const key = _key as keyof FormValue;
 
-            if (fieldErrors) {
-              replaceVisibleErrors((e) => ({
-                ...e,
-                [name]: fieldErrors
-                  .filter((c): c is string => typeof c === 'string')
-                  .reduce<{ [key: string]: string }>((acc, fieldError) => {
-                    acc[fieldError] = fieldError;
+                const fieldMesssagesTree = formMessagesTree[key as string];
 
-                    return acc;
-                  }, {}),
-              }));
-            }
+                if (fieldMesssagesTree && (key === name || dirtyFields[key])) {
+                  formErrors[key] = fieldMesssagesTree
+                    .filter((c): c is string => typeof c === 'string')
+                    .reduce<{ [key: string]: string }>(
+                      (fieldErrors, message) => {
+                        fieldErrors[message] = message;
+                        return fieldErrors;
+                      },
+                      {},
+                    );
+                }
+
+                return formErrors;
+              }, {}),
+            );
           } else {
             throw new Error(
               "Cannot have form errors coming from the form root object. Only it's fields.",
             );
           }
+        } else {
+          replaceVisibleErrors({});
+          replaceTotalErrors({});
         }
       };
 
@@ -113,7 +125,10 @@ export function useSimpleForm<
           window.clearTimeout(debounceTimeout);
         }
 
-        const newDebouceTimeout = window.setTimeout(validate, debounceTimeout);
+        const newDebouceTimeout = window.setTimeout(
+          validate,
+          args.debounceMilliseconds,
+        );
         replaceDebounceTimeout(newDebouceTimeout);
       } else {
         validate();
