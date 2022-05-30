@@ -193,6 +193,18 @@ export abstract class SimpleEntityRepository<
         ] = undefined;
       }
 
+      if (this.repository.metadata.updateDateColumn) {
+        _entityLikeObject[
+          this.repository.metadata.updateDateColumn.propertyName as keyof Entity
+        ] = undefined;
+      }
+
+      if (this.repository.metadata.deleteDateColumn) {
+        _entityLikeObject[
+          this.repository.metadata.deleteDateColumn.propertyName as keyof Entity
+        ] = undefined;
+      }
+
       const entity = new EntityClass();
 
       for (const _k of Object.keys(_entityLikeObject)) {

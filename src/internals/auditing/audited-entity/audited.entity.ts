@@ -15,6 +15,9 @@ export abstract class AuditedEntity extends SimpleEntity {
   @DeleteDateColumn()
   deletedAt!: Date | null;
 
+  @Column('timestamp')
+  recoveredAt!: Date | null;
+
   @Column('text', { nullable: true })
   operationId!: string | null;
 
