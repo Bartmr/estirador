@@ -66,6 +66,7 @@
     "lint": "eslint --ext .ts,.tsx --max-warnings 0 .",
     "lint:fix": "eslint --ext .ts,.tsx --max-warnings 0 --fix .",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
-    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint"
+    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint",
+    "integrity-check:fast": "IS_INTEGRITY_CHECK=true npm run build && npm run typecheck && npm run lint"
   }
 }

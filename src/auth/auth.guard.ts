@@ -5,6 +5,10 @@ import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
 
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext) {
+    if (context.getType() !== 'http') {
+      throw new Error('Unknown execution context');
+    }
+
     const request: AppServerRequest = context
       .switchToHttp()
       .getRequest<AppServerRequest>();

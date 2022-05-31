@@ -31,6 +31,14 @@ export class AllExceptionsFilter implements ExceptionFilter<unknown> {
   }
 
   catch(exception: unknown, host: ArgumentsHost): void {
+    if (host.getType() !== 'http') {
+      this.loggingService.logError(
+        'all-exceptions-filter:unknown-execution-context',
+        new Error(),
+      );
+      return;
+    }
+
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<AppServerRequest>();
     const response = ctx.getResponse<AppServerResponse>();

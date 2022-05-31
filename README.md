@@ -160,6 +160,7 @@ tunnels:
   - BREAKING-CHANGES.md
     - add warning for inherited projects to delete all `node_modules` directories and `package-lock.json` files, and then run `npm run install:all`
   - Dockerfile
+  - Dockerfile.dev
   - client-side/web-app/.nvmrc
   - client-side/web-app/Dockerfile
   - client-side/web-app/load-build-environment.js
