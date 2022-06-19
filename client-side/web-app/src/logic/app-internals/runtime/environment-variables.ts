@@ -37,7 +37,10 @@ const schema = object({
     }
   }),
   LOG_DEBUG: boolean(),
-  MAIN_API_URL: string().filled(),
+  MAIN_API_URL: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
