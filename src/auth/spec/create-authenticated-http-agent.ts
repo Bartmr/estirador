@@ -38,9 +38,9 @@ export async function createAuthenticatedHttpAgentForExistingUser(
     .send(existingUserCredentials);
 
   const loginResponseValidationResult = object({
-    authTokenId: string().filled(),
+    authTokenId: string().required(),
     session: object({
-      userId: string().filled(),
+      userId: string().required(),
     }),
   })
     .required()

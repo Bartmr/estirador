@@ -52,7 +52,7 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
 
 - `npm run install:all`
 - Start your project's infrastructure (example: databases, Redis, etc.)
-  - `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
+  - `./start-dev-infrastructure.sh`
 - Seed the development database with sample data by running `NODE_ENV=development npm run seed`
 - Start the server with `npm run start:dev`, or `npm run start:debug` if you want to debug the API in the Chrome Developer Tools
 - To run the web app:

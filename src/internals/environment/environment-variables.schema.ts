@@ -31,13 +31,28 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
     }
   }),
 
-  WEB_APP_ORIGIN: string().filled(),
+  WEB_APP_ORIGIN: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
 
-  DATABASE_HOST: string().filled(),
+  DATABASE_HOST: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
   DATABASE_PORT: number().required(),
-  DATABASE_NAME: string().filled(),
-  DATABASE_USER: string().filled(),
-  DATABASE_PASSWORD: string().filled(),
+  DATABASE_NAME: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  DATABASE_USER: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  DATABASE_PASSWORD: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
 
   AUTH_TOKEN_TTL: number()
     .notNull()
