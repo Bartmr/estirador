@@ -14,7 +14,7 @@ type NextJSProps = {
 
 const FatalErrorFrame = () => {
   return (
-    <div className="vh-100 bg-primary">
+    <div className="vh-100 bg-body">
       <div className="h-75 container d-flex flex-column justify-content-center">
         <div className="text-center">
           <FontAwesomeIcon
