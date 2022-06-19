@@ -13,7 +13,9 @@ class LocalStorage {
     );
 
     if (validationResult.errors) {
-      throw new Error();
+      throw new Error(
+        JSON.stringify(validationResult.messagesTree, undefined, 2),
+      );
     } else {
       return validationResult.value;
     }
