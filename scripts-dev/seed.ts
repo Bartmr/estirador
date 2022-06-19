@@ -9,31 +9,31 @@ import { ProcessContextManager } from 'src/internals/process/process-context-man
 import { ProcessType } from 'src/internals/process/process-context';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 
+if (NODE_ENV !== NodeEnv.Development) {
+  throw new Error('Seed command is only for development');
+}
+
 async function seed() {
-  if (NODE_ENV === NodeEnv.Development) {
-    ProcessContextManager.setContext({
-      type: ProcessType.Script,
-      name: 'scripts-dev:seed',
-      workerId: generateRandomUUID(),
-    });
+  ProcessContextManager.setContext({
+    type: ProcessType.Script,
+    name: 'scripts-dev:seed',
+    workerId: generateRandomUUID(),
+  });
 
-    const { DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS } = await import(
-      'src/internals/databases/typeorm-ormconfig-with-migrations'
-    );
+  const { DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS } = await import(
+    'src/internals/databases/typeorm-ormconfig-with-migrations'
+  );
 
-    const defaultDBConnection = await createConnection({
-      ...DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS,
-      entities: ['src/**/typeorm/*.entity.ts'],
-    });
+  const defaultDBConnection = await createConnection({
+    ...DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS,
+    entities: ['src/**/typeorm/*.entity.ts'],
+  });
 
-    await tearDownDatabases([defaultDBConnection]);
+  await tearDownDatabases([defaultDBConnection]);
 
-    await defaultDBConnection.runMigrations();
+  await defaultDBConnection.runMigrations();
 
-    await Promise.all([defaultDBConnection.close()]);
-  } else {
-    throw new Error('Seed command is only for development');
-  }
+  await Promise.all([defaultDBConnection.close()]);
 }
 
 seed().catch((err) => {
