@@ -45,7 +45,7 @@ app__runJob = (jobName: string, jobFunction: JobFunction) => {
 
     const timeout = setTimeout(() => {
       // eslint-disable-next-line no-console
-      console.error(`${jobName}:hanging-process`);
+      console.error(`ERROR: ${jobName}:hanging-process`);
       process.exit(1);
     }, 30000);
     timeout.unref();
@@ -53,7 +53,7 @@ app__runJob = (jobName: string, jobFunction: JobFunction) => {
 
   runAsync().catch((err) => {
     // eslint-disable-next-line no-console
-    console.error(`${jobName}:setup`, err);
+    console.error(`ERROR: ${jobName}:setup`, err);
     process.exit(1);
   });
 };

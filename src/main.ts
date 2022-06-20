@@ -47,9 +47,11 @@ async function bootstrap() {
   const app = await createApp();
 
   const shutdown = async () => {
+    loggingService.logInfo('shutdown-triggered', 'Shutdown was triggered');
+
     const timeout = setTimeout(() => {
       // eslint-disable-next-line no-console
-      console.error(`hanging-process`);
+      console.error('\n\n !!! HANGING PROCESS !!! \n\n');
       process.exit(1);
     }, 30000);
     timeout.unref();
