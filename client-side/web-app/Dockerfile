@@ -26,6 +26,7 @@ COPY ./client-side/web-app/.babelrc \
   ./client-side/web-app/gatsby-*.js \
   ./client-side/web-app/tsconfig.json \
   ./client-side/web-app/tsconfig.typecheck.json \
+  ./client-side/web-app/shared-libraries.sh \
   /usr/src/app/client-side/web-app/
 
 ARG HOST_URL
