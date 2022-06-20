@@ -56,7 +56,7 @@
   "scripts": {
     "clean": "rimraf dist .next",
     "build": "next build",
-    "build:ci": "rm -rf dist && mkdir -p dist/libs/shared/src && cp -f -R ../../libs/shared/src dist/libs/shared && CI=true npm run build",
+    "build:ci": "./shared-libraries.sh && CI=true npm run build",
     "build:profiling": "next build --profile",
     "develop": "next dev -p 8000",
     "debug": "NODE_OPTIONS='--inspect' next dev",
