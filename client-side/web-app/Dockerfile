@@ -25,6 +25,7 @@ COPY ./client-side/web-app/.nvmrc \
   ./client-side/web-app/next.config.js \
   ./client-side/web-app/tsconfig.json \
   ./client-side/web-app/tsconfig.typecheck.json \
+  ./client-side/web-app/shared-libraries.sh \
   /usr/src/app/client-side/web-app/
 
 ARG HOST_URL
