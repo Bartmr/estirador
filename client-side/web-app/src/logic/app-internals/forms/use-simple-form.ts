@@ -65,7 +65,7 @@ export function useSimpleForm<
   const fieldUtils: FieldUtils<FormValue> = {
     hasErrors: (name) => !!visibleErrors[name],
     getErrors: (name) => visibleErrors[name] || {},
-    setValue: (name, value) => {
+    setValue: (name, fieldInput) => {
       if (!dirtyFields[name]) {
         replaceDirtyFields((oldDirtyFields) => ({
           ...oldDirtyFields,
@@ -73,66 +73,73 @@ export function useSimpleForm<
         }));
       }
 
-      replaceValues((oldValues) => ({ ...oldValues, [name]: value }));
+      replaceValues((oldValues) => {
+        const newValues = { ...oldValues, [name]: fieldInput };
 
-      const validate = () => {
-        const validationResult = args.schema.validate(value);
+        const validate = () => {
+          const validationResult = args.schema.validate(newValues);
 
-        if (validationResult.errors) {
-          const messagesTree = validationResult.messagesTree;
+          if (validationResult.errors) {
+            const messagesTree = validationResult.messagesTree;
 
-          const formMessagesTree = messagesTree[0];
+            const formMessagesTree = messagesTree[0];
 
-          if (typeof formMessagesTree === 'object') {
-            replaceTotalErrors(formMessagesTree);
+            if (typeof formMessagesTree === 'object') {
+              replaceTotalErrors(formMessagesTree);
 
-            replaceVisibleErrors(
-              Object.keys(formMessagesTree).reduce<{
-                [K in keyof FormValue]?: { [key: string]: string };
-              }>((formErrors, _key) => {
-                const key = _key as keyof FormValue;
+              replaceVisibleErrors(
+                Object.keys(formMessagesTree).reduce<{
+                  [K in keyof FormValue]?: { [key: string]: string };
+                }>((formErrors, _key) => {
+                  const key = _key as keyof FormValue;
 
-                const fieldMesssagesTree = formMessagesTree[key as string];
+                  const fieldMesssagesTree = formMessagesTree[key as string];
 
-                if (fieldMesssagesTree && (key === name || dirtyFields[key])) {
-                  formErrors[key] = fieldMesssagesTree
-                    .filter((c): c is string => typeof c === 'string')
-                    .reduce<{ [key: string]: string }>(
-                      (fieldErrors, message) => {
-                        fieldErrors[message] = message;
-                        return fieldErrors;
-                      },
-                      {},
-                    );
-                }
+                  if (
+                    fieldMesssagesTree &&
+                    (key === name || dirtyFields[key])
+                  ) {
+                    formErrors[key] = fieldMesssagesTree
+                      .filter((c): c is string => typeof c === 'string')
+                      .reduce<{ [key: string]: string }>(
+                        (fieldErrors, message) => {
+                          fieldErrors[message] = message;
+                          return fieldErrors;
+                        },
+                        {},
+                      );
+                  }
 
-                return formErrors;
-              }, {}),
-            );
+                  return formErrors;
+                }, {}),
+              );
+            } else {
+              throw new Error(
+                "Cannot have form errors coming from the form root object. Only it's fields.",
+              );
+            }
           } else {
-            throw new Error(
-              "Cannot have form errors coming from the form root object. Only it's fields.",
-            );
+            replaceVisibleErrors({});
+            replaceTotalErrors({});
           }
+        };
+
+        if (args.debounceMilliseconds != null) {
+          if (debounceTimeout != null) {
+            window.clearTimeout(debounceTimeout);
+          }
+
+          const newDebouceTimeout = window.setTimeout(
+            validate,
+            args.debounceMilliseconds,
+          );
+          replaceDebounceTimeout(newDebouceTimeout);
         } else {
-          replaceVisibleErrors({});
-          replaceTotalErrors({});
-        }
-      };
-
-      if (args.debounceMilliseconds != null) {
-        if (debounceTimeout != null) {
-          window.clearTimeout(debounceTimeout);
+          validate();
         }
 
-        const newDebouceTimeout = window.setTimeout(
-          validate,
-          args.debounceMilliseconds,
-        );
-        replaceDebounceTimeout(newDebouceTimeout);
-      } else {
-        validate();
-      }
+        return newValues;
+      });
     },
     isDirty: (name) => !!dirtyFields[name],
   };
