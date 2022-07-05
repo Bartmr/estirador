@@ -1,8 +1,8 @@
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { SerializableJSONData, JSONData } from './json-types';
+import { SerializableJSONData } from './json-types';
 
 class SessionStorage {
-  getItem<S extends Schema<JSONData | undefined>>(
+  getItem<S extends Schema<SerializableJSONData | undefined>>(
     schema: S,
     key: string,
   ): InferType<S> {
