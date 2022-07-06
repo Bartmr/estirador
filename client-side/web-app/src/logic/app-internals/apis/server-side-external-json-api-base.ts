@@ -1,6 +1,5 @@
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import {
-  JSONData,
   JSONPrimitive,
   SerializableJSONData,
 } from '@app/shared/internals/transports/json-types';
@@ -10,7 +9,7 @@ import { Logger } from 'src/logic/app-internals/logging/logger';
 
 type JSONResponseSchema = Schema<{
   status: number;
-  body?: JSONData | undefined;
+  body?: unknown;
 }>;
 
 type JsonHEADResponseSchema = Schema<{
