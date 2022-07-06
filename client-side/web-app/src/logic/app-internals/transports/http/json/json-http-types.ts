@@ -6,14 +6,14 @@ export type JsonHttpResponseBase = {
   body: JSONData | undefined;
 };
 
-export type JsonHttpResponse<R extends JsonHttpResponseBase> = Readonly<
+export type JsonHttpResponse<R> =
   | {
       failure?: undefined;
       logAndReturnAsUnexpected: () => {
         failure: TransportFailure.UnexpectedResponse;
         status: number;
       };
-      response: Readonly<R>;
+      response: R;
       headers: Headers;
     }
   | {
@@ -22,8 +22,7 @@ export type JsonHttpResponse<R extends JsonHttpResponseBase> = Readonly<
   | {
       failure: TransportFailure.UnexpectedResponse;
       status: number;
-    }
->;
+    };
 
 export type JsonHttpHEADResponse = JsonHttpResponse<{
   status: number;
