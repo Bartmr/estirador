@@ -54,7 +54,7 @@
     "integrity-check:web-app:fast": "cd client-side/web-app && npm run integrity-check:fast",
     "integrity-check:all:fast": "concurrently \"npm run integrity-check:api:fast\" \"npm run integrity-check:web-app:fast\" -n \"api,web-app\"",
     "pre-merge-commit": "npm run install:all && npm run integrity-check:all",
-    "update-all-dependencies": "npm-check-updates --packageFile **/package.json --reject @types/node @nestjs/typeorm typeorm -u && npm run reset-all-dependencies",
+    "update-all-dependencies": "npm-check-updates --upgrade && npm run reset-all-dependencies",
     "reset-all-dependencies": "rimraf **/package-lock.json **/node_modules && npm run install:all",
     "reset-repository": "git clean -Xdf",
     "nest": "nest",
