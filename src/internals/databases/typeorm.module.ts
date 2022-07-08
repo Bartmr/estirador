@@ -26,22 +26,21 @@ const connectionManager: ConnectionManager = new ConnectionManager();
 
 export class TypeormConnectionsModule implements OnApplicationShutdown {
   static forRoot(allConnectionOptions: ConnectionOptions[]): DynamicModule {
-    for (const options of allConnectionOptions) {
-      const nameValidation = equals(getEnumValues(TypeormConnectionName))
-        .notNull()
-        .validate(options.name);
-
-      if (nameValidation.errors) {
-        throw new Error();
-      }
-    }
+    const connectionNameSchema = equals(getEnumValues(TypeormConnectionName))
+      .notNull()
+      .transform((v) => v ?? TypeormConnectionName.Default);
 
     return {
       module: TypeormConnectionsModule,
       global: true,
       providers: allConnectionOptions.map((options) => {
-        const connectionName = (options.name ??
-          TypeormConnectionName.Default) as TypeormConnectionName;
+        const connectionNameRes = connectionNameSchema.validate(options.name);
+
+        if (connectionNameRes.errors) {
+          throw new Error();
+        }
+
+        const connectionName = connectionNameRes.value;
 
         return {
           provide: getTypeormConnectionProviderToken(connectionName),
@@ -59,8 +58,13 @@ export class TypeormConnectionsModule implements OnApplicationShutdown {
         };
       }),
       exports: allConnectionOptions.map((options) => {
-        const connectionName = (options.name ??
-          TypeormConnectionName.Default) as TypeormConnectionName;
+        const connectionNameRes = connectionNameSchema.validate(options.name);
+
+        if (connectionNameRes.errors) {
+          throw new Error();
+        }
+
+        const connectionName = connectionNameRes.value;
 
         return getTypeormConnectionProviderToken(connectionName);
       }),
