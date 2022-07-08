@@ -47,7 +47,11 @@ async function bootstrap() {
   const app = await createApp();
 
   const shutdown = async () => {
-    loggingService.logInfo('shutdown-triggered', 'Shutdown was triggered');
+    process.removeListener('SIGTERM', shutdownHandler);
+    process.removeListener('SIGINT', shutdownHandler);
+    if (listenToSIGUSR2) {
+      process.removeListener('SIGUSR2', shutdownHandler);
+    }
 
     const timeout = setTimeout(() => {
       // eslint-disable-next-line no-console
@@ -56,11 +60,12 @@ async function bootstrap() {
     }, 30000);
     timeout.unref();
 
-    process.removeListener('SIGTERM', shutdownHandler);
-    process.removeListener('SIGINT', shutdownHandler);
-    if (listenToSIGUSR2) {
-      process.removeListener('SIGUSR2', shutdownHandler);
-    }
+    process.on('exit', (code) => {
+      // eslint-disable-next-line no-console
+      console.info(`About to exit with code: ${code}`);
+    });
+
+    loggingService.logInfo('shutdown-triggered', 'Shutdown was triggered');
 
     await app.close();
   };
