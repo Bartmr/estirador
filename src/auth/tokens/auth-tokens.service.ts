@@ -1,15 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import { User } from 'src/users/typeorm/user.entity';
 import { AuthTokensRepository } from './auth-token.repository';
 import { Connection, EntityManager } from 'typeorm';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 @Injectable()
 export class AuthTokensService {
   private tokensRepository: AuthTokensRepository;
 
-  constructor(@InjectConnection() connection: Connection) {
+  constructor(@InjectTypeormConnection() connection: Connection) {
     this.tokensRepository =
       connection.getCustomRepository(AuthTokensRepository);
   }

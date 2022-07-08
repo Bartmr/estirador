@@ -1,6 +1,5 @@
 import { LoggerService, ModuleMetadata } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CROSS_CUTTING_PROVIDERS } from 'src/cross-cutting-providers';
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from 'src/internals/databases/default-db-typeorm-conn-opts';
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';
@@ -10,6 +9,7 @@ import { createLoggingTestService } from './logging-test-service';
 import { TestApp } from './test-app-types';
 import cookieParser from 'cookie-parser';
 import { AuthModule } from 'src/auth/auth.module';
+import { TypeormConnectionsModule } from 'src/internals/databases/typeorm.module';
 
 if (NODE_ENV !== NodeEnv.Test) {
   throw new Error();
@@ -44,10 +44,7 @@ export async function createAndInitializeTestApp(args: {
   const moduleRef = await Test.createTestingModule({
     imports: [
       LoggingModule.forRoot(() => loggingTestService),
-      TypeOrmModule.forRoot({
-        ...DEFAULT_DB_TYPEORM_CONN_OPTS,
-        autoLoadEntities: true,
-      }),
+      TypeormConnectionsModule.forRoot([DEFAULT_DB_TYPEORM_CONN_OPTS]),
       AuthModule,
       ...args.imports,
     ],
