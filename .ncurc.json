@@ -1,0 +1,4 @@
+{
+  "packageFile": "**/package.json",
+  "reject": ["@types/node", "@nestjs/typeorm", "typeorm"]
+}

@@ -7,8 +7,12 @@ import { Schema, InferType } from 'not-me/lib/schemas/schema';
 import {
   JsonHttpHEADResponse,
   JsonHttpResponse,
-  JsonHttpResponseBase,
 } from '../transports/http/json/json-http-types';
+
+type JsonHttpResponseBase = {
+  status: number;
+  body?: unknown;
+};
 
 export class ExternalJSONApi {
   private jsonApi: JSONApiBase;
@@ -38,7 +42,10 @@ export class ExternalJSONApi {
       if (validationResult.errors) {
         return res.logAndReturnAsUnexpected();
       } else {
-        return res;
+        return {
+          ...res,
+          response: validationResult.value as I,
+        };
       }
     }
   }
@@ -65,7 +72,10 @@ export class ExternalJSONApi {
       if (validationResult.errors) {
         return res.logAndReturnAsUnexpected();
       } else {
-        return res;
+        return {
+          ...res,
+          response: validationResult.value as I,
+        };
       }
     }
   }
@@ -92,7 +102,10 @@ export class ExternalJSONApi {
       if (validationResult.errors) {
         return res.logAndReturnAsUnexpected();
       } else {
-        return res;
+        return {
+          ...res,
+          response: validationResult.value as I,
+        };
       }
     }
   }
@@ -119,7 +132,10 @@ export class ExternalJSONApi {
       if (validationResult.errors) {
         return res.logAndReturnAsUnexpected();
       } else {
-        return res;
+        return {
+          ...res,
+          response: validationResult.value as I,
+        };
       }
     }
   }
@@ -145,7 +161,10 @@ export class ExternalJSONApi {
       if (validationResult.errors) {
         return res.logAndReturnAsUnexpected();
       } else {
-        return res;
+        return {
+          ...res,
+          response: validationResult.value as I,
+        };
       }
     }
   }

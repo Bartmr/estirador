@@ -14,18 +14,16 @@ export type JSONData = JSONPrimitive | JSONObject | JSONArray;
 export type SerializableJSONObject = {
   [x: string]:
     | undefined
-    | JSONPrimitive
+    | SerializableJSONValue
     | SerializableJSONObject
-    | SerializableJSONArray
-    | Date;
+    | SerializableJSONArray;
 };
 
 export type SerializableJSONArray = Array<
   | undefined
-  | JSONPrimitive
+  | SerializableJSONValue
   | SerializableJSONObject
   | SerializableJSONArray
-  | Date
 >;
 
 export type SerializableJSONValue = Date | JSONPrimitive;

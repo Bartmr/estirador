@@ -1,11 +1,8 @@
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { SerializableJSONData, JSONData } from './json-types';
+import { SerializableJSONData } from './json-types';
 
 class SessionStorage {
-  getItem<S extends Schema<JSONData | undefined>>(
-    schema: S,
-    key: string,
-  ): InferType<S> {
+  getItem<S extends Schema<unknown>>(schema: S, key: string): InferType<S> {
     const data = window.localStorage.getItem(key);
 
     const validationResult = schema.validate(
