@@ -51,7 +51,7 @@ async function bootstrap() {
 
     const timeout = setTimeout(() => {
       // eslint-disable-next-line no-console
-      console.error(`hanging-process`);
+      console.error('\n\n !!! HANGING PROCESS !!! \n\n');
       process.exit(1);
     }, 30000);
     timeout.unref();

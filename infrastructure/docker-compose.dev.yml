@@ -1,16 +1,20 @@
 version: '3.7'
 
 services:
-  postgres_estirador-ecommerce-playground:
-    image: postgres
+  postgres_estirador:
+    build:
+      context: postgres
+      dockerfile: ./Dockerfile
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
-  postgres_test_estirador-ecommerce-playground:
-    image: postgres
+  postgres_test_estirador:
+    build:
+      context: postgres
+      dockerfile: ./Dockerfile
     environment:
       - POSTGRES_DB=postgres_test
       - POSTGRES_USER=postgres

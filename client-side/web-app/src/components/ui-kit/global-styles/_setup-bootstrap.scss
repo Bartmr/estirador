@@ -16,6 +16,8 @@ $component-active-color: get-contrasting-color-absolute-value(
 
 $card-bg: $body-bg;
 $card-bg-inverted: $body-bg-inverted;
+$card-cap-bg: set-contrasting-color-alpha('body', 0.05);
+$card-border-color: $border-color;
 
 $spinner-width-lg: 3rem;
 $spinner-height-lg: 3rem;
