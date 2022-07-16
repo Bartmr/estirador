@@ -36,7 +36,11 @@ export function LinkAnchor(props: Props) {
       <a
         rel="noopener noreferrer"
         href={props.href}
-        target={props.openExternalLinkInSameTab ? undefined : '_blank'}
+        target={
+          props.href.includes('://') && !props.openExternalLinkInSameTab
+            ? '_blank'
+            : undefined
+        }
         {...commonProps}
       >
         {props.children}

@@ -3,7 +3,7 @@ import { Connection, ConnectionManager } from 'typeorm';
 import { NodeEnv } from '../../environment/node-env.types';
 import { TYPEORM_ORMCONFIG } from '../typeorm-ormconfig';
 import { ConnectionOptions } from 'typeorm';
-import { TYPEORM_DEFAULT_CONNECTION_NAME } from '../databases-constants';
+import { TypeormConnectionName } from '../typeorm-connection-names';
 
 if (NODE_ENV !== NodeEnv.Test) {
   throw new Error();
@@ -11,14 +11,15 @@ if (NODE_ENV !== NodeEnv.Test) {
 
 export async function getTestDatabaseConnection(
   entities?: ConnectionOptions['entities'],
-  connectionName = TYPEORM_DEFAULT_CONNECTION_NAME,
+  connectionName: TypeormConnectionName = TypeormConnectionName.Default,
 ): Promise<Connection> {
   const connectionManager = new ConnectionManager();
 
   const connectionOptions = TYPEORM_ORMCONFIG.find((c) => {
     return (
       c.name === connectionName ||
-      (connectionName === TYPEORM_DEFAULT_CONNECTION_NAME && !c.name)
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      (!c.name && connectionName === TypeormConnectionName.Default)
     );
   });
 

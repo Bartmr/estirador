@@ -3,8 +3,8 @@ import {
   JSONPrimitive,
   SerializableJSONData,
 } from 'libs/shared/src/internals/transports/json-types';
+import { toQueryString } from 'libs/shared/src/internals/urls/to-query-string';
 import axios from 'axios';
-import querystring from 'querystring';
 import { LoggingService } from '../logging/logging.service';
 
 type JSONResponseSchema = Schema<{
@@ -51,7 +51,7 @@ export abstract class JSONApiBase {
     ),
   ): Promise<InferType<S>> {
     const url = `${this.apiUrl}${path}${
-      queryParams ? `?${querystring.encode(queryParams)}` : ''
+      queryParams ? `?${toQueryString(queryParams)}` : ''
     }`;
 
     const response = await axios({

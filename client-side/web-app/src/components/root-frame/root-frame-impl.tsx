@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
@@ -33,7 +38,7 @@ const FatalErrorFrame = () => {
   );
 };
 
-type ErrorBoundaryProps = {};
+type ErrorBoundaryProps = { children: ReactNode };
 type ErrorBoundaryState = { fatalErrorOccurred: boolean };
 class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,

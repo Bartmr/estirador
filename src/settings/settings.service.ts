@@ -1,5 +1,5 @@
-import { InjectConnection } from '@nestjs/typeorm';
 import { AuditContext } from 'src/internals/auditing/audit-context';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 import {
   IncrementalUpdateChanges,
   SimpleEntityRepository,
@@ -18,7 +18,7 @@ class SettingsRepository extends SimpleEntityRepository<Settings> {}
 export class SettingsService {
   private forInstance: string;
 
-  constructor(@InjectConnection() private connection: Connection) {
+  constructor(@InjectTypeormConnection() private connection: Connection) {
     if (NODE_ENV === NodeEnv.Test) {
       this.forInstance = generateUniqueUUID();
     } else {

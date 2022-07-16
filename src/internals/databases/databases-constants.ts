@@ -6,5 +6,3 @@ export const HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS =
 
 export const LOG_DATABASES =
   EnvironmentVariablesService.variables.LOG_DATABASES;
-
-export const TYPEORM_DEFAULT_CONNECTION_NAME = 'default';
