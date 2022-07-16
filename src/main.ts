@@ -14,13 +14,13 @@ type ModuleHotData = {
   closingPromise?: Promise<unknown>;
 };
 
-ProcessContextManager.setContext({
-  type: ProcessType.WebServer,
-  name: ProcessType.WebServer,
-  workerId: generateRandomUUID(),
-});
-
 async function bootstrap() {
+  ProcessContextManager.setContext({
+    type: ProcessType.WebServer,
+    name: ProcessType.WebServer,
+    workerId: generateRandomUUID(),
+  });
+
   const closingPromise = (module.hot?.data as ModuleHotData | undefined)
     ?.closingPromise;
   if (closingPromise) {
@@ -90,7 +90,10 @@ async function bootstrap() {
         process.removeListener('SIGUSR2', shutdownHandler);
       }
 
-      loggingService.logInfo('shutting-down', 'Shutting down');
+      loggingService.logInfo(
+        'disposing-hmr',
+        'Disposing previous hot reloaded instance',
+      );
 
       data.closingPromise = app.close();
     });

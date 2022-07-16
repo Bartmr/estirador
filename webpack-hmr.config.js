@@ -52,6 +52,7 @@ module.exports = function (options, webpack, nodeArgs) {
       new RunScriptWebpackPlugin({
         name: 'main.js',
         nodeArgs,
+        autoRestart: false,
       }),
     ],
   };
