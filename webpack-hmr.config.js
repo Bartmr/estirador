@@ -30,6 +30,9 @@ module.exports = function (options, webpack, nodeArgs) {
     ...options,
     mode: 'development',
     devtool: 'inline-source-map',
+    cache: {
+      type: 'filesystem',
+    },
     entry: {
       main: [HOT_ENTRY, './src/main.ts'],
       ...jobFilesEntryPoints,
