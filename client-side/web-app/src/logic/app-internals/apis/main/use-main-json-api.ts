@@ -5,8 +5,6 @@ import { useLocalStorage } from '../../transports/use-local-storage';
 import { useMainApiSessionLogout } from './session/use-main-api-session-logout';
 import { MainApiAuthTokenIdLocalStorageSchema } from './session/main-api-session-schemas';
 import { EnvironmentVariables } from '../../runtime/environment-variables';
-import { useStoreGetState } from '../../store/use-store-get-state';
-import { mainApiReducer } from './main-api-reducer';
 
 class MainJSONApi extends JSONApiBase {}
 
@@ -22,7 +20,6 @@ export function useMainJSONApi() {
   const jsonHttp = useJSONHttp();
   const localStorage = useLocalStorage();
   const mainApiSessionLogout = useMainApiSessionLogout();
-  const getMainApiState = useStoreGetState({ mainApi: mainApiReducer });
 
   return new MainJSONApi({
     jsonHttp,
@@ -43,11 +40,6 @@ export function useMainJSONApi() {
     },
     onInvalidAuthToken: async () => {
       await mainApiSessionLogout.logout();
-    },
-    hasSession: () => {
-      const sessionData = getMainApiState().mainApi.session.data;
-
-      return !!sessionData;
     },
   });
 }
