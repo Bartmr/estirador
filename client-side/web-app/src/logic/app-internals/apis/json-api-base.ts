@@ -1,6 +1,5 @@
 import { toQueryString } from '@app/shared/internals/urls/to-query-string';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
-import { Logger } from '../logging/logger';
 import { UnparsedRequestHeaders } from '../transports/http/http-types';
 import {
   JsonHttpOutgoingBody,
@@ -28,20 +27,17 @@ export abstract class JSONApiBase {
   private apiUrl: string;
   private getHeaders: () => UnparsedRequestHeaders;
   private onInvalidAuthToken: null | (() => Promise<void>);
-  private hasSession: () => boolean;
 
   constructor(params: {
     jsonHttp: JSONApiBase['jsonHttp'];
     apiUrl: JSONApiBase['apiUrl'];
     getHeaders: JSONApiBase['getHeaders'];
     onInvalidAuthToken: JSONApiBase['onInvalidAuthToken'];
-    hasSession: JSONApiBase['hasSession'];
   }) {
     this.jsonHttp = params.jsonHttp;
     this.apiUrl = params.apiUrl;
     this.getHeaders = params.getHeaders;
     this.onInvalidAuthToken = params.onInvalidAuthToken;
-    this.hasSession = params.hasSession;
   }
 
   private async doRequest<R extends JsonHttpResponseBase>(
@@ -60,8 +56,6 @@ export abstract class JSONApiBase {
           acceptableStatusCodes: readonly R['status'][];
         },
   ): Promise<JsonHttpResponse<R>> {
-    const doesHaveSession = this.hasSession();
-
     const originallyAcceptableStatusCodes = params.acceptableStatusCodes;
 
     const transformedRequestParams = {
@@ -114,17 +108,7 @@ export abstract class JSONApiBase {
         return { failure: TransportFailure.Forbidden };
       }
 
-      if (this.onInvalidAuthToken && res.response.status === 401) {
-        if (!doesHaveSession) {
-          Logger.logError(
-            'tried-to-access-authenticated-endpoint-without-session',
-            new Error(),
-            {
-              url: transformedRequestParams.url,
-            },
-          );
-        }
-
+      if (res.response.status === 401 && this.onInvalidAuthToken) {
         await this.onInvalidAuthToken();
 
         return { failure: TransportFailure.AbortedAndDealtWith };
