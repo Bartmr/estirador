@@ -7,8 +7,6 @@ type QueryParams = {
 export function toQueryString(queryParams: QueryParams) {
   const urlSearchParams = new URLSearchParams();
 
-  let paramsCounter = 0;
-
   for (const key in queryParams) {
     const value = queryParams[key];
 
@@ -21,21 +19,21 @@ export function toQueryString(queryParams: QueryParams) {
               : JSON.stringify(parameter);
 
           urlSearchParams.append(key, serializedParameter);
-          paramsCounter += 1;
         }
       } else {
         const serializedValue =
           typeof value === 'string' ? value : JSON.stringify(value);
 
         urlSearchParams.append(key, serializedValue);
-        paramsCounter += 1;
       }
     }
   }
 
-  if (paramsCounter === 0) {
-    return '';
+  const serializedParams = urlSearchParams.toString();
+
+  if (serializedParams) {
+    return `?${serializedParams}`;
   } else {
-    return `?${urlSearchParams.toString()}`;
+    return '';
   }
 }
