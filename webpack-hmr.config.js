@@ -29,7 +29,7 @@ module.exports = function (options, webpack, nodeArgs) {
   return {
     ...options,
     mode: 'development',
-    devtool: 'inline-source-map',
+    devtool: 'cheap-source-map',
     cache: {
       type: 'filesystem',
     },
