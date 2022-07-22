@@ -22,6 +22,5 @@ export function useMainJSONApi() {
       return {};
     },
     onInvalidAuthToken: null,
-    hasSession: () => false,
   });
 }

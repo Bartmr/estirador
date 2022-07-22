@@ -4,8 +4,7 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
+      "name": "Attach to debugger",
       "port": 9229
     }
   ]
