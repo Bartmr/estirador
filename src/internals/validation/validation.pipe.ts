@@ -5,11 +5,11 @@ import {
   ArgumentMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { throwError } from 'not-me/lib/utils/throw-error';
 import {
   SupportedValidationSchema,
   VALIDATION_SCHEMA_KEY,
 } from 'libs/shared/src/internals/validation/validation-schema.decorator';
+import { throwError } from '../utils/throw-error';
 
 @Injectable()
 export class AppValidationPipe implements PipeTransform<unknown> {

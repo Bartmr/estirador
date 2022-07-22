@@ -71,7 +71,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
     "glob": "^8.0.3",
-    "not-me": "^5.1.0",
+    "not-me": "^5.2.1",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
