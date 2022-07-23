@@ -12,6 +12,12 @@ import {
   pathExists,
   saveGraphQLSchemaToFile,
 } from './gatsby-build-utils';
+import type webpack from 'webpack';
+
+type WebpackConfig = webpack.Configuration;
+type MiniCssExtractPlugin = webpack.WebpackPluginInstance & {
+  options?: { experimentalUseImportModule?: boolean };
+};
 
 const exec = promisify(childProcess.exec);
 
@@ -21,6 +27,8 @@ const exec = promisify(childProcess.exec);
 export async function onCreateWebpackConfig({
   store,
   actions,
+  getConfig,
+  stage,
 }: CreateWebpackConfigArgs) {
   // eslint-disable-next-line node/no-process-env
   if (process.env['NODE_ENV'] === 'development') {
@@ -42,28 +50,48 @@ export async function onCreateWebpackConfig({
     await exec(GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND);
   }
 
-  actions.setWebpackConfig({
-    resolve: {
-      alias: {
-        /*
-          Absolute imports should only be allowed to import from inside the `src` directory.
+  const config = getConfig() as WebpackConfig;
 
-          This is to avoid build configurations
-          and code with sensible information used at build time
-          from being bundled with the client-side code.
+  config.resolve = {
+    ...config.resolve,
+    alias: {
+      ...config.resolve?.alias,
+      /*
+        Absolute imports should only be allowed to import from inside the `src` directory.
 
-          That's why we use a `src` alias instead of
-          pointing the imports root directly to the root of the project.
-        */
-        src: path.join(process.cwd(), `src`),
-        typeorm: path.join(
-          process.cwd(),
-          '../../node_modules/typeorm/typeorm-model-shim.js',
-        ),
-        '@app/shared': EnvironmentVariables.CI
-          ? path.join(process.cwd(), 'dist/libs/shared/src')
-          : path.join(process.cwd(), '../../libs/shared/src'),
-      },
+        This is to avoid build configurations
+        and code with sensible information used at build time
+        from being bundled with the client-side code.
+
+        That's why we use a `src` alias instead of
+        pointing the imports root directly to the root of the project.
+      */
+      src: path.join(process.cwd(), `src`),
+      typeorm: path.join(
+        process.cwd(),
+        '../../node_modules/typeorm/typeorm-model-shim.js',
+      ),
+      '@app/shared': EnvironmentVariables.CI
+        ? path.join(process.cwd(), 'dist/libs/shared/src')
+        : path.join(process.cwd(), '../../libs/shared/src'),
     },
-  });
+  };
+
+  if (stage === 'build-javascript' || stage === 'develop') {
+    const miniCssExtractPlugin = config.plugins?.find(
+      (plugin): plugin is MiniCssExtractPlugin =>
+        plugin.constructor.name === 'MiniCssExtractPlugin',
+    );
+
+    if (!miniCssExtractPlugin) {
+      throw new Error();
+    } else {
+      if (!miniCssExtractPlugin.options) {
+        throw new Error();
+      }
+      miniCssExtractPlugin.options.experimentalUseImportModule = true;
+    }
+  }
+
+  actions.replaceWebpackConfig(config);
 }
