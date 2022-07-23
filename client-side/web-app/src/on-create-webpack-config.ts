@@ -19,17 +19,6 @@ const exec = promisify(childProcess.exec);
 //
 //
 
-const isMiniCssExtractPluginInstance = (
-  plugin: webpack.WebpackPluginInstance,
-): plugin is webpack.WebpackPluginInstance & {
-  options?: { experimentalUseImportModule?: boolean };
-} => {
-  return plugin.constructor.name === 'MiniCssExtractPlugin';
-};
-
-//
-//
-
 export async function onCreateWebpackConfig({
   store,
   actions,
@@ -57,7 +46,7 @@ export async function onCreateWebpackConfig({
 
   const config = getConfig() as webpack.Configuration;
 
-  actions.replaceWebpackConfig({
+  const newConfig: webpack.Configuration = {
     ...config,
     resolve: {
       ...config.resolve,
@@ -83,15 +72,7 @@ export async function onCreateWebpackConfig({
           : path.join(process.cwd(), '../../libs/shared/src'),
       },
     },
-    plugins: config.plugins?.map((plugin) => {
-      if (isMiniCssExtractPluginInstance(plugin)) {
-        plugin.options = {
-          ...plugin.options,
-          experimentalUseImportModule: true,
-        };
-      }
+  };
 
-      return plugin;
-    }),
-  });
+  actions.replaceWebpackConfig(newConfig);
 }
