@@ -1,4 +1,4 @@
 {
   "packageFile": "**/package.json",
-  "reject": ["@types/node", "typeorm"]
+  "reject": ["@types/node", "typeorm", "bootstrap", "react-bootstrap"]
 }
