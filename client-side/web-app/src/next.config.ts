@@ -2,26 +2,26 @@ import path from 'path';
 
 import { NextConfig } from 'next';
 import { EnvironmentVariables } from './logic/app-internals/runtime/environment-variables';
+import type webpack from 'webpack';
 
 export const NEXT_CONFIG: NextConfig = {
-  webpack: (config: {
-    resolve: {
-      alias: {
-        [key: string]: string;
-      };
+  webpack: (config: webpack.Configuration): webpack.Configuration => {
+    return {
+      ...config,
+      resolve: {
+        ...config.resolve,
+        alias: {
+          ...config.resolve?.alias,
+          typeorm: path.join(
+            process.cwd(),
+            '../../node_modules/typeorm/typeorm-model-shim.js',
+          ),
+          '@app/shared': EnvironmentVariables.CI
+            ? path.join(process.cwd(), 'dist/libs/shared/src')
+            : path.join(process.cwd(), '../../libs/shared/src'),
+        },
+      },
     };
-  }) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      typeorm: path.join(
-        process.cwd(),
-        '../../node_modules/typeorm/typeorm-model-shim.js',
-      ),
-      '@app/shared': EnvironmentVariables.CI
-        ? path.join(process.cwd(), 'dist/libs/shared/src')
-        : path.join(process.cwd(), '../../libs/shared/src'),
-    };
-    return config;
   },
   sassOptions: {
     includePaths: [
