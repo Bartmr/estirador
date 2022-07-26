@@ -8,7 +8,8 @@ type Props = {
   className?: string;
   onClick?: (event: SyntheticEvent<HTMLAnchorElement>) => void;
   style?: React.CSSProperties;
-  openExternalLinkInSameTab?: boolean;
+  openInNewTab?: boolean;
+  asRegularAnchorTag?: boolean;
 };
 
 export function LinkAnchor(props: Props) {
@@ -31,13 +32,17 @@ export function LinkAnchor(props: Props) {
       : {}),
   };
 
-  if (props.href.includes('://')) {
+  if (
+    props.href.includes('://') ||
+    props.asRegularAnchorTag ||
+    props.openInNewTab
+  ) {
     return (
       <a
         rel="noopener noreferrer"
         href={props.href}
         target={
-          props.href.includes('://') && !props.openExternalLinkInSameTab
+          props.href.includes('://') || props.openInNewTab
             ? '_blank'
             : undefined
         }
