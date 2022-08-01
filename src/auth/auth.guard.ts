@@ -1,7 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
-  Inject,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -13,8 +13,9 @@ import {
   PUBLIC_ROUTE_METADATA_KEY,
 } from './public-route.decorator';
 
+@Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(@Inject(Reflector) private reflector: Reflector) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<true> {
     if (context.getType() !== 'http') {
