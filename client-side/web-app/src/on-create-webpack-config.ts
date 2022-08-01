@@ -12,6 +12,7 @@ import {
   pathExists,
   saveGraphQLSchemaToFile,
 } from './gatsby-build-utils';
+import type webpack from 'webpack';
 
 const exec = promisify(childProcess.exec);
 
@@ -21,6 +22,7 @@ const exec = promisify(childProcess.exec);
 export async function onCreateWebpackConfig({
   store,
   actions,
+  getConfig,
 }: CreateWebpackConfigArgs) {
   // eslint-disable-next-line node/no-process-env
   if (process.env['NODE_ENV'] === 'development') {
@@ -42,16 +44,21 @@ export async function onCreateWebpackConfig({
     await exec(GRAPHQL_TYPESCRIPT_GENERATOR_COMMAND);
   }
 
-  actions.setWebpackConfig({
+  const config = getConfig() as webpack.Configuration;
+
+  const newConfig: webpack.Configuration = {
+    ...config,
     resolve: {
+      ...config.resolve,
       alias: {
+        ...config.resolve?.alias,
         /*
           Absolute imports should only be allowed to import from inside the `src` directory.
-
+  
           This is to avoid build configurations
           and code with sensible information used at build time
           from being bundled with the client-side code.
-
+  
           That's why we use a `src` alias instead of
           pointing the imports root directly to the root of the project.
         */
@@ -65,5 +72,7 @@ export async function onCreateWebpackConfig({
           : path.join(process.cwd(), '../../libs/shared/src'),
       },
     },
-  });
+  };
+
+  actions.replaceWebpackConfig(newConfig);
 }
