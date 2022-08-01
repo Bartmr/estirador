@@ -42,7 +42,7 @@ export class AuthGuard implements CanActivate {
     private tokensService: AuthTokensService,
   ) {}
 
-  async canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext): Promise<true> {
     if (context.getType() !== 'http') {
       throw new Error('Unknown execution context');
     }
