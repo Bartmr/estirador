@@ -3,7 +3,6 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -39,7 +38,7 @@ const authTokenKeySchema = uuid().required();
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    @Inject(Reflector) private reflector: Reflector,
+    private reflector: Reflector,
     private tokensService: AuthTokensService,
   ) {}
 
