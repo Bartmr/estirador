@@ -4,8 +4,8 @@ import {
   SerializableJSONData,
   SerializableJSONObject,
 } from '@app/shared/internals/transports/json-types';
+import { toQueryString } from '@app/shared/internals/urls/to-query-string';
 import axios from 'axios';
-import querystring from 'querystring';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 
 export type JSONResponse = {
@@ -55,7 +55,7 @@ export abstract class ServerSideJSONApiBase {
       }
   )): Promise<S> {
     const url = `${this.apiUrl}${path}${
-      queryParams ? `?${querystring.encode(queryParams)}` : ''
+      queryParams ? toQueryString(queryParams) : ''
     }`;
     const response = await axios({
       method,

@@ -4,8 +4,8 @@ import {
   SerializableJSONData,
 } from '@app/shared/internals/transports/json-types';
 import axios from 'axios';
-import querystring from 'querystring';
 import { Logger } from 'src/logic/app-internals/logging/logger';
+import { toQueryString } from '@app/shared/internals/urls/to-query-string';
 
 type JSONResponseSchema = Schema<{
   status: number;
@@ -50,7 +50,7 @@ export abstract class ServerSideExternalJSONApiBase {
     ),
   ): Promise<InferType<S>> {
     const url = `${this.apiUrl}${path}${
-      queryParams ? `?${querystring.encode(queryParams)}` : ''
+      queryParams ? toQueryString(queryParams) : ''
     }`;
     const response = await axios({
       method,
