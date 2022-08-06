@@ -51,7 +51,7 @@ export abstract class JSONApiBase {
     ),
   ): Promise<InferType<S>> {
     const url = `${this.apiUrl}${path}${
-      queryParams ? `?${toQueryString(queryParams)}` : ''
+      queryParams ? toQueryString(queryParams) : ''
     }`;
 
     const response = await axios({

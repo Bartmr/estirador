@@ -1,10 +1,23 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
+import {
+  PublicRouteMetadata,
+  PUBLIC_ROUTE_METADATA_KEY,
+} from './public-route.decorator';
 
+@Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(context: ExecutionContext) {
+  constructor(private reflector: Reflector) {}
+
+  async canActivate(context: ExecutionContext): Promise<true> {
     if (context.getType() !== 'http') {
       throw new Error('Unknown execution context');
     }
@@ -19,6 +32,15 @@ export class AuthGuard implements CanActivate {
       requestMethod: request.method,
     });
 
-    return true;
+    const isPublic = this.reflector.get<PublicRouteMetadata | undefined>(
+      PUBLIC_ROUTE_METADATA_KEY,
+      context.getHandler(),
+    );
+
+    if (isPublic) {
+      return true;
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }
