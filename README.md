@@ -88,7 +88,7 @@ _Typeorm_ entities should always be placed in directories named `typeorm` and ha
 
 ### Creating background jobs:
 
-In order for a background job to run in a separate process and be compiled in a separate file from the server code, just have its file name end in `.job.ts`. The job function should also be wrapped around `prepareJob()` from `src/internals/jobs/run-job`. These wrapper functions do the usual setup like loading environment variables, logging and error handling.
+In order for a background job to run in a separate process and be compiled in a separate file from the server code, just have its file name end in `.job.ts`. The job function should also be wrapped around `app__runJob()` which is a global variable made available by importing `src/internals/jobs/run-job`. **Make sure you import this file on top of other imports. It's a module with side-effects** that does the usual setup like loading environment variables, logging and error handling.
 
 ### Sharing your development environment with others:
 
