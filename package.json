@@ -107,6 +107,7 @@
     "npm-check-updates": "^15.3.4",
     "prettier": "^2.7.1",
     "run-script-webpack-plugin": "^0.1.1",
+    "source-map-loader": "^4.0.0",
     "supertest": "^6.2.4",
     "ts-jest": "^28.0.7",
     "ts-loader": "^9.3.1",
