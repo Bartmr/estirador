@@ -45,7 +45,7 @@
     "test:migrations:debug:watch": "npm run test:migrations:debug -- --watch",
     "test:all:cov": "jest --config ./test/jest-all.js --coverage",
     "test:all:cov:changed": "npm run test:all:cov -- --onlyChanged",
-    "clean:api": "rimraf dist",
+    "clean:api": "rimraf dist node_modules/.cache/webpack",
     "build:api": "npm run clean:api && nest build --path tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "typecheck:declaration-files": "tsc -p tsconfig.declaration-files.json --noEmit",
