@@ -30,6 +30,17 @@ module.exports = function (options, webpack, nodeArgs) {
     ...options,
     mode: 'development',
     devtool: 'cheap-source-map',
+    module: {
+      ...options.module,
+      rules: [
+        ...options.module.rules,
+        {
+          test: /.tsx?$/,
+          enforce: 'pre',
+          use: ['source-map-loader'],
+        },
+      ],
+    },
     cache: {
       type: 'filesystem',
     },
