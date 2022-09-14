@@ -163,12 +163,14 @@ export abstract class SimpleEntityRepository<
     auditContext: AuditContext,
     options?: Partial<{
       manager: EntityManager;
-      _allowMutationsToEntityLikeObjects: boolean;
+      keepCreatedAt?: boolean;
+      keepUpdatedAt?: boolean;
+      keepDeletedAt?: boolean;
     }>,
   ): Promise<Entity[]> {
-    const EntityClass = this.repository.target as ConcreteClass<
-      Partial<Entity>
-    >;
+    const EntityClass = this.repository.target as ConcreteClass<{
+      [key: string]: unknown;
+    }>;
 
     const repository = options?.manager
       ? options.manager.getRepository<Entity>(EntityClass)
@@ -176,42 +178,36 @@ export abstract class SimpleEntityRepository<
 
     const toSave: DeepPartial<Entity>[] = [];
 
+    const keys_to_strip = ['id'];
+
+    if (!options?.keepCreatedAt && this.repository.metadata.createDateColumn) {
+      keys_to_strip.push(
+        this.repository.metadata.createDateColumn.propertyName,
+      );
+    }
+
+    if (!options?.keepUpdatedAt && this.repository.metadata.updateDateColumn) {
+      keys_to_strip.push(
+        this.repository.metadata.updateDateColumn.propertyName,
+      );
+    }
+
+    if (!options?.keepDeletedAt && this.repository.metadata.deleteDateColumn) {
+      keys_to_strip.push(
+        this.repository.metadata.deleteDateColumn.propertyName,
+      );
+    }
+
     for (const entityLikeObject of entityLikeObjects) {
-      const _entityLikeObject = (
-        options?._allowMutationsToEntityLikeObjects
-          ? entityLikeObject
-          : {
-              ...entityLikeObject,
-            }
-      ) as Partial<Entity>;
-
-      _entityLikeObject.id = undefined;
-
-      if (this.repository.metadata.createDateColumn) {
-        _entityLikeObject[
-          this.repository.metadata.createDateColumn.propertyName as keyof Entity
-        ] = undefined;
-      }
-
-      if (this.repository.metadata.updateDateColumn) {
-        _entityLikeObject[
-          this.repository.metadata.updateDateColumn.propertyName as keyof Entity
-        ] = undefined;
-      }
-
-      if (this.repository.metadata.deleteDateColumn) {
-        _entityLikeObject[
-          this.repository.metadata.deleteDateColumn.propertyName as keyof Entity
-        ] = undefined;
-      }
-
       const entity = new EntityClass();
 
-      for (const _k of Object.keys(_entityLikeObject)) {
-        const key = _k as keyof Partial<Entity>;
-        const value = _entityLikeObject[key];
+      for (const key of Object.keys(entityLikeObject)) {
+        if (keys_to_strip.includes(key)) {
+          continue;
+        }
 
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        const value = (entityLikeObject as { [key: string]: unknown })[key];
+
         if (value === undefined) {
           continue;
         }
