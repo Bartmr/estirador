@@ -52,7 +52,9 @@ export abstract class AuditedEntityRepository<
 
     await super.createMany(toArchive, auditContext, {
       manager,
-      _allowMutationsToEntityLikeObjects: true,
+      keepCreatedAt: true,
+      keepUpdatedAt: true,
+      keepDeletedAt: true,
     });
   }
 
@@ -61,48 +63,51 @@ export abstract class AuditedEntityRepository<
     auditContext: AuditContext,
   ): Promise<Entity[]> {
     const run = async (manager: EntityManager) => {
-      const EntityClass = this.repository.target as ConcreteClass<
-        Partial<Entity>
-      >;
+      const EntityClass = this.repository.target as ConcreteClass<{
+        [key: string]: unknown;
+      }>;
 
       const repository = manager.getRepository<Entity>(EntityClass);
 
       const toSave: DeepPartial<Entity>[] = [];
 
+      const keys_to_strip: Array<keyof AuditedEntity> = [
+        'id',
+        'instanceId',
+        'deletedAt',
+        'recoveredAt',
+        'operationId',
+        'requestPath',
+        'requestMethod',
+        'processId',
+        'archivedByUserId',
+        'createdAt',
+        'updatedAt',
+      ];
+
+      const createdAt = new Date();
+
       for (const entityLikeObject of entityLikeObjects) {
-        const _entityLikeObject = {
-          ...entityLikeObject,
-        } as Partial<Entity>;
+        const entity = new EntityClass();
 
-        _entityLikeObject.id = undefined;
-        _entityLikeObject.instanceId = undefined;
-        _entityLikeObject.deletedAt = undefined;
-        _entityLikeObject.recoveredAt = undefined;
-        _entityLikeObject.operationId = undefined;
-        _entityLikeObject.requestPath = undefined;
-        _entityLikeObject.requestMethod = undefined;
-        _entityLikeObject.processId = undefined;
-        _entityLikeObject.archivedByUserId = undefined;
+        for (const key of Object.keys(entityLikeObject)) {
+          if (keys_to_strip.includes(key as keyof AuditedEntity)) {
+            continue;
+          }
 
-        const createdAt = new Date();
-        _entityLikeObject.createdAt = createdAt;
-        _entityLikeObject.updatedAt = createdAt;
+          const value = (entityLikeObject as { [key: string]: unknown })[key];
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const _createdEntity = new EntityClass();
-        for (const _k of Object.keys(_entityLikeObject)) {
-          const key = _k as keyof Partial<Entity>;
-          const value = _entityLikeObject[key];
-
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (value === undefined) {
             continue;
           }
 
-          _createdEntity[key] = value;
+          entity[key] = value;
         }
 
-        toSave.push(_createdEntity as DeepPartial<Entity>);
+        entity['createdAt'] = createdAt;
+        entity['updatedAt'] = createdAt;
+
+        toSave.push(entity as DeepPartial<Entity>);
       }
 
       await repository.save(toSave);
