@@ -48,10 +48,12 @@
 
     &:disabled,
     &.disabled {
+      color: get-contrasting-color('body');
       border-color: transparent;
 
       &:hover,
       &:active {
+        color: get-contrasting-color('body');
         border-color: transparent;
       }
     }
@@ -93,7 +95,7 @@
 
     &:disabled,
     &.disabled {
-      color: get-contrasting-color('body');
+      color: $outline-color;
 
       text-decoration: line-through;
       border-color: $outline-color;
@@ -101,6 +103,8 @@
       &:hover,
       &:focus,
       &:active {
+        color: $outline-color;
+
         text-decoration: line-through;
         border-color: $outline-color;
       }

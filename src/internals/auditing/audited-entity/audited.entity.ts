@@ -37,13 +37,4 @@ export abstract class AuditedEntity extends SimpleEntity {
   // Set in AuditedEntityRepository. No need for @UpdatedAtColumn()
   @Column('timestamp')
   updatedAt!: Date;
-
-  toJSON() {
-    return {
-      ...this,
-      requestPath: undefined,
-      requestMethod: undefined,
-      processId: undefined,
-    };
-  }
 }

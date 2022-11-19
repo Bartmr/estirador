@@ -7,3 +7,19 @@
 .bg-hovered {
   background-color: $hovered-bg !important;
 }
+
+@each $color, $value in $theme-colors {
+  .bg-#{$color}.bg-muted {
+    background-color: set-contrasting-color-alpha(
+      $color,
+      $opacity-muted
+    ) !important;
+  }
+
+  .bg-#{$color}.bg-subtle {
+    background-color: set-contrasting-color-alpha(
+      $color,
+      $opacity-subtle
+    ) !important;
+  }
+}
