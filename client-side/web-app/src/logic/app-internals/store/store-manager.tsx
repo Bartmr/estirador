@@ -45,7 +45,6 @@ class StoreManager {
             session: {
               status: TransportedDataStatus.Loading,
             },
-            isLoggingOut: true,
           },
         };
       }

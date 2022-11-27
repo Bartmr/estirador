@@ -8,13 +8,11 @@ import {
 
 export type MainApiStoreState = {
   session: TransportedData<MainApiSessionData | null>;
-  isLoggingOut: boolean;
 };
 export type MainApiReducer = Reducer<MainApiStoreState, MainApiSessionAction>;
 
 const initialState: MainApiStoreState = {
   session: { status: TransportedDataStatus.NotInitialized },
-  isLoggingOut: false,
 };
 
 export const mainApiReducer: MainApiReducer = (
@@ -26,11 +24,6 @@ export const mainApiReducer: MainApiReducer = (
       return {
         ...state,
         session: action.payload,
-      };
-    case 'FINISHED_LOGGING_OUT':
-      return {
-        ...state,
-        isLoggingOut: false,
       };
     default:
       return state;

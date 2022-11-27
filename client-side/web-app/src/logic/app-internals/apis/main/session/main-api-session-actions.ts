@@ -10,7 +10,4 @@ export type MainApiSessionAction =
     }
   | {
       type: typeof MAIN_API_SESSION_LOGOUT;
-    }
-  | {
-      type: 'FINISHED_LOGGING_OUT';
     };

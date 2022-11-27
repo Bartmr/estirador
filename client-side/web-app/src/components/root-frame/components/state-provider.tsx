@@ -10,9 +10,6 @@ import { useStoreSelector } from 'src/logic/app-internals/store/use-store-select
 import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
-import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
-import { navigate } from 'gatsby';
-import { LOGIN_ROUTE } from 'src/components/templates/login/login-routes';
 import { SSRProvider } from 'react-bootstrap';
 
 let previousRuntimeData:
@@ -25,8 +22,6 @@ type ModuleHotData = {
 };
 
 const FrameWithState = (props: { children: ReactNode }) => {
-  const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
-
   const mainApiSession = useMainApiSession();
 
   const mainApiState = useStoreSelector(
@@ -39,14 +34,6 @@ const FrameWithState = (props: { children: ReactNode }) => {
       if (
         mainApiState.session.status === TransportedDataStatus.NotInitialized
       ) {
-        if (mainApiState.isLoggingOut) {
-          await navigate(LOGIN_ROUTE.getHref({ next: null }));
-
-          dispatch({
-            type: 'FINISHED_LOGGING_OUT',
-          });
-        }
-
         await mainApiSession.restoreSession();
       }
     })();

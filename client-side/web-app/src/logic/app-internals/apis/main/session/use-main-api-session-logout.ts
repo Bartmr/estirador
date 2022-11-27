@@ -21,7 +21,7 @@ class MainApiSessionLogout {
   async logout() {
     const state = this.getState();
 
-    if (state.mainApi.isLoggingOut) {
+    if (state.mainApi.session.status === TransportedDataStatus.Loading) {
       return;
     }
     this.dispatch({
