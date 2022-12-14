@@ -3,13 +3,19 @@
 @import 'node_modules/bootstrap/scss/spinners';
 
 .spinner-border {
-  &.spinner-sm {
-    @extend .spinner-border-sm;
+  font-size: $font-size-base;
+  vertical-align: -0.35em;
+
+  &.spinner-border-sm {
+    vertical-align: $spinner-vertical-align;
   }
 }
 
 .spinner-grow {
-  &.spinner-sm {
-    @extend .spinner-grow-sm;
+  font-size: $font-size-base;
+  vertical-align: -0.35em;
+
+  &.spinner-grow-sm {
+    vertical-align: $spinner-vertical-align;
   }
 }

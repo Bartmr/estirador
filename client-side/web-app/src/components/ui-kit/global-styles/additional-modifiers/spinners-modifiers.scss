@@ -1,25 +1,49 @@
 @import 'variables';
 @import 'setup-bootstrap';
 
-.spinner-border,
+.spinner-border {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+      $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+      &.spinner-border#{$infix}-sm {
+        width: $spinner-width-sm;
+        height: $spinner-height-sm;
+      }
+      &.spinner-border#{$infix}-md {
+        width: $spinner-width;
+        height: $spinner-height;
+      }
+      &.spinner-border#{$infix}-lg {
+        width: $spinner-width-lg;
+        height: $spinner-height-lg;
+      }
+      &.spinner-border-inherit {
+        width: 1em;
+        height: 1em;
+      }
+    }
+  }
+}
+
 .spinner-grow {
   @each $breakpoint in map-keys($grid-breakpoints) {
     @include media-breakpoint-up($breakpoint) {
       $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
-      &.spinner#{$infix}-sm {
+      &.spinner-grow#{$infix}-sm {
         width: $spinner-width-sm;
         height: $spinner-height-sm;
       }
-      &.spinner#{$infix}-md {
+      &.spinner-grow#{$infix}-md {
         width: $spinner-width;
         height: $spinner-height;
       }
-      &.spinner#{$infix}-lg {
+      &.spinner-grow#{$infix}-lg {
         width: $spinner-width-lg;
         height: $spinner-height-lg;
       }
-      &.spinner-inherit {
+      &.spinner-grow-inherit {
         width: 1em;
         height: 1em;
       }
@@ -35,16 +59,16 @@
     @include media-breakpoint-up($breakpoint) {
       $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
-      &.spinner#{$infix}-sm {
+      &.spinner-border#{$infix}-sm {
         border-width: $spinner-border-width-sm;
       }
-      &.spinner#{$infix}-md {
+      &.spinner-border#{$infix}-md {
         border-width: $spinner-border-width;
       }
-      &.spinner#{$infix}-lg {
+      &.spinner-border#{$infix}-lg {
         border-width: $spinner-border-width-lg;
       }
-      &.spinner-inherit {
+      &.spinner-border-inherit {
         border-width: 0.2em;
       }
     }

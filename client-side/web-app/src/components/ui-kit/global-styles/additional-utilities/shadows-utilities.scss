@@ -1,59 +1,122 @@
 @import 'variables';
 
+/*
+  DO NOT SET IT TO CONTRASTING COLORS,
+  or else, the shadow will be the same color as the contrasting colors inside the
+  shadowed container.
+
+  Example:
+  <div className="bg-darkest>
+    <button className="btn btn-lightest shadow"></button>
+  </div>
+
+  Here, the shadow color will be dark, and will not contrast with bg-darkest,
+  because the contrasting colors are being set by btn-lightest,
+  and its contrasting colors are dark.
+*/
 @each $color, $value in $theme-colors {
+  $shadow-opacity: null;
+
+  @if (saturation($value) > 50%) {
+    $shadow-opacity: 100%;
+  } @else {
+    $shadow-opacity: 20%;
+  }
+
   .shadow-#{$color} {
     &.shadow-sm {
       box-shadow: #{$box-shadow-sm-dimensions}
-        rgba($value, $box-shadow-sm-opacity) !important;
+        rgba($value, $shadow-opacity) !important;
     }
     &.shadow {
       box-shadow: #{$box-shadow-dimensions}
-        rgba($value, $box-shadow-opacity) !important;
+        rgba($value, $shadow-opacity) !important;
     }
     &.shadow-lg {
       box-shadow: #{$box-shadow-lg-dimensions}
-        rgba($value, $box-shadow-lg-opacity) !important;
+        rgba($value, $shadow-opacity) !important;
     }
   }
 }
+/* --- */
 
+/*
+  Same as text-shadow, but to be used with SVG icons
+  and other unusual symbols that aren't text
+*/
 .drop-shadow-sm {
   filter: drop-shadow(
-    #{$box-shadow-sm-dimensions} set-contrasting-color-alpha('darkest', $text-shadow-sm-opacity)
+    #{$box-shadow-sm-dimensions} set-contrasting-color-alpha('body', $text-shadow-sm-opacity)
   ) !important;
 }
 
 .drop-shadow {
   filter: drop-shadow(
-    #{$box-shadow-dimensions} set-contrasting-color-alpha('darkest', $text-shadow-opacity)
+    #{$box-shadow-dimensions} set-contrasting-color-alpha('body', $text-shadow-opacity)
   ) !important;
 }
 
 .drop-shadow-lg {
   filter: drop-shadow(
-    #{$box-shadow-lg-dimensions} set-contrasting-color-alpha('darkest', $text-shadow-lg-opacity)
+    #{$box-shadow-lg-dimensions} set-contrasting-color-alpha('body', $text-shadow-lg-opacity)
   ) !important;
 }
 
 @each $color, $value in $theme-colors {
-  .drop-shadow-#{$color} {
-    &.drop-shadow-sm {
-      filter: drop-shadow(
-        #{$box-shadow-sm-dimensions}
-          #{set-contrasting-color-alpha($color, $text-shadow-sm-opacity)}
-      ) !important;
+  @if (saturation($value) > 50%) {
+    .drop-shadow-#{$color} {
+      &.drop-shadow-sm {
+        filter: drop-shadow(
+            #{$text-shadow-sm-dimensions}
+              #{set-contrasting-color-alpha($color, $text-shadow-sm-opacity)}
+          )
+          drop-shadow(
+            #{$text-shadow-sm-dimensions}
+              #{set-contrasting-color-alpha($color, $text-shadow-sm-opacity)}
+          ) !important;
+      }
+      &.drop-shadow {
+        filter: drop-shadow(
+            #{$text-shadow-dimensions}
+              #{set-contrasting-color-alpha($color, $text-shadow-opacity)}
+          )
+          drop-shadow(
+            #{$text-shadow-dimensions}
+              #{set-contrasting-color-alpha($color, $text-shadow-opacity)}
+          ) !important;
+      }
+      &.drop-shadow-lg {
+        filter: drop-shadow(
+            #{$text-shadow-lg-dimensions}
+              #{set-contrasting-color-alpha($color, $text-shadow-lg-opacity)}
+          )
+          drop-shadow(
+            #{$text-shadow-lg-dimensions}
+              #{set-contrasting-color-alpha($color, $text-shadow-lg-opacity)}
+          ) !important;
+      }
     }
-    &.drop-shadow {
-      filter: drop-shadow(
-        #{$box-shadow-dimensions}
-          #{set-contrasting-color-alpha($color, $text-shadow-opacity)}
-      ) !important;
-    }
-    &.drop-shadow-lg {
-      filter: drop-shadow(
-        #{$box-shadow-lg-dimensions}
-          #{set-contrasting-color-alpha($color, $text-shadow-lg-opacity)}
-      ) !important;
+  } @else {
+    .drop-shadow-#{$color} {
+      &.drop-shadow-sm {
+        filter: drop-shadow(
+          #{$text-shadow-sm-dimensions}
+            #{set-contrasting-color-alpha($color, $text-shadow-sm-opacity)}
+        ) !important;
+      }
+      &.drop-shadow {
+        filter: drop-shadow(
+          #{$text-shadow-dimensions}
+            #{set-contrasting-color-alpha($color, $text-shadow-opacity)}
+        ) !important;
+      }
+      &.drop-shadow-lg {
+        filter: drop-shadow(
+          #{$text-shadow-lg-dimensions}
+            #{set-contrasting-color-alpha($color, $text-shadow-lg-opacity)}
+        ) !important;
+      }
     }
   }
 }
+/* --- */

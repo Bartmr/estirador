@@ -1,3 +1,12 @@
+.link-body {
+  color: get-contrasting-color('body') !important;
+
+  &:hover,
+  &:focus {
+    color: get-contrasting-color('body-hover') !important;
+  }
+}
+
 @each $color, $value in $theme-colors {
   .link-#{$color} {
     color: get-contrasting-color($color) !important;

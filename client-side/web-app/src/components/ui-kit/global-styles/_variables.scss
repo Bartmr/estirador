@@ -241,9 +241,24 @@ $box-shadow-opacity: 0.2;
 $box-shadow-lg-dimensions: 0 1rem 3rem;
 $box-shadow-lg-opacity: 0.3;
 
-$box-shadow-sm: #{$box-shadow-sm-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-sm-opacity);
-$box-shadow: #{$box-shadow-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-opacity);
-$box-shadow-lg: #{$box-shadow-lg-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-lg-opacity);
+/*
+  DO NOT SET IT TO CONTRASTING COLORS,
+  or else, the shadow will be the same color as the contrasting colors inside the
+  shadowed container.
+
+  Example:
+  <div className="bg-darkest>
+    <button className="btn btn-lightest shadow"></button>
+  </div>
+
+  Here, the shadow color will be dark, and will not contrast with bg-darkest,
+  because the contrasting colors are being set by btn-lightest,
+  and its contrasting colors are dark.
+*/
+$box-shadow-sm: #{$box-shadow-sm-dimensions} rgba(0, 0, 0, $box-shadow-sm-opacity);
+$box-shadow: #{$box-shadow-dimensions} rgba(0, 0, 0, $box-shadow-opacity);
+$box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(0, 0, 0, $box-shadow-lg-opacity);
+/* ---*/
 
 $text-shadow-sm-dimensions: 0 0.05rem 0.2rem;
 $text-shadow-sm-opacity: 1;

@@ -148,6 +148,18 @@ $pagination-disabled-border-color: $pagination-disabled-bg;
 
 $table-color: get-contrasting-color('body');
 
+$table-striped-bg-factor: 0.05;
+$table-striped-bg: set-contrasting-color-alpha(
+  'body',
+  $table-striped-bg-factor
+);
+
+$table-active-bg-factor: 0.1;
+$table-active-bg: set-contrasting-color-alpha('body', $table-active-bg-factor);
+
+$table-hover-bg-factor: 0.075;
+$table-hover-bg: set-contrasting-color-alpha('body', $table-hover-bg-factor);
+
 $toast-background-color-inverted: $body-bg-inverted;
 $toast-color: get-contrasting-color('body');
 $toast-border-color: $border-color;

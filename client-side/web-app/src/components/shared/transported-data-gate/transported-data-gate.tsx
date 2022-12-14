@@ -42,7 +42,9 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
   }`;
 
   const spinnerSizeClass =
-    layout === TransportedDataGateLayout.Default ? 'spinner-lg' : 'spinner-sm';
+    layout === TransportedDataGateLayout.Default
+      ? 'spinner-border-lg'
+      : 'spinner-border-sm';
 
   const iconSizeClassName =
     layout === TransportedDataGateLayout.Default ? 'icon-badge' : '';

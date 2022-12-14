@@ -1,19 +1,13 @@
 @import 'variables';
 
-/*
-  The default shadows should remain the same regardless of the surrounding color.
-
-  They are absolute in a color scheme,
-  but they may change between color schemes (default, inverted, etc)
-*/
 .text-shadow-sm {
-  text-shadow: #{$text-shadow-sm-dimensions} rgba(0, 0, 0, $text-shadow-sm-opacity) !important;
+  text-shadow: #{$text-shadow-sm-dimensions} set-contrasting-color-alpha('body', $text-shadow-sm-opacity) !important;
 }
 .text-shadow {
-  text-shadow: #{$text-shadow-dimensions} rgba(0, 0, 0, $text-shadow-opacity) !important;
+  text-shadow: #{$text-shadow-dimensions} set-contrasting-color-alpha('body', $text-shadow-opacity) !important;
 }
 .text-shadow-lg {
-  text-shadow: #{$text-shadow-lg-dimensions} rgba(0, 0, 0, $text-shadow-lg-opacity) !important;
+  text-shadow: #{$text-shadow-lg-dimensions} set-contrasting-color-alpha('body', $text-shadow-lg-opacity) !important;
 }
 /* ----- */
 
@@ -21,18 +15,56 @@
   Colored shadows should change in order to contrast with the surrounding color
 */
 @each $color, $value in $theme-colors {
-  .text-shadow-#{$color} {
-    &.text-shadow-sm {
-      text-shadow: #{$text-shadow-sm-dimensions}
-        set-contrasting-color-alpha($color, $text-shadow-sm-opacity) !important;
+  @if (saturation($value) > 50%) {
+    .text-shadow-#{$color} {
+      &.text-shadow-sm {
+        text-shadow: #{$text-shadow-sm-dimensions}
+            set-contrasting-color-alpha($color, $text-shadow-sm-opacity),
+          #{$text-shadow-sm-dimensions}
+            set-contrasting-color-alpha(
+              $color,
+              $text-shadow-sm-opacity
+            ) !important;
+      }
+      &.text-shadow {
+        text-shadow: #{$text-shadow-dimensions}
+            set-contrasting-color-alpha($color, $text-shadow-opacity),
+          #{$text-shadow-dimensions}
+            set-contrasting-color-alpha(
+              $color,
+              $text-shadow-opacity
+            ) !important;
+      }
+      &.text-shadow-lg {
+        text-shadow: #{$text-shadow-lg-dimensions}
+            set-contrasting-color-alpha($color, $text-shadow-lg-opacity),
+          #{$text-shadow-lg-dimensions}
+            set-contrasting-color-alpha(
+              $color,
+              $text-shadow-lg-opacity
+            ) !important;
+      }
     }
-    &.text-shadow {
-      text-shadow: #{$text-shadow-dimensions}
-        set-contrasting-color-alpha($color, $text-shadow-opacity) !important;
-    }
-    &.text-shadow-lg {
-      text-shadow: #{$text-shadow-lg-dimensions}
-        set-contrasting-color-alpha($color, $text-shadow-lg-opacity) !important;
+  } @else {
+    .text-shadow-#{$color} {
+      &.text-shadow-sm {
+        text-shadow: #{$text-shadow-sm-dimensions}
+          set-contrasting-color-alpha(
+            $color,
+            $text-shadow-sm-opacity
+          ) !important;
+      }
+      &.text-shadow {
+        text-shadow: #{$text-shadow-dimensions}
+          set-contrasting-color-alpha($color, $text-shadow-opacity) !important;
+      }
+      &.text-shadow-lg {
+        text-shadow: #{$text-shadow-lg-dimensions}
+          set-contrasting-color-alpha(
+            $color,
+            $text-shadow-lg-opacity
+          ) !important;
+      }
     }
   }
 }
