@@ -15,7 +15,7 @@
   .btn-#{$color} {
     @include with-contrasting-colors($value);
 
-    border-color: set-contrasting-color-alpha($color, 0.5);
+    border-color: set-contrasting-color-alpha('body', 0.5);
 
     &:active {
       background-color: darken($value, 10);
@@ -34,7 +34,7 @@
 
     &:hover,
     &:focus {
-      border-color: set-contrasting-color-alpha($color, 0.5);
+      border-color: set-contrasting-color-alpha('body', 0.7);
     }
 
     &:focus,
