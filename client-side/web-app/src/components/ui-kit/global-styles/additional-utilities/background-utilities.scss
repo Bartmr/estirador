@@ -3,32 +3,24 @@
 
 .bg-selected {
   background-color: $selected-bg !important;
-
-  @include inherit-contrasting-colors;
 }
 
 .bg-hovered {
   background-color: $hovered-bg !important;
-
-  @include inherit-contrasting-colors;
 }
 
 @each $color, $value in $theme-colors {
-  .bg-#{$color}.bg-muted {
+  .bg-#{$color}-muted {
     background-color: set-contrasting-color-alpha(
       $color,
       $opacity-muted
     ) !important;
-
-    @include inherit-contrasting-colors;
   }
 
-  .bg-#{$color}.bg-subtle {
+  .bg-#{$color}-subtle {
     background-color: set-contrasting-color-alpha(
       $color,
       $opacity-subtle
     ) !important;
-
-    @include inherit-contrasting-colors;
   }
 }
