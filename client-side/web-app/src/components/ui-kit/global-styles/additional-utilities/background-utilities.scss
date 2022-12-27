@@ -1,11 +1,16 @@
 @import 'variables';
+@import 'contrasting-colors-mixins';
 
 .bg-selected {
   background-color: $selected-bg !important;
+
+  @include inherit-contrasting-colors;
 }
 
 .bg-hovered {
   background-color: $hovered-bg !important;
+
+  @include inherit-contrasting-colors;
 }
 
 @each $color, $value in $theme-colors {
@@ -14,6 +19,8 @@
       $color,
       $opacity-muted
     ) !important;
+
+    @include inherit-contrasting-colors;
   }
 
   .bg-#{$color}.bg-subtle {
@@ -21,5 +28,7 @@
       $color,
       $opacity-subtle
     ) !important;
+
+    @include inherit-contrasting-colors;
   }
 }
