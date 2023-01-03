@@ -46,6 +46,7 @@ import './additional-modifiers/spinners-modifiers.scss';
 import './additional-modifiers/navbar-modifiers.scss';
 import './additional-modifiers/selectable-modifiers.scss';
 import './additional-modifiers/link-modifiers.scss';
+import './additional-modifiers/dropdown-modifiers.scss';
 
 /* --- */
 

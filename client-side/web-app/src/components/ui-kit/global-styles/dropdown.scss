@@ -10,3 +10,9 @@
 .dropdown-menu-dark {
   @include with-contrasting-colors-and-no-styling($dropdown-dark-bg);
 }
+
+.dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,0 +1,32 @@
+@import 'variables';
+@import 'setup-bootstrap';
+@import 'contrasting-colors-mixins';
+
+.dropdown-item {
+  .dropdown-label {
+    padding-right: 2rem;
+  }
+
+  .dropdown-icon {
+    color: set-contrasting-color-alpha('body', $text-muted-opacity);
+  }
+
+  .dropdown-shortcut {
+    flex: 1 1 auto;
+
+    font-size: $font-size-sm;
+    font-style: italic;
+    color: set-contrasting-color-alpha('body', $text-muted-opacity);
+    text-align: right;
+  }
+}
+
+@each $color, $_ in $theme-colors {
+  .dropdown-item.dropdown-item-#{$color} {
+    color: get-contrasting-color($color);
+
+    .dropdown-icon {
+      color: set-contrasting-color-alpha($color, $text-muted-opacity);
+    }
+  }
+}
