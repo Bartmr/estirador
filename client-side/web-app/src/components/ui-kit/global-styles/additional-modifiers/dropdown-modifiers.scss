@@ -4,14 +4,16 @@
 
 .dropdown-item {
   .dropdown-label {
-    padding-right: 2rem;
+    margin-right: 2rem;
   }
 
   .dropdown-icon {
+    margin-left: map-get($map: $spacers, $key: 2);
     color: set-contrasting-color-alpha('body', $text-muted-opacity);
   }
 
   .dropdown-shortcut {
+    margin-left: map-get($map: $spacers, $key: 2);
     flex: 1 1 auto;
 
     font-size: $font-size-sm;
