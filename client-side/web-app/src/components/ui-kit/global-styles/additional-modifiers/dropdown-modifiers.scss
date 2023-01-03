@@ -25,6 +25,10 @@
   .dropdown-item.dropdown-item-#{$color} {
     color: get-contrasting-color($color);
 
+    .dropdown-shortcut {
+      color: set-contrasting-color-alpha($color, $text-muted-opacity);
+    }
+
     .dropdown-icon {
       color: set-contrasting-color-alpha($color, $text-muted-opacity);
     }
