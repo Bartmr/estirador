@@ -1,3 +1,8 @@
 @import 'variables';
 @import 'setup-bootstrap';
 @import 'node_modules/bootstrap/scss/tooltip';
+@import 'contrasting-colors-mixins';
+
+.tooltip-inner {
+  @include with-contrasting-colors($tooltip-bg);
+}

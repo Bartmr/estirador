@@ -7,8 +7,16 @@
   color: get-contrasting-color('success');
 }
 
+.valid-tooltip {
+  @include with-contrasting-colors($success);
+}
+
 .invalid-feedback {
   color: get-contrasting-color('danger');
+}
+
+.invalid-tooltip {
+  @include with-contrasting-colors($danger);
 }
 
 .form-control {
