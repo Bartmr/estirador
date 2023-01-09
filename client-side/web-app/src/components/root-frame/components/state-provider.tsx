@@ -1,10 +1,14 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 // eslint-disable-next-line node/no-restricted-import
 import { Provider } from 'react-redux';
 import {
   createStoreManager,
   StoreManagerProvider,
 } from 'src/logic/app-internals/store/store-manager';
+import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
+import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { SSRProvider } from 'react-bootstrap';
 
@@ -18,6 +22,23 @@ type ModuleHotData = {
 };
 
 const FrameWithState = (props: { children: ReactNode }) => {
+  const mainApiSession = useMainApiSession();
+
+  const mainApiState = useStoreSelector(
+    { mainApi: mainApiReducer },
+    (s) => s.mainApi,
+  );
+
+  useEffect(() => {
+    (async () => {
+      if (
+        mainApiState.session.status === TransportedDataStatus.NotInitialized
+      ) {
+        await mainApiSession.restoreSession();
+      }
+    })();
+  }, [mainApiState.session.status]);
+
   return <SSRProvider>{props.children}</SSRProvider>;
 };
 

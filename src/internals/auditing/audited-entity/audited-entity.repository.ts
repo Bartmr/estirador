@@ -23,6 +23,7 @@ export abstract class AuditedEntityRepository<
     entity.requestPath = auditContext.requestPath;
     entity.requestMethod = auditContext.requestMethod;
     entity.processId = auditContext.processId;
+    entity.archivedByUserId = auditContext.authContext?.user.id || null;
 
     if (!options?.alreadyRemoved) {
       entity.deletedAt = new Date();
@@ -79,6 +80,7 @@ export abstract class AuditedEntityRepository<
         'requestPath',
         'requestMethod',
         'processId',
+        'archivedByUserId',
         'createdAt',
         'updatedAt',
       ];

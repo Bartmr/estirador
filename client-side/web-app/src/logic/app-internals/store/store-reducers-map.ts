@@ -1,5 +1,5 @@
-import { Reducer } from 'redux';
+import { MainApiReducer } from '../apis/main/main-api-reducer';
 
 export type StoreReducersMap = Partial<{
-  sampleReducer: Reducer<unknown>;
+  mainApi: MainApiReducer;
 }>;

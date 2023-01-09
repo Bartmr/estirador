@@ -5,9 +5,11 @@ import {
 } from 'redux';
 import { devToolsEnhancerDevelopmentOnly } from '@redux-devtools/extension';
 import { Store, StoreAction, StoreState } from './store-types';
+import { MAIN_API_SESSION_LOGOUT } from '../apis/main/session/main-api-session-actions';
 import { StoreReducersMap } from './store-reducers-map';
 import { createContext, ReactNode, useContext } from 'react';
 import { throwError } from '../utils/throw-error';
+import { TransportedDataStatus } from '../transports/transported-data/transported-data-types';
 
 type RootReducer = Reducer<StoreState, StoreAction>;
 
@@ -34,7 +36,19 @@ class StoreManager {
   combineInternalReducersMap() {
     const combinedReducer = combineReducers(this.reducersMap) as RootReducer;
 
-    const rootReducer: RootReducer = (state, action) => {
+    const rootReducer: RootReducer = (stateArg, action) => {
+      let state = stateArg;
+
+      if (action.type === MAIN_API_SESSION_LOGOUT) {
+        state = {
+          mainApi: {
+            session: {
+              status: TransportedDataStatus.Loading,
+            },
+          },
+        };
+      }
+
       return combinedReducer(state, action);
     };
 

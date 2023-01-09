@@ -13,6 +13,7 @@ export function createTestAuditContext() {
     processId,
     requestPath: null,
     requestMethod: null,
+    authContext: null,
   };
 
   const auditContextEntityProps = {
